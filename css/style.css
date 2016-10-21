@@ -1,0 +1,576 @@
+
+/**
+
+00.00 TABLE OF CONTENTS
+00.01 Imports
+00.02 Globals
+00.02 background colors
+00.03 Text Colors
+01.00 content-wrapper
+02.00 Nav/Side Bar
+03.00 Content Pane
+03.01 Case Builder Block
+03.02 Case Manager Block
+04.00 Evidence Manager
+05.00
+06.00
+07.00
+08.00
+09.00 Header
+09.02 Nav bar list
+09.01 Logo
+10.00 Footer
+
+**/
+
+
+/** 00.01 Imports **/
+@import url('reset.css');
+@import url('framework.css');
+@import url('grid.css');
+
+@font-face {
+  font-family: 'Aveni';
+  src: url('../font/AvenirNext-Regular.otf') format('opentype'),
+			 url('../font/AvenirNext-Regular.woff') format('woff'),
+       url('../font/AvenirNext-Regular.ttf')  format('truetype');
+}
+
+
+/** 00.02 GLobals **/
+body{
+  font-family: 'Aveni';
+	color: #333;
+  clip: auto;
+  overflow-x: hidden;
+}
+
+.point-cursor{
+  cursor: pointer !important;
+}
+
+/**00.02 Background Colors **/
+.nav-bar-blue{
+	background: #242533;
+}
+
+/** 00.04 Text Colors **/
+
+/** 01.00 Content Wrapper **/
+.content-wrapper{
+	width: 100%;
+	height: 90%;
+}
+
+/** 02.00 Nav/Side bar **/
+
+.nav-side-bar{
+	background: #242533;
+	float: left;
+	height: 100%;
+	width: 10%;
+}
+
+/** 03.00 Content Pane **/
+.content-pane{
+	float: left;
+	height: 100%;
+	padding: 60px;
+	width: 90%;
+}
+
+/** 03.01 Case Builder Block **/
+
+.builder-container{
+	float: left;
+	height: 100%;
+	padding-right: 5px;
+	width: 70%;
+}
+
+.builder-block{
+	width: 100%;
+	height: 100%;
+}
+
+.builder-block .header{
+  background: #e7e7e7;
+  border: 1px solid #bbb;
+	display: block;
+	font-weight: bold;
+	font-size: 20px;
+	height: 12%;
+	width: 100%;
+}
+
+.builder-block h3{
+	font-weight: bold;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+.question-inventory-container{
+  width: 80%;
+  height: 100%;
+  padding-right:5px;
+  float: left;
+  margin-top: 5px;
+}
+
+.evidence-inventory-block{
+	background: #d9d9d9;
+  border: 1px solid #bbb;
+	height: 88%;
+}
+
+
+.evidence-inventory-list li{
+	background: #cfcfcf;
+	font-size: 11px;
+	margin-bottom: 5px;
+}
+
+.evidence-inventory-list .view-icon{
+	background: #34A7C1;
+	color: #000;
+	float: right;
+	margin-right: 3px;
+	padding: 10px;
+}
+
+.evidence-inventory-list .delete-icon{
+	background: #ee5f77;
+	color: #000;
+	float: right;
+	padding: 10px;
+}
+
+.fortify-case-button-container{
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+}
+
+.fortify-case-button{
+  background: #FA9585;
+  //background: linear-gradient(#EFAAA7, #FA9585);
+  padding: 0 40px;
+  font-weight: normal;
+  font-size: 15px;
+  text-align: center;
+  color: #fff;
+  font-weight: bold;
+  padding: 30px 0px;
+  text-shadow: 0px 1px #000;
+  text-decoration: none;
+}
+
+.fortify-case-button:active{
+  background: linear-gradient( #FA9585, #EFAAA7);
+
+}
+
+.onoffswitch {
+    position: relative; width: 90px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+    display: none;
+}
+.onoffswitch-label {
+    display: block; overflow: hidden;
+		cursor: pointer;
+    border: 2px solid #999999;
+}
+.onoffswitch-inner {
+    display: block; width: 200%;
+		margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
+    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+    content: "Yes";
+    padding-left: 10px;
+    background-color: #34A7C1; color: #FFFFFF;
+}
+.onoffswitch-inner:after {
+    content: "No";
+    padding-right: 10px;
+    background-color: #EEEEEE; color: #999999;
+    text-align: right;
+}
+.onoffswitch-switch {
+    display: block; width: 18px; margin: 6px;
+    background: #FFFFFF;
+    position: absolute; top: 0; bottom: 0;
+    right: 56px;
+    border: 2px solid #999999; border-radius: 20px;
+    transition: all 0.3s ease-in 0s;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0px;
+}
+
+.report-question-block{
+	background: #dfdfdf;
+	height: 88%;
+  border-top: 1px solid #bbb;
+  border-bottom: 1px solid #bbb;
+  border-left: 1px solid #bbb;
+}
+
+.report-question input[type="text"]{
+	background: #cccccc;
+	border:0px solid #555;
+	padding: 10px;
+}
+
+.report-question-header{
+  background: #999;padding: 10px;font-size: 10px;color: #fff;
+}
+
+.report-question select{
+	background: #ccc;
+	border: 0px solid #555;
+  font: inherit;
+	outline: 0px;
+	margin: 0px;
+	padding: 5px;
+	-webkit-appearance: none;
+}
+
+.report-question  select {
+  background-image:
+    linear-gradient(45deg, transparent 50%, gray 50%),
+    linear-gradient(135deg, gray 50%, transparent 50%),
+    linear-gradient(to right, #ccc, #ccc);
+  background-position:
+    calc(100% - 20px) calc(1em + 2px),
+    calc(100% - 15px) calc(1em + 2px),
+    calc(100% - 2.5em) 0.5em;
+  background-size:
+    5px 5px,
+    5px 5px,
+    1px 1.5em;
+  background-repeat: no-repeat;
+}
+
+.report-question select:focus {
+  background-image:
+    linear-gradient(45deg, green 50%, transparent 50%),
+    linear-gradient(135deg, transparent 50%, green 50%),
+    linear-gradient(to right, #ccc, #ccc);
+  background-position:
+    calc(100% - 15px) 1em,
+    calc(100% - 20px) 1em,
+    calc(100% - 2.5em) 0.5em;
+  background-size:
+    5px 5px,
+    5px 5px,
+    1px 1.5em;
+  background-repeat: no-repeat;
+  border-color: green;
+  outline: 0;
+}
+
+
+select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 #000;
+}
+
+.report-question option{
+	outline: 0px;
+}
+
+.tag-block{
+	background: #dfdfdf;
+	height: 88%;
+  border: 1px solid #bbb;
+  margin-top: 5px;
+}
+
+#tag-list li{
+	background: #999;
+	border-radius: 4px;
+	color: #fff;
+	font-size: 10px;
+	margin-bottom: 4px;
+	padding: 10px;
+	text-align: center;
+}
+
+/** 03.02 Case Manager Block **/
+
+.manager-container{
+	float: left;
+	height: 100%;
+	width: 30%;
+  overflow-y: auto;
+}
+
+
+.manager-container h2{
+  background: #e7e7e7;
+  border: 1px solid #bbb;
+	display: block;
+	font-weight: bold;
+	font-size: 20px;
+	height: 12%;
+	text-align: center;
+	width: 100%;
+}
+
+.manager-container h3{
+	text-align: center;
+	background: #ccc;
+}
+
+.manager-container li{
+  transition: all 0.1s;
+}
+
+h3.new-case {
+  background: #385477;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+h3.new-case:hover{
+  background: #648bba;
+}
+
+h3.new-case:active{
+  background: #243d5b;
+}
+
+#case-list li:hover {
+  background: #f8f8f8;
+}
+
+#case-list li:active {
+  background: #d9d9d9;
+}
+
+#case-list li:last-child{
+  border-bottom: 0px;
+}
+
+#case-list .active{
+  background: #b7f6a2 !important;
+}
+
+#case-list .active:hover {
+  background: #dbfad1 !important;
+}
+
+.manager-container .case-file-count{
+  text-align: center;
+  background: rgba(000,000,000,0.1);
+}
+
+.case-delete-button{
+  transition: all 0.1s;
+}
+
+.case-delete-button:hover {
+  background: #f38c9d;
+}
+
+.case-delete-button:active {
+  background: #e92f4e;
+}
+
+.case-ref-id{
+  text-align: center;
+}
+
+/** 04.00 Evidence Slider **/
+
+
+.overlay-container{
+  background: rgba(18,18,25,0.9);
+  width: 40%;
+  position: absolute;
+  right: 0;
+  z-index: 1005;
+  height: 100%;
+  transform: translateX(100%);
+  transition: all 0.3s;
+}
+
+.overlay-container.show{
+  transform: translateX(0%);
+}
+
+.close{
+  background: #e65959;
+  font-weight: bold;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.upload{
+  background: #b4e2a0;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.media-block{
+padding: 40px;
+margin: 0px;
+}
+
+.media-block li{
+  width: 25%;
+  height: 140px;
+  display: inline-block;
+  margin: 0px auto;
+  margin-left: -3px;
+  padding: 10px;
+  transition: all 1s;
+}
+
+.media-block li .block{
+  height: 100%;
+  width: 100%;
+}
+
+.media-block li .one{
+  background: url("../img/ev-1.png");
+  background-size: cover;
+}
+
+.media-block li .two{
+  background: url("../img/ev-2.png");
+  background-size: cover;
+}
+
+.media-block li .three{
+  background: url("../img/ev-3.png");
+  background-size: cover;
+}
+
+.green-border{
+  border: 10px solid #00ff00;
+}
+
+.red-border{
+  border: 10px solid #ff0000;
+}
+
+.ev-curtain{
+  background: rgba(000,000,000,0.5);
+  color: #cfcfcf;
+  display: none;
+  font-size: 12px;
+  height: 100%;
+  position: absolute;
+  transition: all 1s;
+  text-align: center;
+  width: 100%;
+  z-index: 1003;
+}
+
+.ev-curtain h3{
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.ev-curtain i{
+  color: #fff;
+  font-size: 30px;
+  margin-top: 10px;
+}
+
+.media-block li:hover .ev-curtain{
+  display: block;
+  transition: all 1s;
+}
+
+
+
+/** 09.00 Header **/
+
+/** 09.01 Logo **/
+
+.logo{
+  background: rgba(000,000,000,0.3);
+  width: 100%;
+  margin: 0px auto;
+  display: block;
+  padding: 30px;
+}
+
+  /**09.02 Nav**/
+
+.logout-button{
+  background: #333445;
+  bottom: 0;
+  color: #fff;
+  font-size:11px;
+  padding: 20px;
+  position: absolute;
+  text-align: center;
+  text-decoration: none;
+  width: 100%;
+}
+
+nav{
+}
+
+nav li{
+  width: 100%;
+}
+nav li div{
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  display: block;
+  margin-bottom: 2px;
+  padding: 20px 10px;
+  text-align: center;
+  text-decoration: none;
+  transition: all .1s;
+}
+
+nav li div:hover{
+  background: rgba(255,255,255,0.3);
+  cursor: pointer;
+}
+
+
+
+/** 10.00 Footer **/
+
+footer{
+	background: #3d3d3d;
+	height: 10%;
+	width: 100%;
+}
+
+.notification-button{
+  height: 100%;
+  background: #509ace;
+  text-align: center;
+  color: #fff;
+
+}
+
+footer .headshot{
+  border-radius: 500px;
+  display: block;
+  height: 80%;
+  padding: 10px;
+}

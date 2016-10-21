@@ -1,0 +1,64 @@
+.one-wide{
+	width: 100%;
+}
+
+.two-wide{
+	float: left;
+	width: 50%;
+}
+
+.three-wide{
+	float: left;
+	width: 33.333333339%;
+}
+
+.four-wide{
+	float: left;
+	width: 25%;
+}
+
+.five-wide{
+	float: left;
+	width: 20%;
+}
+
+
+/** PERCENTAGE WIDTH**/
+.five-per-wide{
+	width: 5%;
+}
+
+.ten-per-wide{
+	width: 10%;
+}
+
+.fifteen-per-wide{
+	width: 15%;
+}
+
+.twenty-per-wide{
+	width: 20%;
+}
+
+.twenty-five-per-wide{
+	width: 25%;
+}
+
+.thirty-per-wide{
+	width: 30%;
+}
+
+.fourty-per-wide{
+	width: 40%;
+}
+
+.fifty-per-wide{
+	width: 50%;
+}
+.seventy-per-wide{
+	width: 70%;
+}
+
+.eighty-per-wide{
+	width: 80%;
+}
