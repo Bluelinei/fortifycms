@@ -36,7 +36,7 @@
   <!--REPORT QUESTION-->
               <div class="report-question thirty-margin-bottom">
                 <p class="one-wide report-question-header">What is the report nickname?</p>
-                <input id="report-nickname" type="text" placeholder="Report nickname" class="one-wide">
+                <input id="report-nickname" type="text" placeholder="Report Nickname" class="one-wide">
               </div><!--END QUESTION-->
 
 

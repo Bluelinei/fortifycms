@@ -15,6 +15,7 @@
     <link href="css/style.css" rel="stylesheet" type="text/css" />
     <script src="https://use.fontawesome.com/47f9a4e330.js"></script>
 
+    <?php require_once './framework/ffmpeg.php'; ?>
     <script src="./framework/jquery3.1.1.js"></script>
     <script src="./framework/toolkit.js"></script>
     <script src="./framework/casemanager.js"></script>

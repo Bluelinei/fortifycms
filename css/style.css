@@ -378,6 +378,7 @@ h3.new-case:active{
 
 .case-delete-button{
   transition: all 0.1s;
+  cursor: pointer;
 }
 
 .case-delete-button:hover {
