@@ -264,6 +264,26 @@ function removeFileFromCase(file)
 	popStack();
 }
 
+function addMedia(file)
+{
+	pushStack('addMedia');
+	$('#mediabrowser').append(file.mediaelement);
+	updateMedia();
+	popStack();
+}
+
+function updateMedia()
+{
+	pushStack('updateMedia');
+	var len = casefiles.length;
+	clearElement($('#mediabrowser'));
+	for(var i=0; i<len; i++)
+	{
+		$('#mediabrowser').append(casefiles[i].mediaelement);
+	}
+	popStack();
+}
+
 
 
 
@@ -294,7 +314,7 @@ function Case()
 Case.prototype.newElement = function() {
 	pushStack('Case.newElement');
 	this.element = $('<li>');
-	this.element.append('<div id="_case_text" class="case-ref-id seventy-per-wide ten-padding left point-cursor">'+ this.casenum + (this.nickname?' ('+truncateText(this.nickname, 13, '...')+')':'')+'</div>');
+	this.element.append('<div id="_case_text" class="case-ref-id seventy-per-wide ten-padding left point-cursor">'+ this.casenum + (this.nickname?' ('+truncateText(this.nickname, 13, '...', 0)+')':'')+'</div>');
 	this.element.append('<div id="_case_filelen" class="case-file-count twenty-per-wide ten-padding left">'+ this.files.length +'</div>');
 	this.element.append(this.newButton());
 	this.element.append('<div class="clear"></div>');
@@ -400,10 +420,13 @@ function Casefile(f)
 	var date = new Date();
 	this.uploaddate = date.getTime();
 	this.element;
+	this.mediaelement;
+	this.thumbnail;
 	this.state;
 	this.caseindex = [];
 
 	casefiles.push(this);
+	this.newMediaElement();
 	this.newElement();
 	popStack();
 }
@@ -414,15 +437,59 @@ Casefile.prototype.newElement = function() {
 	this.element = $('<li>');
 	this.element.addClass('casefile-element');
 	this.element.append('<p class="left ten-padding bold">(' + getFileType(this.file.type) + ')</p>');
-	this.element.append(this.addDeleteButton());
+	this.element.append(this.addRemoveButton());
 	this.element.append('<a href="view" class="view-icon link-button"><i class="fa fa-eye" aria-hidden="true"></i></a>');
 	this.element.append('<p class="right ten-padding">'+ d.toLocaleDateString() + ' ' + d.toLocaleTimeString() +'</p>');
 	this.element.append('<div class="clear"></div>');
-	this.element.id = this.uid;
+	this.element.id = this.uid+"_case";
 	this.element.click(clickHandler(onClick, this));
 	this.checkState();
 	popStack();
 };
+
+Casefile.prototype.newMediaElement = function() {
+	pushStack('Casefile.newMediaElement');
+	var d = new Date(this.uploaddate);
+	this.mediaelement = $('<li>');
+	var inner = $('<div class="block">');
+	var e = [];
+	e.push('<div class="ev-curtain"><div class="vertical-middle">');
+	e.push('<h3>'+truncateText(this.file.name, 10, '...', 3)+'</h3>');
+	e.push('<p>'+d.toLocaleDateString()+'</p><br>');
+	e.push('<div style="display: inline;"><i class="fa fa-play-circle-o point-cursor" aria-hidden="true" style="margin-right: 10px;"></i></div>');
+	e.push('<div style="display: inline;"><i class="fa fa-plus point-cursor" aria-hidden="true"></i></div>');
+	e.push('</div></div>');
+	inner.append(e.join(''));
+	inner.css({'background-image': 'url("../img/loading.gif")',
+		'background-repeat': 'no-repeat',
+		'background-size': '50px 50px',
+		'background-position': 'center'
+	});
+	this.mediaelement.append(inner);
+	popStack();
+}
+
+Casefile.prototype.updateMediaElement = function(thumb) {
+	pushStack('Casefile.updateMediaElement');
+	var d = new Date(this.uploaddate);
+	this.mediaelement = $('<li>');
+	var inner = $('<div class="block">');
+	var e = [];
+	e.push('<div class="ev-curtain"><div class="vertical-middle">');
+	e.push('<h3>'+truncateText(this.file.name, 10, '...', 3)+'</h3>');
+	e.push('<p>'+d.toLocaleDateString()+'</p><br>');
+	e.push('<div style="display: inline;"><i class="fa fa-play-circle-o point-cursor" aria-hidden="true" style="margin-right: 10px;"></i></div>');
+	e.push('<div style="display: inline;"><i class="fa fa-plus point-cursor" aria-hidden="true"></i></div>');
+	e.push('</div></div>');
+	inner.append(e.join(''));
+	inner.css({'background-image': 'url("./framework/thumbs/'+this.thumbnail+'")',
+		'background-repeat': 'no-repeat',
+		'background-size': 'cover',
+		'background-position': 'center'
+	});
+	this.mediaelement.append(inner);
+	popStack();
+}
 
 Casefile.prototype.display = function(node) {
 	node.append(this.element);
@@ -484,13 +551,13 @@ Casefile.prototype.updateElement = function() {
 	popStack();
 };
 
-Casefile.prototype.addDeleteButton = function() {
+Casefile.prototype.addRemoveButton = function() {
 	pushStack('Casefile.addDeleteButton')
 	var button = $('<div>');
 	button.addClass('delete-icon link-button point-cursor');
-	button.addClass(this.uid);
+	button.addClass(this.uid+"_removebutton");
 	button.html('<i class="fa fa-minus-circle" aria-hidden="true"></i>');
-	$(document).on('click', '.'+this.uid, clickHandler(removeFileFromCase, this));
+	$(document).on('click', '.'+this.uid+"_removebutton", clickHandler(removeFileFromCase, this));
 	popStack();
 	return button;
 }
@@ -529,4 +596,26 @@ ReportTag.prototype.newButton = function() {
 	button.on('click', clickHandler(removeTag, this));
 	popStack();
 	return button;
+}
+
+
+
+
+
+
+//*****************************************************************************************************************************
+//** EVIDENCE OBJECT **********************************************************************************************************
+//*****************************************************************************************************************************
+
+function Evidence()
+{
+	pushStack('Evidence');
+	this.element;
+	popStack();
+}
+
+Evidence.prototype.newElement = function() {
+	pushStack('Evidence.newElement');
+
+	popStack();
 }

@@ -1,3 +1,6 @@
+
+var SHOW_CALLSTACK = true;
+
 function rand(n, add=1) {return Math.floor((Math.random()*n)+add);}
 
 function idExists(sel)
@@ -55,7 +58,6 @@ function clickHandler(func, arg) {
 function classFunctionHandler(obj, func, arg) {return function() {obj.func(arg);};}
 
 var callstack = [];
-var SHOW_CALLSTACK = false;
 
 function pushStack(func)
 {
@@ -95,12 +97,40 @@ function tokenize(string, delim)
 	return tokens;
 }
 
-function truncateText(str, len, filler)
+function truncateText(str, len, filler, end=0)
 {
 	if(str.length > len)
 	{
+		var sub = '';
+		if(end) sub = str.slice(-end);
 		str = str.substr(0, len);
 		str += filler;
+		str += sub;
 	}
 	return str;
+}
+
+function getThumbnail(filename, ext, callback)
+{
+	pushStack('getThumbnail');
+	var f = new FormData();
+	var output;
+	f.append('function', 'capture');
+	f.append('source', '.\\uploads\\'+filename+'.'+ext);
+	f.append('time','00:00:00');
+	f.append('output','.\\thumbs\\'+filename+'.png');
+	f.append('dir', '.\\thumbs\\');
+
+	$.ajax({
+		url:'./framework/ffmpeg.php',
+		method:'POST',
+		data: f,
+		processData: false,
+		contentType: false,
+		success: function(response) {
+			log(response);
+			callback(response);
+		}
+	});
+	popStack();
 }
