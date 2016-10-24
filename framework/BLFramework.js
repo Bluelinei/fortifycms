@@ -78,6 +78,8 @@ function postFiles(files) //Sends file and file data to PHP for processing and u
 	{
 		var cf = new Casefile(files[i])
 		formData.append('file', files[i]);
+		formData.append('ext', getExtension(files[i].name));
+		formData.append('uid', cf.uid);
 		
 		$.ajax({
 			url: 'framework/uploads.php',

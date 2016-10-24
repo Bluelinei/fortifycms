@@ -78,6 +78,8 @@ function getFileType(file)
 	else return 'DOCUMENT';
 }
 
+function getExtension(string) {return string.substring(string.lastIndexOf('.')+1);}
+
 function clearElement(node) {node.html('');}
 
 function tokenize(string, delim)

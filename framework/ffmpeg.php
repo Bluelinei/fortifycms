@@ -2,14 +2,14 @@
 
 $FF_DIR = "./ffmpeg/bin/ffmpeg.exe";
 
-function redactVideo($source, $start, $end)
+function redactVideo($source, $start, $end, $output)
 {
 
 }
 
-function captureScreen($source, $time)
+function captureFrame($source, $time, $output)
 {
-
+	shell_exec("$FF_DIR -y -ss $time -frames:v 1 $output");
 }
 
 if(isset($_POST['function']))
@@ -18,11 +18,18 @@ if(isset($_POST['function']))
 	switch($_POST['function'])
 	{
 		case 'redact':
-			redactVideo($_POST['source'], $_POST['start'], $_POST['end']);
+		{
+			redactVideo($_POST['source'], $_POST['start'], $_POST['end'], $_POST['output']);
+		}
 		case 'capture':
-			captureScreen($_POST['source'], $_POST['time']);
+		{
+			captureFrame($_POST['source'], $_POST['time'], $_POST['output']);
+		}
 		default:
-			echo "[!!!] $_POST['function'] is not a recognized function.";
+		{
+			$func = $_POST['function'];
+			echo "Undefined function \'$func\'";
+		}
 	}
 }
 
