@@ -1,5 +1,5 @@
 
-var SHOW_CALLSTACK = true;
+var SHOW_CALLSTACK = false;
 
 function rand(n, add=1) {return Math.floor((Math.random()*n)+add);}
 

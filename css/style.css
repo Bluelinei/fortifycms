@@ -152,8 +152,8 @@ body{
 }
 
 .fortify-case-button{
-  background: #FA9585;
-  //background: linear-gradient(#EFAAA7, #FA9585);
+  background: #bd3333;
+//background: linear-gradient(#EFAAA7, #FA9585);
   padding: 0 40px;
   font-weight: normal;
   font-size: 15px;
@@ -161,7 +161,7 @@ body{
   color: #fff;
   font-weight: bold;
   padding: 30px 0px;
-  text-shadow: 0px 1px #000;
+//text-shadow: 0px 1px #000;
   text-decoration: none;
 }
 

@@ -78,12 +78,11 @@ function postFiles(files) //Sends file and file data to PHP for processing and u
 	for(var i=0; i<len; i++)
 	{
 		var cf = new Casefile(files[i]);
-		var type = getFileType(files[i]);
+		var type = getFileType(files[i].type);
 		var ext = getExtension(files[i].name);
 		formData.append('file', files[i]);
 		formData.append('ext', ext);
 		formData.append('uid', cf.uid);
-		
 		$.ajax({
 			url: 'framework/uploads.php',
 			method: 'POST',
@@ -99,21 +98,31 @@ function postFiles(files) //Sends file and file data to PHP for processing and u
 							cf.thumbnail = './framework/thumbs/'+cf.uid+'.png';
 							cf.updateMediaElement();
 							updateMedia();
+						});
 						break;
 					case 'IMAGE':
-						cf.thumbnail = './framework/uploads/'cf.uid+'.'+ext;
+						log('./framework/uploads/'+cf.uid+'.'+ext);
+						cf.thumbnail = './framework/uploads/'+cf.uid+'.'+ext;
+						cf.updateMediaElement();
+						updateMedia();
 						break;
 					case 'AUDIO':
 						cf.thumbnail = './img/audio.png';
+						cf.updateMediaElement();
+						updateMedia();
 						break;
 					case 'TEXT':
+						cf.thumbnail = './img/txticon.png';
+						cf.updateMediaElement();
+						updateMedia();
 						break;
 					case 'DOCUMENT':
+						cf.thumbnail = './img/docicon.png';
+						cf.updateMediaElement();
+						updateMedia();
 						break;
 					default: break;
 				}
-				
-				});
 				postSQL(cf);
 			}
 		});
