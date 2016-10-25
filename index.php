@@ -1,7 +1,6 @@
 <?php require 'header.php'; ?>
 
-<!--START Content-pane-->
-    <div class="content-pane" id="page-body">
+
 <!--START  Builder wrapper-->
       <div class="builder-container">
 
@@ -127,6 +126,6 @@
     </div><!--END Content Pane-->
     <div class="clear"></div>
     <input method="post" type="file" id="openfilebrowser" name="files[]" enctype="multipart/form-data" style="display:none;" multiple />
-  </div><!--END Main Content Area Wrapper-->
+
 
 <?php require 'footer.php'; ?>
