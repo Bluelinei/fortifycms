@@ -15,15 +15,21 @@ $reporttags = $_POST['reporttags'];
 $evidence = $_POST['evidence'];
 $admin = $_POST['admin'];
 
-$sqlrequest;
+$conn;
 
-function updateEntry();
+function updateEntry()
+{
+	$sql = "UPDATE quickreport SET nickname=$nickname, report_num=$reportnum, location=$reportloc, report_type=$reporttype, tag_list=$reporttags, file_list=$evidence, further_admin=$admin WHERE uniqueKey=$uid"
+}
 
-function newEntry();
+function newEntry()
+{
+	$sql = "UPDATE quickreport SET uniqueKey=$uid, nickname=$nickname, report_num=$reportnum, location=$reportloc, report_type=$reporttype, tag_list=$reporttags, file_list=$evidence, further_admin=$admin"
+}
 
 try {
 	$conn = new PDO("mysql:host=$hostname; port=$port; dbname=$database; charset=UTF8;", $username, $pass);
-	$ifexist = 'SELECT EXISTS(SELECT 1 FROM quickreport WHERE uid=$uid';
+	$ifexist = 'SELECT EXISTS(SELECT 1 FROM quickreport WHERE uid=$uid)';
 	$conn->exec($ifexist);
 	if($conn) updateEntry();
 	else newEntry();
