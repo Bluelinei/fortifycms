@@ -49,6 +49,10 @@ body{
   cursor: pointer !important;
 }
 
+.grey-text {
+  color: #777;
+}
+
 /**00.02 Background Colors **/
 .nav-bar-blue{
 	background: #242533;
@@ -246,7 +250,7 @@ body{
 	-webkit-appearance: none;
 }
 
-.report-question  select {
+.report-question  select:hover {
   background-image:
     linear-gradient(45deg, transparent 50%, gray 50%),
     linear-gradient(135deg, gray 50%, transparent 50%),
@@ -287,7 +291,13 @@ select:-moz-focusring {
 }
 
 .report-question option{
+  color: #000;
 	outline: 0px;
+}
+
+.report-question option:disabled {
+  color: #777;
+  background: #bbb;
 }
 
 .tag-block{
@@ -418,14 +428,24 @@ h3.new-case:active{
   height: 40px;
   border-radius: 4px;
   color: #fff;
+  transition: all 0.1s;
+}
+
+.close:hover {
+  background: #f2a6a6;
 }
 
 .upload{
-  background: #b4e2a0;
+  background: #6eac53; /*#b4e2a0*/
   height: 40px;
   padding: 0 20px;
   border-radius: 4px;
   color: #fff;
+  transition: all 0.1s;
+}
+
+.upload:hover {
+  background: #b4e2a0;
 }
 
 .media-block{

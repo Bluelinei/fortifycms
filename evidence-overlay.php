@@ -11,15 +11,5 @@
 
 
     <ul id="mediabrowser" class="media-block">
-      <!--<li><div class="block one">
-            <div class="ev-curtain">
-              <div class="vertical-middle">
-                <h3>Friendly Name</h3>
-                added 10-17-16<br>
-                <a href="#"><i class="fa fa-play-circle-o" aria-hidden="true" style="margin-right: 10px;"></i></a>
-                <a href="#"><i class="fa fa-plus" aria-hidden="true"></i></a>
-              </div>
-            </div>
-          </div></li>-->
     </ul>
   </div><!--END Evidence Manager Overlay-->

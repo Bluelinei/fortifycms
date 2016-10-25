@@ -43,7 +43,7 @@
     <!--REPORT QUESTION-->
                 <div class="report-question thirty-margin-bottom">
                   <p class="one-wide report-question-header">What is the report type?</p>
-                  <select class="one-wide">
+                  <select class="one-wide" id="report-type">
                     <option>Arrest Report</option>
                     <option>CAD Report</option>
                   </select>
@@ -51,7 +51,8 @@
     <!--REPORT QUESTION-->
                 <div class="report-question thirty-margin-bottom">
                   <p class="one-wide report-question-header">Assign Report Tags</p>
-                  <select class="one-wide" id="report-tag">
+                  <select class="one-wide grey-text" id="report-tag">
+                    <option style="color:#777;" selected>SELECT TAG</option>
                     <option>Domestic Abuse</option>
                     <option>Child Endangerment</option>
                     <option>Sexual Assault</option>

@@ -12,7 +12,7 @@ function redactVideo($source, $start, $end, $output)
 function captureFrame($source, $time, $output)
 {
 	exec(".\\ffmpeg\\bin\\ffmpeg.exe -y -ss 00:00:00 -i $source -frames:v 1 $output", $out);
-	echo "Thumbnail generated in $output";
+	echo "FFMPEG: Thumbnail generated in $output";
 }
 
 if(isset($_POST['function']))
@@ -32,7 +32,7 @@ if(isset($_POST['function']))
 		default:
 		{
 			$func = $_POST['function'];
-			echo "Undefined function '$func'";
+			echo "FFMPEG: Undefined function '$func'";
 			break;
 		}
 	}
