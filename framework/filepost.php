@@ -13,6 +13,8 @@ $file_type = $_POST['file_type'];
 $upload_date = $_POST['upload_date'];
 $case_index = $_POST['case_index'];
 
+$sqlrequest;
+
 try {
 	$conn = new PDO("mysql:host=$hostname; port=$port; dbname=$database; charset=UTF8;", $username, $pass);
 	$sqlrequest = "INSERT INTO evidence (uid, nickname, file_path, file_type, upload_date, case_index) VALUES (?, ?, ?, ?, ?, ?)";

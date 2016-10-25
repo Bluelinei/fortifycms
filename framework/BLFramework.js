@@ -44,8 +44,6 @@ function fileOutput(files) //Outputs the information for the uploaded file onto 
 	}
 }
 
-function log(msg) {console.log(msg);} //Outputs a message to the browser console
-
 //File Upload functions
 
 function postSQL(cf)
@@ -90,6 +88,7 @@ function postFiles(files) //Sends file and file data to PHP for processing and u
 			processData: false,
 			contentType: false,
 			success: function(response) {
+				log(response);
 				cf.filepath = response;
 				switch(type)
 				{
