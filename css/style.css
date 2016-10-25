@@ -378,6 +378,7 @@ h3.new-case:active{
 
 .case-delete-button{
   transition: all 0.1s;
+  cursor: pointer;
 }
 
 .case-delete-button:hover {
@@ -481,12 +482,14 @@ margin: 0px;
   text-align: center;
   width: 100%;
   z-index: 1003;
+  overflow: hidden;
 }
 
 .ev-curtain h3{
   font-size: 14px;
   font-weight: bold;
   color: #fff;
+  text-align: center;
 }
 
 .ev-curtain i{

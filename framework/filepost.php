@@ -18,6 +18,7 @@ try {
 	$sqlrequest = "INSERT INTO evidence (uid, nickname, file_path, file_type, upload_date, case_index) VALUES (?, ?, ?, ?, ?, ?)";
 	$statement = $conn->prepare($sqlrequest);
 	$statement->execute(array($uid, $nickname, $file_path, $file_type, $upload_date, $case_index));
+	echo "Successfully posted to database.";
 } catch(PDOException $e) {
 	die($sqlrequest."<br>".$e->getMessage());
 }

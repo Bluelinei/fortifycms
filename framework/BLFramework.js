@@ -72,13 +72,17 @@ function postSQL(cf)
 
 function postFiles(files) //Sends file and file data to PHP for processing and uploading.
 {
-	var len = files.length
+	pushStack('postFiles');
+	var len = files.length;
 	var formData = new FormData();
 	for(var i=0; i<len; i++)
 	{
-		var cf = new Casefile(files[i])
+		var cf = new Casefile(files[i]);
+		var type = getFileType(files[i].type);
+		var ext = getExtension(files[i].name);
 		formData.append('file', files[i]);
-		
+		formData.append('ext', ext);
+		formData.append('uid', cf.uid);
 		$.ajax({
 			url: 'framework/uploads.php',
 			method: 'POST',
@@ -87,11 +91,44 @@ function postFiles(files) //Sends file and file data to PHP for processing and u
 			contentType: false,
 			success: function(response) {
 				cf.filepath = response;
+				switch(type)
+				{
+					case 'VIDEO':
+						getVideoThumbnail(cf.uid, getExtension(cf.filepath), function(response){
+							cf.thumbnail = './framework/thumbs/'+cf.uid+'.png';
+							cf.updateMediaElement();
+							updateMedia();
+						});
+						break;
+					case 'IMAGE':
+						log('./framework/uploads/'+cf.uid+'.'+ext);
+						cf.thumbnail = './framework/uploads/'+cf.uid+'.'+ext;
+						cf.updateMediaElement();
+						updateMedia();
+						break;
+					case 'AUDIO':
+						cf.thumbnail = './img/audio.png';
+						cf.updateMediaElement();
+						updateMedia();
+						break;
+					case 'TEXT':
+						cf.thumbnail = './img/txticon.png';
+						cf.updateMediaElement();
+						updateMedia();
+						break;
+					case 'DOCUMENT':
+						cf.thumbnail = './img/docicon.png';
+						cf.updateMediaElement();
+						updateMedia();
+						break;
+					default: break;
+				}
 				postSQL(cf);
 			}
 		});
-		workingcase.addFile(cf);
+		addMedia(cf);
 	}
+	popStack();
 }
 
 function closeMediaBrowser()
