@@ -10,36 +10,14 @@ const UNFORT = "unfortified"; //File has not been assigned to a case
 const INUSE = "inuse"; //File is assigned to the current working case
 const UNUSED = "unused"; //File is assigned to a case, but not the current one
 
-const CHANGE_STATE = false;
+const CHANGE_STATE = true;
 
 // *** GLOBAL FUNCTIONS ********************************************************************************************************
 
-function getUID()
+function postCases()
 {
-	var uid;
-	var status;
-	do {
-		status = false;
-		uid = getHex(64);
-		for(c in cases)
-		{
-			if(uid == c.uid)
-			{
-				status = true;
-				break;
-			}
-		}
-		if(status) continue;
-		for(c in casefiles)
-		{
-			if(uid == c.uid)
-			{
-				status = true;
-				break;
-			}
-		}
-	} while(status)
-	return uid;
+	var len = cases.length;
+	for(var i=0; i<len; i++) {cases[i].postCase();}
 }
 
 function getCaseById(id)
@@ -72,7 +50,8 @@ function updateCases()
 	pushStack('updateCases');
 	var len = cases.length;
 	for(var i=0; i<len; i++) {
-		$(caselistElementID).append(cases[i].element);}
+		$(caselistElementID).append(cases[i].element);
+	}
 	popStack();
 }
 
@@ -80,7 +59,7 @@ function updateCaseFiles()
 {
 	pushStack('updateCaseFiles');
 	var len = casefiles.length;
-	for(var i=0; i<len; i++) {casefiles[i].checkState();}
+	for(var i=0; i<len; i++) {casefiles[i].updateMediaElement();}
 	popStack();
 }
 
@@ -89,8 +68,110 @@ function display(node, element) {node.append(element);}
 function newCase()
 {
 	pushStack('newCase');
-	var c = new Case();
-	setAsActiveCase(c);
+	var status;
+	var uid = getHex(64);
+	var f = new FormData();
+	f.append('function', 'checkuid');
+	f.append('table', 'quickreport');
+	f.append('uid', uid);
+	do {
+		status = false;
+		$.ajax({
+			url: 'framework/functions.php',
+			method: 'POST',
+			data: f,
+			processData: false,
+			contentType: false,
+			success: function(response) {
+				if(response) status = true;
+				else
+				{
+					var c = new Case(uid);
+					setAsActiveCase(c);
+				}
+			}
+		});
+	} while(status);
+	popStack();
+}
+
+function newCaseFile(uploadedfile)
+{
+	pushStack('newCase');
+	var status;
+	var uid = getHex(64);
+	var f = new FormData();
+	f.append('function', 'checkuid');
+	f.append('table', 'evidence');
+	f.append('uid', uid);
+	do {
+		status = false;
+		$.ajax({
+			url: 'framework/functions.php',
+			method: 'POST',
+			data: f,
+			processData: false,
+			contentType: false,
+			success: function(response) {
+				if(response) status = true;
+				else
+				{
+					var cf = new Casefile(uploadedfile, uid);
+					var type = getFileType(uploadedfile.type);
+					var ext = getExtension(uploadedfile.name);
+					var formData = new FormData();
+					formData.append('file', uploadedfile);
+					formData.append('ext', ext);
+					formData.append('uid', cf.uid);
+					$.ajax({
+						url: 'framework/uploads.php',
+						method: 'POST',
+						data: formData,
+						processData: false,
+						contentType: false,
+						success: function(response) {
+							log(response);
+							cf.filepath = response;
+							switch(type)
+							{
+								case 'VIDEO':
+									getVideoThumbnail(cf.uid, getExtension(cf.filepath), function(response){
+										cf.thumbnail = './framework/thumbs/'+cf.uid+'.png';
+										cf.updateMediaElement();
+										updateMedia();
+									});
+									break;
+								case 'IMAGE':
+									log('./framework/uploads/'+cf.uid+'.'+ext);
+									cf.thumbnail = './framework/uploads/'+cf.uid+'.'+ext;
+									cf.updateMediaElement();
+									updateMedia();
+									break;
+								case 'AUDIO':
+									cf.thumbnail = './img/audioicon.png';
+									cf.updateMediaElement();
+									updateMedia();
+									break;
+								case 'TEXT':
+									cf.thumbnail = './img/texticon.png';
+									cf.updateMediaElement();
+									updateMedia();
+									break;
+								case 'DOCUMENT':
+									cf.thumbnail = './img/docicon.png';
+									cf.updateMediaElement();
+									updateMedia();
+									break;
+								default: break;
+							}
+							postSQL(cf);
+						}
+					});
+					addMedia(cf);
+				}
+			}
+		});
+	} while(status);
 	popStack();
 }
 
@@ -142,6 +223,7 @@ function deleteCase(c)
 function fortifyActiveCase()
 {
 	pushStack('fortifyActiveCase');
+	postCases();
 	updateInfo();
 	popStack();
 }
@@ -350,10 +432,10 @@ function toggleAdmin()
 //** CASE OBJECT **********************************************************************************************************
 //*************************************************************************************************************************
 
-function Case()
+function Case(uid)
 {
 	pushStack('Case');
-	this.uid = getUID();
+	this.uid = uid;
 	this.casenum = '[New Case]';
 	this.nickname = '';
 	this.location;
@@ -368,6 +450,28 @@ function Case()
 	this.newElement();
 	updateCases();
 	popStack();
+}
+
+Case.prototype.postCase = function() {
+	var f = new FormData();
+	f.append('uid',this.uid);
+	f.append('nickname',this.nickname);
+	f.append('reportnum',this.casenum);
+	f.append('reportloc',this.location);
+	f.append('reporttype',this.type);
+	f.append('reporttags',this.tags.join('<#>'));
+	f.append('evidence',this.files.join('<#>'));
+	f.append('admin',this.admin);
+	$.ajax({
+		url:'framework/casepost.php',
+		method: 'POST',
+		data: f,
+		processData: false,
+		contentType: false,
+		success: function(response) {
+			log(response);
+		}
+	});
 }
 
 Case.prototype.newElement = function() {
@@ -405,7 +509,7 @@ Case.prototype.addFile = function(file) {
 	for(var i=0; i<len; i++) {if(this.files[i].uid==file.uid) {popStack(); return 0;}}
 	this.files.push(file);
 	file.caseindex.push(this.uid);
-	file.checkState();
+	file.updateMediaElement();
 	this.updateElement();
 	updateFileList();
 	popStack()
@@ -418,7 +522,7 @@ Case.prototype.removeFile = function(file) {
 	for(var i=0; i<len; i++) {if(this.files[i]==file) {this.files.splice(i,1);}}
 	len = file.caseindex.length;
 	for(var i=0; i<len; i++) {if(file.caseindex[i]==this.uid) {file.caseindex.splice(i,1);}}
-	file.checkState();
+	file.updateMediaElement();
 	this.updateElement();
 	popStack()
 };
@@ -469,10 +573,10 @@ Case.prototype.deleteCase = function() {
 //** CASEFILE OBJECT **********************************************************************************************************
 //*****************************************************************************************************************************
 
-function Casefile(f)
+function Casefile(f, uid)
 {
 	pushStack('CaseFile');
-	this.uid = getUID();
+	this.uid = uid;
 	this.name;
 	this.file = f;
 	this.filepath;
@@ -502,7 +606,6 @@ Casefile.prototype.newElement = function() {
 	this.element.append('<div class="clear"></div>');
 	this.element.id = this.uid+"_case";
 	this.element.click(clickHandler(onClick, this));
-	this.checkState();
 	popStack();
 };
 
@@ -512,7 +615,7 @@ Casefile.prototype.newMediaElement = function() {
 	this.mediaelement = $('<li>');
 	var inner = $('<div class="block">');
 	var e = [];
-	e.push('<div class="ev-curtain"><div class="vertical-middle">');
+	e.push('<div class="ev-curtain" style="border:'+this.checkState()+';"><div class="vertical-middle">');
 	e.push('<h3>'+truncateText(this.file.name, 10, '...', 3)+'</h3>');
 	e.push('<p>'+d.toLocaleDateString()+'</p><br>');
 	e.push('<div style="display: inline;"><i class="fa fa-play-circle-o point-cursor" aria-hidden="true" style="margin-right: 10px;"></i></div>');
@@ -534,7 +637,7 @@ Casefile.prototype.updateMediaElement = function(thumb) {
 	this.mediaelement = $('<li>');
 	var inner = $('<div class="block">');
 	var e = [];
-	e.push('<div class="ev-curtain"><div class="vertical-middle">');
+	e.push('<div class="ev-curtain" style="border:'+this.checkState()+'"><div class="vertical-middle">');
 	e.push('<h3>'+truncateText(this.file.name, 10, '...', 3)+'</h3>');
 	e.push('<p>'+d.toLocaleDateString()+'</p><br>');
 	e.push('<div style="display: inline;"><i class="fa fa-play-circle-o point-cursor" aria-hidden="true" style="margin-right: 10px;"></i></div>');
@@ -590,19 +693,13 @@ Casefile.prototype.updateElement = function() {
 		switch(this.state)
 		{
 			case UNFORT:
-				this.element.css({
-					'background': '#f2a2a2',
-				});
+				return '5px solid red';
 				break;
 			case UNUSED:
-				this.element.css({
-					'background': '#ddd',
-				});
+				return 'none';
 				break;
 			case INUSE:
-				this.element.css({
-					'background': '#44d679',
-				});
+				return '5px solid green';
 				break;
 			default: break;
 		}
