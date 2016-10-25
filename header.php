@@ -45,5 +45,3 @@
       <a href="" class="logout-button">Log Out</a>
 
     </div><!--END Nav/Logo side-bar-->
-    <!--START Content-pane-->
-        <div class="content-pane" id="page-body">

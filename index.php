@@ -1,5 +1,7 @@
 <?php require 'header.php'; ?>
 
+<!--START Content-pane-->
+    <div class="content-pane fourty-padding" id="page-body">
 
 <!--START  Builder wrapper-->
       <div class="builder-container">
