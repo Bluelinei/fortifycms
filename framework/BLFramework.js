@@ -107,7 +107,7 @@ function postFiles(files) //Sends file and file data to PHP for processing and u
 						updateMedia();
 						break;
 					case 'AUDIO':
-						cf.thumbnail = './img/audio.png';
+						cf.thumbnail = './img/audioicon.png';
 						cf.updateMediaElement();
 						updateMedia();
 						break;
@@ -180,6 +180,7 @@ function setEventListeners()
 	$('#report-nickname').on('input', updateInfo);
 	$('#report-location').on('input', updateInfo);
 	$('#report-tag').on('change', setTag);
+	$('#report-tag').val('SELECT TAG');
 	$('#nav-evidence').on('click', toggleMediaBrowser);
 	$('#add-evidence').on('click', toggleMediaBrowser);
 	$('#close-media-browser').on('click', closeMediaBrowser);

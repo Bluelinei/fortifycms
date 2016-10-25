@@ -189,7 +189,6 @@ function updateInfo()
 function updateTags()
 {
 	pushStack('updateTags');
-	var rt = $('#report-tag');
 	hideTags();
 	var len = workingcase.tags.length;
 	var tlistlen = reporttags.length;
@@ -200,10 +199,35 @@ function updateTags()
 			if(workingcase.tags[i] == reporttags[x].name) 
 			{
 				reporttags[x].element.css('display','block');
+				disableTag(reporttags[x].value);
 			}
 		}
 	}
 	popStack();
+}
+
+function resetTags()
+{
+	var rt = document.getElementById('report-tag');
+	var len = rt.options.length;
+	for(var i=0; i<len; i++)
+	{
+		if(rt.options[i].value=='SELECT TAG') continue;
+		rt.options[i].disabled = false;
+	}
+}
+
+function disableTag(tag)
+{
+	var rt = document.getElementById('report-tag');
+	var len = rt.options.length;
+	for(var i=0; i<len; i++)
+	{
+		if(rt.options[i].value == tag)
+		{
+			rt.options[i].disabled = true;
+		}
+	}
 }
 
 function generateTags()
@@ -214,6 +238,7 @@ function generateTags()
 	for(var i=0; i<len; i++)
 	{
 		var tag = new ReportTag(rt.options[i].text);
+		tag.value = rt.options[i].value;
 		$('#tag-list').append(tag.element);
 	}
 	popStack();
@@ -222,16 +247,23 @@ function generateTags()
 function setTag()
 {
 	pushStack('setTag');
+	if($('#report-tag').val() == 'SELECT TAG')
+	{
+		popStack();
+		return;
+	}
 	var len = workingcase.tags.length;
 	for(var i=0; i<len; i++) //Check to see if the tag already exists in the workingcase. If so, just return.
 	{
 		if(workingcase.tags[i] == $('#report-tag').val())
 		{
+			$('#report-tag').val('SELECT TAG');
 			popStack();
 			return;
 		}
 	}
 	workingcase.tags.push($('#report-tag').val())
+	$('#report-tag').val('SELECT TAG');
 	updateTags();
 	popStack(); 
 }
@@ -248,6 +280,7 @@ function removeTag(t)
 function hideTags()
 {
 	var len = reporttags.length;
+	resetTags();
 	for(var i=0; i<len; i++)
 	{
 		reporttags[i].element.css('display','none');
@@ -303,6 +336,7 @@ function Case()
 	this.files = [];
 	this.tags = [];
 	this.element;
+	this.admin = false;
 	this.DELETED = false;
 
 	cases.push(this);
@@ -573,6 +607,7 @@ function ReportTag(n)
 {
 	pushStack('ReportTag');
 	this.name = n;
+	this.value;
 	this.element;
 	this.newElement();
 	this.element.css('display', 'none');
@@ -596,26 +631,4 @@ ReportTag.prototype.newButton = function() {
 	button.on('click', clickHandler(removeTag, this));
 	popStack();
 	return button;
-}
-
-
-
-
-
-
-//*****************************************************************************************************************************
-//** EVIDENCE OBJECT **********************************************************************************************************
-//*****************************************************************************************************************************
-
-function Evidence()
-{
-	pushStack('Evidence');
-	this.element;
-	popStack();
-}
-
-Evidence.prototype.newElement = function() {
-	pushStack('Evidence.newElement');
-
-	popStack();
 }

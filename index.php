@@ -51,13 +51,14 @@
     <!--REPORT QUESTION-->
                 <div class="report-question thirty-margin-bottom">
                   <p class="one-wide report-question-header">Assign Report Tags</p>
-                  <select class="one-wide" id="report-tag">
-                    <option>Domestic Abuse</option>
-                    <option>Child Endangerment</option>
-                    <option>Sexual Assault</option>
-                    <option>DUI</option>
-                    <option>Speeding</option>
-                    <option>Drug Possesion</option>
+                  <select class="one-wide grey-text" id="report-tag">
+                    <option value="SELECT TAG" style="color:#777;" selected>SELECT TAG</option>
+                    <option value="Domestic Abuse">Domestic Abuse</option>
+                    <option value="Child Endangerment">Child Endangerment</option>
+                    <option value="Sexual Assault">Sexual Assault</option>
+                    <option value="DUI">DUI</option>
+                    <option value="Speeding">Speeding</option>
+                    <option value="Drug Possesion">Drug Possesion</option>
                   </select>
                 </div><!--END QUESTION-->
               </div>
