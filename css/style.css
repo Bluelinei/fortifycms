@@ -45,7 +45,7 @@ body{
   overflow-x: hidden;
 }
 
-.point-cursor{
+.point-cursor:hover{
   cursor: pointer !important;
 }
 
