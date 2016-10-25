@@ -19,26 +19,11 @@ function getUID()
 	var uid;
 	var status;
 	do {
+		log('Checking UID...')
 		status = false;
 		uid = getHex(64);
-		for(c in cases)
-		{
-			if(uid == c.uid)
-			{
-				status = true;
-				break;
-			}
-		}
-		if(status) continue;
-		for(c in casefiles)
-		{
-			if(uid == c.uid)
-			{
-				status = true;
-				break;
-			}
-		}
 	} while(status)
+	log('Generated!');
 	return uid;
 }
 
@@ -89,8 +74,31 @@ function display(node, element) {node.append(element);}
 function newCase()
 {
 	pushStack('newCase');
-	var c = new Case();
-	setAsActiveCase(c);
+	var status;
+	var uid = getHex(64);
+	var f = new FormData();
+	f.append('function', 'checkuid');
+	f.append('table', 'quickreport');
+	f.append('uid', uid);
+	do {
+		status = false;
+		$.ajax({
+			url: 'framework/functions.php',
+			method: 'POST',
+			data: f,
+			processData: false,
+			contentType: false,
+			//async:false; //If all else fails, it may be the only solution just to get it working.
+				success: function(response) {
+				if(response) status = true;
+				else
+				{
+					var c = new Case(uid);
+					setAsActiveCase(c);
+				}
+			}
+		});
+	} while(status);
 	popStack();
 }
 
@@ -350,10 +358,10 @@ function toggleAdmin()
 //** CASE OBJECT **********************************************************************************************************
 //*************************************************************************************************************************
 
-function Case()
+function Case(uid)
 {
 	pushStack('Case');
-	this.uid = getUID();
+	this.uid = uid;
 	this.casenum = '[New Case]';
 	this.nickname = '';
 	this.location;
@@ -368,6 +376,10 @@ function Case()
 	this.newElement();
 	updateCases();
 	popStack();
+}
+
+Case.prototype.postCaseUpdate = function() {
+
 }
 
 Case.prototype.newElement = function() {
