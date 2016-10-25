@@ -14,6 +14,8 @@
             <div class="clear"></div>
           </div><!--END Builder Header-->
 
+<!--START BUILDER BLOCK CONTENT WRAPPER-->
+          <div class="builder-block-content">
 
 <!--START QUESTION/ INVENTORY CONTAINER-->
           <div class="question-inventory-container">
@@ -80,6 +82,8 @@
 
 <!--Further Admin Block-->
           <div class="twenty-per-wide left tag-block">
+<!--START tag-column-->
+            <div class="tag-column">
               <div class="twenty-padding">
               <h3>Further Admin</h3>
   <!--Toggle Switch-->
@@ -97,15 +101,15 @@
                 </ul>
               </div>
             </div>
+          </div><!--END tag-column>
+<!--FORTIFY case button-->
             <div class="fortify-case-button-container">
-              <div style="height: 5px; width: 100%; background: #fff;border-top: 1px solid #bbb;"></div>
-              <div id="fortify-button" class="one-wide fortify-case-button point-cursor text-bold twenty-padding">Fortify Case</div>
-            </div>
-          </div><!--END further admin block-->
+              <div id="fortify-button" class="one-wide fortify-case-button point-cursor text-bold"><p class="vertical-middle">Fortify Case</p></div>
+            </div><!--END fortify case button-->
+          </div><!--END further admin block // this is the 100% block that contains the tag list and the button, it's how we get the 5px spacing between the evidence inventory block and then the 5px spacing between the fortify case button and the tag list-->
 
-
-
-        </div>
+        </div><!--END builder-block content wrapper-->
+        </div><!--END builder-block-->
       </div><!--END builder wrapper-->
 <!--START manager wrapper-->
       <div class="manager-container">

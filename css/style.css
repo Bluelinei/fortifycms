@@ -63,7 +63,7 @@ body{
 /** 01.00 Content Wrapper **/
 .content-wrapper{
 	width: 100%;
-	height: 90%;
+	height: 100%;
 }
 
 /** 02.00 Nav/Side bar **/
@@ -79,7 +79,7 @@ body{
 .content-pane{
 	float: left;
 	height: 100%;
-	padding: 60px;
+	padding: 40px;
 	width: 90%;
 }
 
@@ -113,6 +113,11 @@ body{
 	text-align: center;
 }
 
+.builder-block-content{
+  height: 88%;
+  width: 100%;
+}
+
 .question-inventory-container{
   width: 80%;
   height: 100%;
@@ -124,7 +129,7 @@ body{
 .evidence-inventory-block{
 	background: #d9d9d9;
   border: 1px solid #bbb;
-	height: 88%;
+	height: 100%;
 }
 
 
@@ -152,20 +157,19 @@ body{
 .fortify-case-button-container{
   position: absolute;
   bottom: 0px;
+  padding-top: 5px;
+  height: 10%;
   width: 100%;
 }
 
 .fortify-case-button{
   background: #bd3333;
-//background: linear-gradient(#EFAAA7, #FA9585);
-  padding: 0 40px;
   font-weight: normal;
   font-size: 15px;
+  height: 100%;
   text-align: center;
   color: #fff;
   font-weight: bold;
-  padding: 30px 0px;
-//text-shadow: 0px 1px #000;
   text-decoration: none;
 }
 
@@ -228,7 +232,7 @@ body{
 
 .report-question-block{
 	background: #dfdfdf;
-	height: 88%;
+	height: 100%;
   border-top: 1px solid #bbb;
   border-bottom: 1px solid #bbb;
   border-left: 1px solid #bbb;
@@ -305,10 +309,14 @@ select:-moz-focusring {
 }
 
 .tag-block{
-	background: #dfdfdf;
-	height: 88%;
-  border: 1px solid #bbb;
   margin-top: 5px;
+  height: 100%;
+}
+
+.tag-column{
+  background: #dfdfdf;
+	height: 90%;
+  border: 1px solid #bbb;
 }
 
 #tag-list li{
@@ -583,15 +591,18 @@ nav li div:hover{
 
 footer{
 	background: #3d3d3d;
-	height: 10%;
+	height: 0%;
 	width: 100%;
 }
 
 .notification-button{
-  height: 100%;
   background: #509ace;
-  text-align: center;
+  bottom: 0;
   color: #fff;
+  padding: 20px;
+  position: fixed;
+  right: 0;
+  text-align: center;
 
 }
 

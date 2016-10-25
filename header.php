@@ -27,7 +27,7 @@
 
 
 <!--START Main Content Area wrapper (side-bar + content pane)-->
-  <div class="content-wrapper">
+<!--  <div class="content-wrapper"> -->
 <!--START Nav/Logo side-bar-->
     <div class="nav-side-bar">
 
