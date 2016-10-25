@@ -73,10 +73,10 @@ function popStack()
 
 function getFileType(file)
 {
-	if(!file.indexOf('video')) return 'VIDEO FILE';
-	else if(!file.indexOf('audio')) return 'AUDIO FILE';
-	else if(!file.indexOf('text')) return 'TEXT FILE';
-	else if(!file.indexOf('image')) return 'IMAGE FILE';
+	if(!file.indexOf('video')) return 'VIDEO';
+	else if(!file.indexOf('audio')) return 'AUDIO';
+	else if(!file.indexOf('text')) return 'TEXT';
+	else if(!file.indexOf('image')) return 'IMAGE';
 	else return 'DOCUMENT';
 }
 
@@ -110,7 +110,7 @@ function truncateText(str, len, filler, end=0)
 	return str;
 }
 
-function getThumbnail(filename, ext, callback)
+function getVideoThumbnail(filename, ext, callback)
 {
 	pushStack('getThumbnail');
 	var f = new FormData();

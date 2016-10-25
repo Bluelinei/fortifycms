@@ -73,13 +73,15 @@ function postSQL(cf)
 function postFiles(files) //Sends file and file data to PHP for processing and uploading.
 {
 	pushStack('postFiles');
-	var len = files.length
+	var len = files.length;
 	var formData = new FormData();
 	for(var i=0; i<len; i++)
 	{
-		var cf = new Casefile(files[i])
+		var cf = new Casefile(files[i]);
+		var type = getFileType(files[i]);
+		var ext = getExtension(files[i].name);
 		formData.append('file', files[i]);
-		formData.append('ext', getExtension(files[i].name));
+		formData.append('ext', ext);
 		formData.append('uid', cf.uid);
 		
 		$.ajax({
@@ -90,36 +92,32 @@ function postFiles(files) //Sends file and file data to PHP for processing and u
 			contentType: false,
 			success: function(response) {
 				cf.filepath = response;
-				getThumbnail(cf.uid, getExtension(cf.filepath), function(response){
-					log("Trying to set thumbnail...");
-					cf.thumbnail = cf.uid+'.png';
-					cf.updateMediaElement();
-					updateMedia();
+				switch(type)
+				{
+					case 'VIDEO':
+						getVideoThumbnail(cf.uid, getExtension(cf.filepath), function(response){
+							cf.thumbnail = './framework/thumbs/'+cf.uid+'.png';
+							cf.updateMediaElement();
+							updateMedia();
+						break;
+					case 'IMAGE':
+						cf.thumbnail = './framework/uploads/'cf.uid+'.'+ext;
+						break;
+					case 'AUDIO':
+						cf.thumbnail = './img/audio.png';
+						break;
+					case 'TEXT':
+						break;
+					case 'DOCUMENT':
+						break;
+					default: break;
+				}
+				
 				});
-				/*var f = new FormData();
-				f.append('function', 'capture');
-				f.append('source', '../../uploads/'+cf.filepath);
-				f.append('time', '00:00:00');
-				f.append('output', '../../thumbs/'+cf.uid+'.png');
-
-				$.ajax({
-					url:'ffmpeg',
-					method:'POST',
-					data: f,
-					processData: false,
-					contentType: false,
-					success: function(response) {
-						log(response);
-						cf.thumbnail = cf.uid+'.png';
-						cf.updateMediaElement();
-						updateMedia();
-					}
-				});*/
 				postSQL(cf);
 			}
 		});
 		addMedia(cf);
-		//workingcase.addFile(cf);
 	}
 	popStack();
 }
