@@ -484,7 +484,7 @@ Casefile.prototype.updateMediaElement = function(thumb) {
 	inner.append(e.join(''));
 	inner.css({'background-image': (this.thumbnail?'url('+this.thumbnail+')':'url("../img/docfile.png")'),
 		'background-repeat': 'no-repeat',
-		'background-size': (this.thumbnail?(getFileType(this.file.type)!='VIDEO'&&getFileType(this.file.type)!='IMAGE'?'100px 100px':'cover'):'100px 100px'),
+		'background-size': (this.thumbnail?'cover':'100px 100px'),
 		'background-position': 'center'
 	});
 	this.mediaelement.append(inner);

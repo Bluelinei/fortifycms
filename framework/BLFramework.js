@@ -112,7 +112,7 @@ function postFiles(files) //Sends file and file data to PHP for processing and u
 						updateMedia();
 						break;
 					case 'TEXT':
-						cf.thumbnail = './img/txticon.png';
+						cf.thumbnail = './img/texticon.png';
 						cf.updateMediaElement();
 						updateMedia();
 						break;
