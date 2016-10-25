@@ -181,6 +181,9 @@ function setEventListeners()
 	$('#report-location').on('input', updateInfo);
 	$('#report-tag').on('change', setTag);
 	$('#report-tag').val('SELECT TAG');
+	$('#myonoffswitch').checked = false;
+	$('#myonoffswitch').on('click', toggleAdmin);
+	$('#report-type').on('change', setCaseType);
 	$('#nav-evidence').on('click', toggleMediaBrowser);
 	$('#add-evidence').on('click', toggleMediaBrowser);
 	$('#close-media-browser').on('click', closeMediaBrowser);

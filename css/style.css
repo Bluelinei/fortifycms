@@ -428,14 +428,24 @@ h3.new-case:active{
   height: 40px;
   border-radius: 4px;
   color: #fff;
+  transition: all 0.1s;
+}
+
+.close:hover {
+  background: #f2a6a6;
 }
 
 .upload{
-  background: #b4e2a0;
+  background: #6eac53; /*#b4e2a0*/
   height: 40px;
   padding: 0 20px;
   border-radius: 4px;
   color: #fff;
+  transition: all 0.1s;
+}
+
+.upload:hover {
+  background: #b4e2a0;
 }
 
 .media-block{

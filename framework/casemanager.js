@@ -156,6 +156,8 @@ function updateReport()
 	else $('#report-number').val(workingcase.casenum);
 	if(workingcase.nickname) $('#report-nickname').val(workingcase.nickname);
 	if(workingcase.location) $('#report-location').val(workingcase.location);
+	document.getElementById('myonoffswitch').checked = workingcase.admin;
+	$('#report-type').val(workingcase.type);
 	updateFileList();
 	updateTags();
 	popStack();
@@ -208,6 +210,7 @@ function updateTags()
 
 function resetTags()
 {
+	pushStack('resetTags');
 	var rt = document.getElementById('report-tag');
 	var len = rt.options.length;
 	for(var i=0; i<len; i++)
@@ -215,10 +218,12 @@ function resetTags()
 		if(rt.options[i].value=='SELECT TAG') continue;
 		rt.options[i].disabled = false;
 	}
+	popStack();
 }
 
 function disableTag(tag)
 {
+	pushStack('disableTag');
 	var rt = document.getElementById('report-tag');
 	var len = rt.options.length;
 	for(var i=0; i<len; i++)
@@ -228,6 +233,7 @@ function disableTag(tag)
 			rt.options[i].disabled = true;
 		}
 	}
+	popStack();
 }
 
 function generateTags()
@@ -279,12 +285,21 @@ function removeTag(t)
 
 function hideTags()
 {
+	pushStack('hideTags');
 	var len = reporttags.length;
 	resetTags();
 	for(var i=0; i<len; i++)
 	{
 		reporttags[i].element.css('display','none');
 	}
+	popStack();
+}
+
+function setCaseType()
+{
+	pushStack('setCaseType');
+	workingcase.type = $('#report-type').val();
+	popStack();
 }
 
 function removeFileFromCase(file)
@@ -317,6 +332,15 @@ function updateMedia()
 	popStack();
 }
 
+function toggleAdmin()
+{
+	pushStack('toggleAdmin');
+	if(workingcase.admin) workingcase.admin = false;
+	else workingcase.admin = true;
+	updateReport();
+	popStack();
+}
+
 
 
 
@@ -337,6 +361,7 @@ function Case()
 	this.tags = [];
 	this.element;
 	this.admin = false;
+	this.type;
 	this.DELETED = false;
 
 	cases.push(this);
