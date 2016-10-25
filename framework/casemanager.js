@@ -482,9 +482,9 @@ Casefile.prototype.updateMediaElement = function(thumb) {
 	e.push('<div style="display: inline;"><i class="fa fa-plus point-cursor" aria-hidden="true"></i></div>');
 	e.push('</div></div>');
 	inner.append(e.join(''));
-	inner.css({'background-image': 'url("./framework/thumbs/'+this.thumbnail+'")',
+	inner.css({'background-image': (this.thumbnail?'url("'+this.thumbnail+'")':'url("../img/video.png")'),
 		'background-repeat': 'no-repeat',
-		'background-size': 'cover',
+		'background-size': (this.thumbnail?'cover':'100px 100px'),
 		'background-position': 'center'
 	});
 	this.mediaelement.append(inner);
