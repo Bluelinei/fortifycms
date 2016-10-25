@@ -169,6 +169,10 @@ body{
   text-decoration: none;
 }
 
+.fortify-case-button:hover{
+  cursor: pointer;
+}
+
 .fortify-case-button:active{
   background: linear-gradient( #FA9585, #EFAAA7);
 
