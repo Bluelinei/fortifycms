@@ -615,7 +615,7 @@ Casefile.prototype.updateMediaElement = function(thumb) {
 	pushStack('Casefile.updateMediaElement');
 	var d = new Date(this.uploaddate);
 	this.mediaelement = $('<li>');
-	var inner = $('<div class="block" style="border:'+this.checkState()+'">');
+	var inner = $('<div class="block" style="border:'+this.checkState()+';">');
 	var e = [];
 	e.push('<div class="ev-curtain"><div class="vertical-middle">');
 	e.push('<h3>'+truncateText(this.file.name, 10, '...', 3)+'</h3>');
@@ -670,7 +670,7 @@ Casefile.prototype.updateElement = function() {
 	switch(this.state)
 	{
 		case UNFORT:
-			return '5px solid ';
+			return '5px solid red';
 			break;
 		case UNUSED:
 			return 'none';

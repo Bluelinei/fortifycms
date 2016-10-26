@@ -436,7 +436,7 @@ h3.new-case:active{
 }
 
 .upload{
-  background: #6eac53; /*#b4e2a0*/
+  background: #385477; /*#b4e2a0*/
   height: 40px;
   padding: 0 20px;
   border-radius: 4px;
@@ -445,7 +445,7 @@ h3.new-case:active{
 }
 
 .upload:hover {
-  background: #b4e2a0;
+  background: #648bba;
 }
 
 .media-block{

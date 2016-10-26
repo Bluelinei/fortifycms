@@ -1,6 +1,6 @@
 <?php
 
-$hostname=	'localhost';
+$hostname=	'192.168.1.27';
 $port= 		'3306';
 $username=	'root';
 $pass=		'';
