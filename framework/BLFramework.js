@@ -1,5 +1,7 @@
 //GLOBAL VARIABLES (MAINLY FOR DEBUGGING)
 
+const address = 'http://192.168.1.27/';
+
 var workingcase;
 
 var drag_enter_target;
