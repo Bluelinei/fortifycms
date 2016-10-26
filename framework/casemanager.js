@@ -68,110 +68,89 @@ function display(node, element) {node.append(element);}
 function newCase()
 {
 	pushStack('newCase');
-	var status;
-	var uid = getHex(64);
 	var f = new FormData();
-	f.append('function', 'checkuid');
+	f.append('function', 'getuid');
 	f.append('table', 'quickreport');
-	f.append('uid', uid);
-	do {
-		status = false;
-		$.ajax({
-			url: 'framework/functions.php',
-			method: 'POST',
-			data: f,
-			processData: false,
-			contentType: false,
-			success: function(response) {
-				if(response) status = true;
-				else
-				{
-					var c = new Case(uid);
-					setAsActiveCase(c);
-				}
-			}
-		});
-	} while(status);
+	$.ajax({
+		url: 'framework/functions.php',
+		method: 'POST',
+		data: f,
+		processData: false,
+		contentType: false,
+		success: function(uid) {
+			var c = new Case(uid);
+			setAsActiveCase(c);
+		}
+	});
 	popStack();
 }
 
 function newCaseFile(uploadedfile)
 {
 	pushStack('newCase');
-	var status;
-	var uid = getHex(64);
 	var f = new FormData();
-	f.append('function', 'checkuid');
+	f.append('function', 'getuid');
 	f.append('table', 'evidence');
-	f.append('uid', uid);
-	do {
-		status = false;
-		$.ajax({
-			url: 'framework/functions.php',
-			method: 'POST',
-			data: f,
-			processData: false,
-			contentType: false,
-			success: function(response) {
-				if(response) status = true;
-				else
-				{
-					var cf = new Casefile(uploadedfile, uid);
-					var type = getFileType(uploadedfile.type);
-					var ext = getExtension(uploadedfile.name);
-					var formData = new FormData();
-					formData.append('file', uploadedfile);
-					formData.append('ext', ext);
-					formData.append('uid', cf.uid);
-					$.ajax({
-						url: 'framework/uploads.php',
-						method: 'POST',
-						data: formData,
-						processData: false,
-						contentType: false,
-						success: function(response) {
-							log(response);
-							cf.filepath = response;
-							switch(type)
-							{
-								case 'VIDEO':
-									getVideoThumbnail(cf.uid, getExtension(cf.filepath), function(response){
-										cf.thumbnail = './framework/thumbs/'+cf.uid+'.png';
-										cf.updateMediaElement();
-										updateMedia();
-									});
-									break;
-								case 'IMAGE':
-									log('./framework/uploads/'+cf.uid+'.'+ext);
-									cf.thumbnail = './framework/uploads/'+cf.uid+'.'+ext;
-									cf.updateMediaElement();
-									updateMedia();
-									break;
-								case 'AUDIO':
-									cf.thumbnail = './img/audioicon.png';
-									cf.updateMediaElement();
-									updateMedia();
-									break;
-								case 'TEXT':
-									cf.thumbnail = './img/texticon.png';
-									cf.updateMediaElement();
-									updateMedia();
-									break;
-								case 'DOCUMENT':
-									cf.thumbnail = './img/docicon.png';
-									cf.updateMediaElement();
-									updateMedia();
-									break;
-								default: break;
-							}
-							postSQL(cf);
-						}
-					});
-					addMedia(cf);
+	$.ajax({
+		url: 'framework/functions.php',
+		method: 'POST',
+		data: f,
+		processData: false,
+		contentType: false,
+		success: function(uid) {
+			var cf = new Casefile(uploadedfile, uid);
+			var type = getFileType(uploadedfile.type);
+			var ext = getExtension(uploadedfile.name);
+			var formData = new FormData();
+			formData.append('file', uploadedfile);
+			formData.append('ext', ext);
+			formData.append('uid', cf.uid);
+			$.ajax({
+				url: 'framework/uploads.php',
+				method: 'POST',
+				data: formData,
+				processData: false,
+				contentType: false,
+				success: function(response) {
+					cf.filepath = response;
+					switch(type)
+					{
+						case 'VIDEO':
+							getVideoThumbnail(cf.uid, getExtension(cf.filepath), function(response){
+								cf.thumbnail = './framework/thumbs/'+cf.uid+'.png';
+								cf.updateMediaElement();
+								updateMedia();
+							});
+							break;
+						case 'IMAGE':
+							log('./framework/uploads/'+cf.uid+'.'+ext);
+							cf.thumbnail = './framework/uploads/'+cf.uid+'.'+ext;
+							cf.updateMediaElement();
+							updateMedia();
+							break;
+						case 'AUDIO':
+							cf.thumbnail = './img/audioicon.png';
+							cf.updateMediaElement();
+							updateMedia();
+							break;
+						case 'TEXT':
+							cf.thumbnail = './img/texticon.png';
+							cf.updateMediaElement();
+							updateMedia();
+							break;
+						case 'DOCUMENT':
+							cf.thumbnail = './img/docicon.png';
+							cf.updateMediaElement();
+							updateMedia();
+							break;
+						default: break;
+					}
+					postSQL(cf);
 				}
-			}
-		});
-	} while(status);
+			});
+			addMedia(cf);
+		}
+	});
 	popStack();
 }
 
@@ -456,12 +435,13 @@ Case.prototype.postCase = function() {
 	var f = new FormData();
 	f.append('uid',this.uid);
 	f.append('nickname',this.nickname);
-	f.append('reportnum',this.casenum);
+	f.append('reportnum',(this.casenum=='[No Report Number]'||this.casenum=='[New Case]'?'':this.casenum));
 	f.append('reportloc',this.location);
 	f.append('reporttype',this.type);
 	f.append('reporttags',this.tags.join('<#>'));
 	f.append('evidence',this.files.join('<#>'));
-	f.append('admin',this.admin);
+	f.append('admin',(this.admin?1:0));
+	f.append('officer', 'Hue G. Tool')
 	$.ajax({
 		url:'framework/casepost.php',
 		method: 'POST',

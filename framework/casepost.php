@@ -1,41 +1,45 @@
 <?php
 
-$hostname = '192.168.1.24';
-$port = '3306';
-$username='zhwatts';
-$pass='';
-$database = 'fortify';
+$hostname=	'localhost';
+$port= 		'3306';
+$username=	'root';
+$pass=		'';
+$database= 	'fortify';
 
-$uid = $_POST['uid'];
-$nickname = $_POST['nickname'];
-$reportnum = $_POST['reportnum'];
-$reportloc = $_POST['reportloc'];
-$reporttype = $_POST['reporttype'];
-$reporttags = $_POST['reporttags'];
-$evidence = $_POST['evidence'];
-$admin = $_POST['admin'];
+function getError($e) {die("CASEPOST: (".$sql.") ".$e->getMessage());}
 
-$conn;
+try{
+	$conn = new PDO("mysql:host=$hostname; port=$port; dbname=$database; charset=UTF8;", $username, $pass);
+} catch(PDOException $e) {getError($e);}
 
-function updateEntry()
+function updateEntry($conn)
 {
-	$sql = "UPDATE quickreport SET nickname=$nickname, report_num=$reportnum, location=$reportloc, report_type=$reporttype, tag_list=$reporttags, file_list=$evidence, further_admin=$admin WHERE uniqueKey=$uid"
+	try {
+		$sql = "UPDATE quickreport SET nickname=?, casenum=?, location=?, type=?, tags=?, evidence=?, admin=?, officer=? WHERE uid=?";
+		$stmt = $conn->prepare($sql);
+		$stmt->execute(array($_POST['nickname'],$_POST['reportnum'],$_POST['reportloc'],$_POST['reporttype'],$_POST['reporttags'],$_POST['evidence'],$_POST['admin'],$_POST['officer'],$_POST['uid']));
+		echo "Updated case in database";
+	} catch(PDOException $e) {getError($e);}
 }
 
-function newEntry()
+function newEntry($conn)
 {
-	$sql = "UPDATE quickreport SET uniqueKey=$uid, nickname=$nickname, report_num=$reportnum, location=$reportloc, report_type=$reporttype, tag_list=$reporttags, file_list=$evidence, further_admin=$admin"
+	try {
+		$sql = "INSERT INTO quickreport (uid, nickname, casenum, location, type, tags, evidence, admin, officer) VALUES (?,?,?,?,?,?,?,?,?)";
+		$stmt = $conn->prepare($sql);
+		$stmt->execute(array($_POST['uid'],$_POST['nickname'],$_POST['reportnum'],$_POST['reportloc'],$_POST['reporttype'],$_POST['reporttags'],$_POST['evidence'],$_POST['admin'],$_POST['officer']));
+		echo "Created new case in database";
+	} catch(PDOException $e) {getError($e);}
 }
 
 try {
-	$conn = new PDO("mysql:host=$hostname; port=$port; dbname=$database; charset=UTF8;", $username, $pass);
-	$ifexist = 'SELECT EXISTS(SELECT 1 FROM quickreport WHERE uid=$uid)';
-	$conn->exec($ifexist);
-	if($conn) updateEntry();
-	else newEntry();
-	echo "CASEPOST: Successfully posted to database.";
-} catch(PDOException $e) {
-	die("CASEPOST: (".$sqlrequest.") ".$e->getMessage());
-}
+	//$conn = new PDO("mysql:host=$hostname; port=$port; dbname=$database; charset=UTF8;", $username, $pass);
+	$ifexist = "SELECT EXISTS(SELECT 1 FROM quickreport WHERE uid=?)";
+	$stmt = $conn->prepare($ifexist);
+	$stmt->execute(array($uid));
+	$reply = $stmt->fetch();
+	if($reply[0]!="0") updateEntry($conn);
+	else newEntry($conn);
+} catch(PDOException $e) {getError($e);}
 
 ?>

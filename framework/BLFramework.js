@@ -54,6 +54,8 @@ function postSQL(cf)
 	fdata.append('file_type', getFileType(cf.file.type));
 	fdata.append('upload_date', cf.uploaddate);
 	fdata.append('case_index', cf.caseindex.join('<#>'));
+	fdata.append('state', cf.state);
+	fdata.append('officer', 'Hue G. Tool');
 
 	$.ajax({
 		url: 'framework/filepost.php',
