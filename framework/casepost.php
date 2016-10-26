@@ -36,7 +36,7 @@ try {
 	//$conn = new PDO("mysql:host=$hostname; port=$port; dbname=$database; charset=UTF8;", $username, $pass);
 	$ifexist = "SELECT EXISTS(SELECT 1 FROM quickreport WHERE uid=?)";
 	$stmt = $conn->prepare($ifexist);
-	$stmt->execute(array($uid));
+	$stmt->execute(array($_POST['uid']));
 	$reply = $stmt->fetch();
 	if($reply[0]!="0") updateEntry($conn);
 	else newEntry($conn);
