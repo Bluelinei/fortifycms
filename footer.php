@@ -1,7 +1,9 @@
   </div><!--END Main Content Area Wrapper-->
 <!--START footer-->
   <footer>
-    <div class="twenty-per-wide notification-button">Notifications</div>
+
+    <a href="" class="logout-button"><p class="vertical-middle">Log Out</p></a>
+    <div class="twenty-per-wide notification-button"><p class="vertical-middle">Notifications</p></div>
   </footer><!--END Footer-->
 
 

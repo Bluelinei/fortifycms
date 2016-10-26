@@ -42,6 +42,4 @@
         </ul>
       </nav>
 
-      <a href="" class="logout-button">Log Out</a>
-
     </div><!--END Nav/Logo side-bar-->
