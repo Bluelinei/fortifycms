@@ -10,5 +10,4 @@
     </div>
     <div class="ten-per-wide right" style="height: 100%; background: #222;"></div>
     <div class="clear"></div>
-
 <?php require 'footer.php'; ?>
