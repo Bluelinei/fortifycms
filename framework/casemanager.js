@@ -595,7 +595,7 @@ Casefile.prototype.newMediaElement = function() {
 	this.mediaelement = $('<li>');
 	var inner = $('<div class="block">');
 	var e = [];
-	e.push('<div class="ev-curtain" style="border:'+this.checkState()+';"><div class="vertical-middle">');
+	e.push('<div class="ev-curtain" style="border:'+this.updateElement()+';"><div class="vertical-middle">');
 	e.push('<h3>'+truncateText(this.file.name, 10, '...', 3)+'</h3>');
 	e.push('<p>'+d.toLocaleDateString()+'</p><br>');
 	e.push('<div style="display: inline;"><i class="fa fa-play-circle-o point-cursor" aria-hidden="true" style="margin-right: 10px;"></i></div>');
@@ -615,9 +615,9 @@ Casefile.prototype.updateMediaElement = function(thumb) {
 	pushStack('Casefile.updateMediaElement');
 	var d = new Date(this.uploaddate);
 	this.mediaelement = $('<li>');
-	var inner = $('<div class="block">');
+	var inner = $('<div class="block" style="border:'+this.checkState()+';">');
 	var e = [];
-	e.push('<div class="ev-curtain" style="border:'+this.checkState()+'"><div class="vertical-middle">');
+	e.push('<div class="ev-curtain"><div class="vertical-middle">');
 	e.push('<h3>'+truncateText(this.file.name, 10, '...', 3)+'</h3>');
 	e.push('<p>'+d.toLocaleDateString()+'</p><br>');
 	e.push('<div style="display: inline;"><i class="fa fa-play-circle-o point-cursor" aria-hidden="true" style="margin-right: 10px;"></i></div>');
@@ -660,29 +660,25 @@ Casefile.prototype.checkState = function() {
 			}
 		}
 		if(this.state != INUSE) this.state = UNUSED;
-	}
-	this.updateElement();
+	};
 	popStack();
-	return this.state;
+	return this.updateElement();
 };
 
 Casefile.prototype.updateElement = function() {
 	pushStack('CaseFile.updateElement');
-	if(CHANGE_STATE)
+	switch(this.state)
 	{
-		switch(this.state)
-		{
-			case UNFORT:
-				return '5px solid red';
-				break;
-			case UNUSED:
-				return 'none';
-				break;
-			case INUSE:
-				return '5px solid green';
-				break;
-			default: break;
-		}
+		case UNFORT:
+			return '5px solid red';
+			break;
+		case UNUSED:
+			return 'none';
+			break;
+		case INUSE:
+			return '5px solid green';
+			break;
+		default: break;
 	}
 	popStack();
 };
