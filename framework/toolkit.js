@@ -1,5 +1,5 @@
 
-var SHOW_CALLSTACK = false;
+var SHOW_CALLSTACK = true;
 
 function log(msg) {console.log(msg);} //Outputs a message to the browser console
 

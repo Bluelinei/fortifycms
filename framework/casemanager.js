@@ -34,17 +34,6 @@ function getCasefileById(id)
 	return null;
 }
 
-function onClick(file)
-{
-	pushStack('onClick');
-	if(!workingcase) {popStack(); return;}
-	if(file.state == INUSE) workingcase.removeFile(file);
-	else workingcase.addFile(file);
-	updateCases();
-	updateCaseFiles();
-	popStack();
-}
-
 function updateCases()
 {
 	pushStack('updateCases');
@@ -87,7 +76,7 @@ function newCase()
 
 function newCaseFile(uploadedfile)
 {
-	pushStack('newCase');
+	pushStack('newCaseFile');
 	var f = new FormData();
 	f.append('function', 'getuid');
 	f.append('table', 'evidence');
@@ -123,7 +112,6 @@ function newCaseFile(uploadedfile)
 							});
 							break;
 						case 'IMAGE':
-							log('./framework/uploads/'+cf.uid+'.'+ext);
 							cf.thumbnail = 'framework/uploads/'+cf.uid+'.'+ext;
 							cf.updateMediaElement();
 							updateMedia();
@@ -179,6 +167,16 @@ function setAsActiveCase(activecase)
 	popStack();
 }
 
+function addFileToCase(file)
+{
+	pushStack('addFile');
+	workingcase.addFile(file);
+	updateCases();
+	updateCaseFiles();
+	updateReport();
+	popStack();
+}
+
 function deleteCase(c)
 {
 	pushStack('deleteCase');
@@ -221,6 +219,7 @@ function updateReport()
 	$('#report-type').val(workingcase.type);
 	updateFileList();
 	updateTags();
+	updateMedia();
 	popStack();
 }
 
@@ -432,6 +431,7 @@ function Case(uid)
 }
 
 Case.prototype.postCase = function() {
+	pushStack('Case.postCase');
 	var f = new FormData();
 	f.append('uid',this.uid);
 	f.append('nickname',this.nickname);
@@ -439,7 +439,10 @@ Case.prototype.postCase = function() {
 	f.append('reportloc',this.location);
 	f.append('reporttype',this.type);
 	f.append('reporttags',this.tags.join('<#>'));
-	f.append('evidence',this.files.join('<#>'));
+	var filelist = []
+	var len = this.files.length;
+	for(var i=0; i<len; i++) {filelist.push(this.files[i].uid);}
+	f.append('evidence',filelist.join('<#>'));
 	f.append('admin',(this.admin?1:0));
 	f.append('officer', 'Hue G. Tool')
 	$.ajax({
@@ -452,6 +455,7 @@ Case.prototype.postCase = function() {
 			log(response);
 		}
 	});
+	popStack();
 }
 
 Case.prototype.newElement = function() {
@@ -504,6 +508,7 @@ Case.prototype.removeFile = function(file) {
 	for(var i=0; i<len; i++) {if(file.caseindex[i]==this.uid) {file.caseindex.splice(i,1);}}
 	file.updateMediaElement();
 	this.updateElement();
+	updateFileList();
 	popStack()
 };
 
@@ -571,6 +576,7 @@ function Casefile(f, uid)
 	casefiles.push(this);
 	this.newMediaElement();
 	this.newElement();
+	this.addMediaAddButton();
 	popStack();
 }
 
@@ -585,7 +591,6 @@ Casefile.prototype.newElement = function() {
 	this.element.append('<p class="right ten-padding">'+ d.toLocaleDateString() + ' ' + d.toLocaleTimeString() +'</p>');
 	this.element.append('<div class="clear"></div>');
 	this.element.id = this.uid+"_case";
-	this.element.click(clickHandler(onClick, this));
 	popStack();
 };
 
@@ -593,13 +598,13 @@ Casefile.prototype.newMediaElement = function() {
 	pushStack('Casefile.newMediaElement');
 	var d = new Date(this.uploaddate);
 	this.mediaelement = $('<li>');
-	var inner = $('<div class="block">');
+	var inner = $('<div class="block" style="border:'+this.checkState()+';">');
 	var e = [];
-	e.push('<div class="ev-curtain" style="border:'+this.updateElement()+';"><div class="vertical-middle">');
+	e.push('<div class="ev-curtain"><div class="vertical-middle">');
 	e.push('<h3>'+truncateText(this.file.name, 10, '...', 3)+'</h3>');
 	e.push('<p>'+d.toLocaleDateString()+'</p><br>');
 	e.push('<div style="display: inline;"><i class="fa fa-play-circle-o point-cursor" aria-hidden="true" style="margin-right: 10px;"></i></div>');
-	e.push('<div style="display: inline;"><i class="fa fa-plus point-cursor" aria-hidden="true"></i></div>');
+	e.push('<div style="display: inline;"><i class="fa fa-plus point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i></div>');
 	e.push('</div></div>');
 	inner.append(e.join(''));
 	inner.css({'background-image': 'url("'+address+'/img/loading.gif")',
@@ -608,6 +613,7 @@ Casefile.prototype.newMediaElement = function() {
 		'background-position': 'center'
 	});
 	this.mediaelement.append(inner);
+	popStack();
 	popStack();
 }
 
@@ -621,16 +627,16 @@ Casefile.prototype.updateMediaElement = function(thumb) {
 	e.push('<h3>'+truncateText(this.file.name, 10, '...', 3)+'</h3>');
 	e.push('<p>'+d.toLocaleDateString()+'</p><br>');
 	e.push('<div style="display: inline;"><i class="fa fa-play-circle-o point-cursor" aria-hidden="true" style="margin-right: 10px;"></i></div>');
-	e.push('<div style="display: inline;"><i class="fa fa-plus point-cursor" aria-hidden="true"></i></div>');
+	e.push('<div style="display: inline;"><i class="fa fa-plus point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i></div>');
 	e.push('</div></div>');
 	inner.append(e.join(''));
-	log(address+this.thumbnail);
 	inner.css({'background-image': (this.thumbnail ? ('url('+address+this.thumbnail+')') : ('url("'+address+'/img/docfile.png")')),
 		'background-repeat': 'no-repeat',
 		'background-size': (this.thumbnail?'cover':'100px 100px'),
 		'background-position': 'center'
 	});
 	this.mediaelement.append(inner);
+	popStack();
 	popStack();
 }
 
@@ -662,8 +668,9 @@ Casefile.prototype.checkState = function() {
 		}
 		if(this.state != INUSE) this.state = UNUSED;
 	};
+	var update = this.updateElement();
 	popStack();
-	return this.updateElement();
+	return update;
 };
 
 Casefile.prototype.updateElement = function() {
@@ -693,6 +700,24 @@ Casefile.prototype.addRemoveButton = function() {
 	$(document).on('click', '.'+this.uid+"_removebutton", clickHandler(removeFileFromCase, this));
 	popStack();
 	return button;
+}
+
+Casefile.prototype.addMediaAddButton = function() {
+	pushStack('Casefile.addMediaAddButton');
+	$(document).on('click', '.'+this.uid+'_addfilebutton', clickHandler(addFileToCase, this));
+	popStack();
+	/*
+	OKAY, LISTEN UP, ASSHOLE!
+
+	YOU'RE A FUCKING MORON FOR TRYING TO CREATE A NEW BUTTON EVERY SINGLE TIME YOU UPDATE SOMETHING SO JUST STOP!
+	GIVE WHATEVER BUTTON YOU HAVE A SPECIFIC CLASS OF [this.uid]+'_WHATEVERTHEFUCKTHEBUTTONDOES'
+	THEN YOU JUST ADD A $(document).on('click') LISTENER TO THE PAGE!
+
+	REMEMBER TO FIX THIS SHIT TOMORROW AND TO STOP BEING SUCH A DIPSHIT!
+
+	By the way...
+	YOU'RE A MOTHERFUCKING WIZARD!
+	*/
 }
 
 
