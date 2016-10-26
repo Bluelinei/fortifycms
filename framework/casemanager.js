@@ -117,29 +117,29 @@ function newCaseFile(uploadedfile)
 					{
 						case 'VIDEO':
 							getVideoThumbnail(cf.uid, getExtension(cf.filepath), function(response){
-								cf.thumbnail = './framework/thumbs/'+cf.uid+'.png';
+								cf.thumbnail = 'framework/thumbs/'+cf.uid+'.png';
 								cf.updateMediaElement();
 								updateMedia();
 							});
 							break;
 						case 'IMAGE':
 							log('./framework/uploads/'+cf.uid+'.'+ext);
-							cf.thumbnail = './framework/uploads/'+cf.uid+'.'+ext;
+							cf.thumbnail = 'framework/uploads/'+cf.uid+'.'+ext;
 							cf.updateMediaElement();
 							updateMedia();
 							break;
 						case 'AUDIO':
-							cf.thumbnail = './img/audioicon.png';
+							cf.thumbnail = 'img/audioicon.png';
 							cf.updateMediaElement();
 							updateMedia();
 							break;
 						case 'TEXT':
-							cf.thumbnail = './img/texticon.png';
+							cf.thumbnail = 'img/texticon.png';
 							cf.updateMediaElement();
 							updateMedia();
 							break;
 						case 'DOCUMENT':
-							cf.thumbnail = './img/docicon.png';
+							cf.thumbnail = 'img/docicon.png';
 							cf.updateMediaElement();
 							updateMedia();
 							break;
@@ -602,7 +602,7 @@ Casefile.prototype.newMediaElement = function() {
 	e.push('<div style="display: inline;"><i class="fa fa-plus point-cursor" aria-hidden="true"></i></div>');
 	e.push('</div></div>');
 	inner.append(e.join(''));
-	inner.css({'background-image': 'url("../img/loading.gif")',
+	inner.css({'background-image': 'url("'+address+'/img/loading.gif")',
 		'background-repeat': 'no-repeat',
 		'background-size': '50px 50px',
 		'background-position': 'center'
@@ -624,7 +624,8 @@ Casefile.prototype.updateMediaElement = function(thumb) {
 	e.push('<div style="display: inline;"><i class="fa fa-plus point-cursor" aria-hidden="true"></i></div>');
 	e.push('</div></div>');
 	inner.append(e.join(''));
-	inner.css({'background-image': (this.thumbnail?'url('+this.thumbnail+')':'url("../img/docfile.png")'),
+	log(address+this.thumbnail);
+	inner.css({'background-image': (this.thumbnail ? ('url('+address+this.thumbnail+')') : ('url("'+address+'/img/docfile.png")')),
 		'background-repeat': 'no-repeat',
 		'background-size': (this.thumbnail?'cover':'100px 100px'),
 		'background-position': 'center'
