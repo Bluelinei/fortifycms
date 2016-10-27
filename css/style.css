@@ -53,6 +53,25 @@ body{
   color: #777;
 }
 
+.hidden {
+  display: none;
+}
+
+.pageload-overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0,0,0,0.7);
+}
+
+.loading-gif {
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+}
+
 /**00.02 Background Colors **/
 .nav-bar-blue{
 	background: #242533;

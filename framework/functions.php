@@ -16,7 +16,32 @@ try{
 
 function getData($conn)
 {
-
+	switch($_POST['table'])
+	{
+		case 'quickreport':
+		{
+			try {
+				$sql = "SELECT * FROM quickreport";
+				$stmt = $conn->prepare($sql);
+				$stmt->execute();
+				$response = $stmt->fetchALL(PDO::FETCH_ASSOC);
+				echo json_encode($response);
+			} catch(PDOException $e) {getError($e);}
+			break;
+		}
+		case 'evidence':
+		{
+			try {
+				$sql = "SELECT * FROM evidence WHERE uid=?";
+				$stmt = $conn->prepare($sql);
+				$stmt->execute(array($_POST['uid']));
+				$response = $stmt->fetch(PDO::FETCH_ASSOC);
+				echo json_encode($response);
+			} catch(PDOException $e) {getError($e);}
+			break;
+		}
+	}
+	
 }
 
 function getUID($conn)

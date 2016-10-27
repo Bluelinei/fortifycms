@@ -2,7 +2,7 @@
 
 $UPLOAD = true;
 
-function setDir($trdir) {if(!is_dir($trdir)) mkdir($trdir);}
+function setDir($trdir) {if(!is_dir($trdir)) mkdir($trdir, 0777, true);}
 
 $ds = DIRECTORY_SEPARATOR;
 if(!isset($_FILES['file']))
@@ -11,6 +11,8 @@ if(!isset($_FILES['file']))
 }
 $file = $_FILES['file'];
 error_reporting(E_ALL);
+
+echo error_get_last();
 
 $fn = $_POST['uid'].".".$_POST['ext'];
 $targetDir = ".".$ds."uploads";

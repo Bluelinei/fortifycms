@@ -22,15 +22,15 @@ function postCases()
 
 function getCaseById(id)
 {
-	var c;
-	for(c in cases) {if(c.uid == id) return c;}
+	var len = cases.length
+	for(var i=0; i<len; i++) {if(cases[i].uid == id) return cases[i];}
 	return null;
 }
 
 function getCasefileById(id)
 {
-	var file;
-	for(file in casefiles) {if(file.uid == id) return file;}
+	var len = casefiles.length;
+	for(var i=0; i<len; i++) {if(casefiles[i].uid == id) return casefiles[i];}
 	return null;
 }
 
@@ -39,6 +39,7 @@ function updateCases()
 	pushStack('updateCases');
 	var len = cases.length;
 	for(var i=0; i<len; i++) {
+		cases[i].updateElement();
 		$(caselistElementID).append(cases[i].element);
 	}
 	popStack();
@@ -87,8 +88,7 @@ function newCaseFile(uploadedfile)
 		processData: false,
 		contentType: false,
 		success: function(uid) {
-			var cf = new Casefile(uploadedfile, uid);
-			var type = getFileType(uploadedfile.type);
+			var cf = new Casefile(uploadedfile.name, getFileType(uploadedfile.type), uid);
 			var ext = getExtension(uploadedfile.name);
 			var formData = new FormData();
 			formData.append('file', uploadedfile);
@@ -101,11 +101,12 @@ function newCaseFile(uploadedfile)
 				processData: false,
 				contentType: false,
 				success: function(response) {
-					cf.filepath = response;
-					switch(type)
+					log('Fuck');
+					log(response);
+					switch(cf.filetype)
 					{
 						case 'VIDEO':
-							getVideoThumbnail(cf.uid, getExtension(cf.filepath), function(response){
+							getVideoThumbnail(cf.uid, getExtension(response), function(response){
 								cf.thumbnail = 'framework/thumbs/'+cf.uid+'.png';
 								cf.updateMediaElement();
 								updateMedia();
@@ -547,13 +548,13 @@ Case.prototype.deleteCase = function() {
 //** CASEFILE OBJECT **********************************************************************************************************
 //*****************************************************************************************************************************
 
-function Casefile(f, uid)
+function Casefile(filename, type, uid)
 {
 	pushStack('CaseFile');
 	this.uid = uid;
-	this.name;
-	this.file = f;
-	this.filepath;
+	this.name = filename;
+	this.filetype = type;
+	this.filepath = filename;
 	var date = new Date();
 	this.uploaddate = date.getTime();
 	this.element;
@@ -575,7 +576,7 @@ Casefile.prototype.postFile = function() {
 	fdata.append('uid', this.uid);
 	fdata.append('nickname', this.name);
 	fdata.append('file_path', this.filepath);
-	fdata.append('file_type', getFileType(this.file.type));
+	fdata.append('file_type', this.filetype);
 	fdata.append('upload_date', this.uploaddate);
 	fdata.append('case_index', this.caseindex.join(''));
 	fdata.append('state', (this.state==UNFORT?0:1));
@@ -599,7 +600,7 @@ Casefile.prototype.newElement = function() {
 	var d = new Date(this.uploaddate);
 	this.element = $('<li>');
 	this.element.addClass('casefile-element');
-	this.element.append('<p class="left ten-padding bold">'+truncateText(this.file.name, 15, '...', 3) +' ('+ getFileType(this.file.type)+')</p>');
+	this.element.append('<p class="left ten-padding bold">'+this.name+' ('+this.filetype+')</p>');
 	this.element.append('<div class="delete-icon link-button point-cursor '+this.uid+'_removebutton"><i class="fa fa-minus-circle" aria-hidden="true"></i></div>');
 	this.element.append('<div class="view-icon link-button point-cursor"><i class="fa fa-eye" aria-hidden="true"></i></div>');
 	this.element.append('<p class="right ten-padding">'+ d.toLocaleDateString() + ' ' + d.toLocaleTimeString() +'</p>');
@@ -615,7 +616,7 @@ Casefile.prototype.newMediaElement = function() {
 	var inner = $('<div class="block" style="border:'+this.checkState()+';">');
 	var e = [];
 	e.push('<div class="ev-curtain"><div class="vertical-middle">');
-	e.push('<h3>'+truncateText(this.file.name, 10, '...', 3)+'</h3>');
+	e.push('<h3>'+this.name+'</h3>');
 	e.push('<p>'+d.toLocaleDateString()+'</p><br>');
 	e.push('<div style="display: inline;"><i class="fa fa-eye point-cursor" aria-hidden="true" style="margin-right: 30px;"></i></div>');
 	e.push('<div style="display: inline;"><i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i></div>');
@@ -638,15 +639,15 @@ Casefile.prototype.updateMediaElement = function(thumb) {
 	var inner = $('<div class="block" style="border:'+this.checkState()+';">');
 	var e = [];
 	e.push('<div class="ev-curtain"><div class="vertical-middle">');
-	e.push('<h3>'+truncateText(this.file.name, 10, '...', 3)+'</h3>');
+	e.push('<h3>'+this.name+'</h3>');
 	e.push('<p>'+d.toLocaleDateString()+'</p><br>');
 	e.push('<div style="display: inline;"><i class="fa fa-eye point-cursor" aria-hidden="true" style="margin-right: 30px;"></i></div>');
 	e.push('<div style="display: inline;"><i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i></div>');
 	e.push('</div></div>');
 	inner.append(e.join(''));
-	inner.css({'background-image': (this.thumbnail ? ('url('+address+this.thumbnail+')') : ('url("'+address+'/img/docfile.png")')),
+	inner.css({'background-image': (this.thumbnail ? ('url('+address+this.thumbnail+')') : ('url("'+address+'/img/docicon.png")')),
 		'background-repeat': 'no-repeat',
-		'background-size': (this.thumbnail?'cover':'100px 100px'),
+		'background-size': 'cover',
 		'background-position': 'center'
 	});
 	this.mediaelement.append(inner);
