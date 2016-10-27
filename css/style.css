@@ -139,18 +139,64 @@ body{
 }
 
 .evidence-inventory-list .view-icon{
-	background: #34A7C1;
-	color: #000;
+	background: #385477;
+	color: #fff;
 	float: right;
 	margin-right: 3px;
-	padding: 10px;
+	padding: 7px;
+  font-size: 16px;
+  transition: all 0.1s;
+}
+
+.evidence-inventory-list .view-icon:hover {
+  background: #648bba;
+}
+
+.evidence-inventory-list .view-icon:active {
+  background: #243d5b;
 }
 
 .evidence-inventory-list .delete-icon{
 	background: #ee5f77;
-	color: #000;
+	color: #fff;
 	float: right;
-	padding: 10px;
+	padding: 7px;
+  font-size: 16px;
+  transition: all 0.1s;
+}
+
+.evidence-inventory-list .delete-icon:hover {
+  background: #f38c9d;
+}
+
+.evidence-inventory-list .delete-icon:active {
+  background: #e92f4e;
+}
+
+.media-add-icon {
+  color: #fff;
+  transition: all 0.1s;
+}
+
+.media-add-icon:hover {
+  color: #b7f6a2;
+}
+
+.media-add-icon:active {
+  color: #fff;
+}
+
+.media-remove-icon {
+  color: #fff;
+  transition: all 0.1s;
+}
+
+.media-remove-icon:hover {
+  color: #f38c9d;
+}
+
+.media-remove-icon:active {
+  color: #fff;
 }
 
 .fortify-case-button-container{
@@ -447,6 +493,10 @@ h3.new-case:active{
 
 .close:hover {
   background: #f2a6a6;
+}
+
+.close:active {
+  background: #e92f4e;
 }
 
 .upload{

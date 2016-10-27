@@ -2,7 +2,7 @@
 
 $UPLOAD = true;
 
-function setDir($trdir) {if(!is_dir($trdir)) mkdir($trdir, 0777, true);}
+function setDir($trdir) {if(!is_dir($trdir)) mkdir($trdir);}
 
 $ds = DIRECTORY_SEPARATOR;
 if(!isset($_FILES['file']))

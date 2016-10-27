@@ -47,30 +47,6 @@ function fileOutput(files) //Outputs the information for the uploaded file onto 
 
 //File Upload functions
 
-function postSQL(cf)
-{
-	var fdata = new FormData();
-	fdata.append('uid', cf.uid);
-	fdata.append('nickname', cf.name);
-	fdata.append('file_path', cf.filepath);
-	fdata.append('file_type', getFileType(cf.file.type));
-	fdata.append('upload_date', cf.uploaddate);
-	fdata.append('case_index', cf.caseindex.join('<#>'));
-	fdata.append('state', cf.state);
-	fdata.append('officer', 'Hue G. Tool');
-
-	$.ajax({
-		url: 'framework/filepost.php',
-		method: 'POST',
-		data: fdata,
-		processData: false,
-		contentType: false,
-		success: function(response) {
-			log(response);
-		}
-	});
-}
-
 function postFiles(files) //Sends file and file data to PHP for processing and uploading.
 {
 	pushStack('postFiles');

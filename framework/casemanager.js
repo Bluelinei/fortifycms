@@ -133,7 +133,7 @@ function newCaseFile(uploadedfile)
 							break;
 						default: break;
 					}
-					postSQL(cf);
+					cf.postFile();
 				}
 			});
 			addMedia(cf);
@@ -170,7 +170,8 @@ function setAsActiveCase(activecase)
 function addFileToCase(file)
 {
 	pushStack('addFile');
-	workingcase.addFile(file);
+	if(file.state == INUSE) workingcase.removeFile(file)
+	else workingcase.addFile(file);
 	updateCases();
 	updateCaseFiles();
 	updateReport();
@@ -442,6 +443,7 @@ Case.prototype.postCase = function() {
 	var filelist = []
 	var len = this.files.length;
 	for(var i=0; i<len; i++) {filelist.push(this.files[i].uid);}
+	for(var i=0; i<len; i++) {this.files[i].postFile();}
 	f.append('evidence',filelist.join(''));
 	f.append('admin',(this.admin?1:0));
 	f.append('officer', 'Hue G. Tool')
@@ -460,14 +462,19 @@ Case.prototype.postCase = function() {
 
 Case.prototype.newElement = function() {
 	pushStack('Case.newElement');
+	var src = this;
 	this.element = $('<li>');
-	this.element.append('<div id="_case_text" class="case-ref-id seventy-per-wide ten-padding left point-cursor">'+ this.casenum + (this.nickname?' ('+truncateText(this.nickname, 13, '...', 0)+')':'')+'</div>');
-	this.element.append('<div id="_case_filelen" class="case-file-count twenty-per-wide ten-padding left">'+ this.files.length +'</div>');
-	this.element.append(this.newButton());
+	this.element.append('<div class="case-ref-id seventy-per-wide ten-padding left point-cursor _case_text">'+ this.casenum + (this.nickname?' ('+truncateText(this.nickname, 13, '...', 0)+')':'')+'</div>');
+	this.element.append('<div class="case-file-count twenty-per-wide ten-padding left _case_filelen">'+ this.files.length +'</div>');
+	this.element.append('<div class="pointer-mouse ten-per-wide left red-light text-center link-button case-delete-button-reference-class case-delete-button '+this.uid+'" style="padding: 8px"><i class="fa fa-minus-circle case-delete-button-reference-class" style="font-size:19px; color:#fff;" aria-hidden="true"></i></div>');
 	this.element.append('<div class="clear"></div>');
 	var c = this;
 	this.element.on('click', function(event) {
 		if(event.target.className.indexOf('case-delete-button-reference-class')==-1) setAsActiveCase(c);
+	});
+	$(document).on('click', '.'+this.uid, function(event) {
+		event.stopPropagation();
+		deleteCase(src);
 	});
 	popStack();
 };
@@ -482,8 +489,8 @@ Case.prototype.updateElement = function() {
 
 Case.prototype.updateHTML = function() {
 	pushStack('Case.updateHTML');
-	this.element.find('#_case_text').html(this.casenum + (this.nickname?' ('+truncateText(this.nickname, 13, '...')+')':''));
-	this.element.find('#_case_filelen').html(this.files.length);
+	this.element.find('._case_text').html(this.casenum + (this.nickname?' ('+truncateText(this.nickname, 13, '...')+')':''));
+	this.element.find('._case_filelen').html(this.files.length);
 	popStack();
 };
 
@@ -496,7 +503,7 @@ Case.prototype.addFile = function(file) {
 	file.updateMediaElement();
 	this.updateElement();
 	updateFileList();
-	popStack()
+	popStack();
 	return 1;
 };
 
@@ -509,7 +516,7 @@ Case.prototype.removeFile = function(file) {
 	file.updateMediaElement();
 	this.updateElement();
 	updateFileList();
-	popStack()
+	popStack();
 };
 
 Case.prototype.getFileList = function() {
@@ -524,27 +531,9 @@ Case.prototype.getFileList = function() {
 	return l.join('<br>');
 };
 
-Case.prototype.newButton = function() {
-	pushStack('Case.newButton');
-	var src = this;
-	var button = $('<div>');
-	button.addClass(src.uid);
-	button.addClass('pointer-mouse ten-per-wide ten-padding left red-light text-center link-button case-delete-button-reference-class case-delete-button');
-	button.html('<i class="fa fa-times-circle-o case-delete-button-reference-class" style="font-size:14px;" aria-hidden="true"></i>');
-	$(document).on('click', '.'+src.uid, function(event) {
-		event.stopPropagation();
-		deleteCase(src);
-	});
-	popStack()
-	return button;
-};
-
 Case.prototype.deleteCase = function() {
 	pushStack('Case.deleteCase');
-	while(this.files.length)
-	{
-		this.removeFile(this.files[0]);
-	}
+	while(this.files.length) {this.removeFile(this.files[0]);}
 	this.DELETED = true;
 	popStack();
 };
@@ -580,14 +569,39 @@ function Casefile(f, uid)
 	popStack();
 }
 
+Casefile.prototype.postFile = function() {
+	pushStack('Casefile.postFile');
+	var fdata = new FormData();
+	fdata.append('uid', this.uid);
+	fdata.append('nickname', this.name);
+	fdata.append('file_path', this.filepath);
+	fdata.append('file_type', getFileType(this.file.type));
+	fdata.append('upload_date', this.uploaddate);
+	fdata.append('case_index', this.caseindex.join(''));
+	fdata.append('state', (this.state==UNFORT?0:1));
+	fdata.append('officer', 'Hue G. Tool');
+
+	$.ajax({
+		url: 'framework/filepost.php',
+		method: 'POST',
+		data: fdata,
+		processData: false,
+		contentType: false,
+		success: function(response) {
+			log(response);
+		}
+	});
+	popStack()
+}
+
 Casefile.prototype.newElement = function() {
 	pushStack('CaseFile.newElement');
 	var d = new Date(this.uploaddate);
 	this.element = $('<li>');
 	this.element.addClass('casefile-element');
-	this.element.append('<p class="left ten-padding bold">(' + getFileType(this.file.type) + ')</p>');
+	this.element.append('<p class="left ten-padding bold">'+truncateText(this.file.name, 15, '...', 3) +' ('+ getFileType(this.file.type)+')</p>');
 	this.element.append('<div class="delete-icon link-button point-cursor '+this.uid+'_removebutton"><i class="fa fa-minus-circle" aria-hidden="true"></i></div>');
-	this.element.append('<a href="view" class="view-icon link-button"><i class="fa fa-eye" aria-hidden="true"></i></a>');
+	this.element.append('<div class="view-icon link-button point-cursor"><i class="fa fa-eye" aria-hidden="true"></i></div>');
 	this.element.append('<p class="right ten-padding">'+ d.toLocaleDateString() + ' ' + d.toLocaleTimeString() +'</p>');
 	this.element.append('<div class="clear"></div>');
 	this.element.id = this.uid+"_case";
@@ -603,8 +617,8 @@ Casefile.prototype.newMediaElement = function() {
 	e.push('<div class="ev-curtain"><div class="vertical-middle">');
 	e.push('<h3>'+truncateText(this.file.name, 10, '...', 3)+'</h3>');
 	e.push('<p>'+d.toLocaleDateString()+'</p><br>');
-	e.push('<div style="display: inline;"><i class="fa fa-play-circle-o point-cursor" aria-hidden="true" style="margin-right: 10px;"></i></div>');
-	e.push('<div style="display: inline;"><i class="fa fa-plus point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i></div>');
+	e.push('<div style="display: inline;"><i class="fa fa-eye point-cursor" aria-hidden="true" style="margin-right: 30px;"></i></div>');
+	e.push('<div style="display: inline;"><i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i></div>');
 	e.push('</div></div>');
 	inner.append(e.join(''));
 	inner.css({'background-image': 'url("'+address+'/img/loading.gif")',
@@ -626,8 +640,8 @@ Casefile.prototype.updateMediaElement = function(thumb) {
 	e.push('<div class="ev-curtain"><div class="vertical-middle">');
 	e.push('<h3>'+truncateText(this.file.name, 10, '...', 3)+'</h3>');
 	e.push('<p>'+d.toLocaleDateString()+'</p><br>');
-	e.push('<div style="display: inline;"><i class="fa fa-play-circle-o point-cursor" aria-hidden="true" style="margin-right: 10px;"></i></div>');
-	e.push('<div style="display: inline;"><i class="fa fa-plus point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i></div>');
+	e.push('<div style="display: inline;"><i class="fa fa-eye point-cursor" aria-hidden="true" style="margin-right: 30px;"></i></div>');
+	e.push('<div style="display: inline;"><i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i></div>');
 	e.push('</div></div>');
 	inner.append(e.join(''));
 	inner.css({'background-image': (this.thumbnail ? ('url('+address+this.thumbnail+')') : ('url("'+address+'/img/docfile.png")')),
@@ -647,6 +661,11 @@ Casefile.prototype.display = function(node) {
 Casefile.prototype.remove = function() {
 	this.element.remove();
 };
+
+Casefile.prototype.isInclude = function() {
+	if(this.state==INUSE) return 'fa-minus-circle media-remove-icon';
+	else return 'fa-plus-circle media-add-icon';
+}
 
 Casefile.prototype.checkState = function() {
 	pushStack('CaseFile.checkState');
@@ -678,13 +697,13 @@ Casefile.prototype.updateElement = function() {
 	switch(this.state)
 	{
 		case UNFORT:
-			return '5px solid red';
+			return '5px solid rgb(255,100,100)';
 			break;
 		case UNUSED:
 			return 'none';
 			break;
 		case INUSE:
-			return '5px solid green';
+			return '5px solid rgb(100,255,100)';
 			break;
 		default: break;
 	}
