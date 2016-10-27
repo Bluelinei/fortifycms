@@ -58,6 +58,14 @@ ul{
 	display: block;
 }
 
+.push-right{
+  margin-left:auto;
+}
+
+.push-left{
+  margin-right:auto;
+}
+
 .bottom{
 	bottom: 0px;
 	position: absolute;

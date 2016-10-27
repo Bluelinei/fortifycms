@@ -63,6 +63,16 @@
 	width: 80%;
 }
 
+.eighty-five-per-wide{
+	width: 85%;
+}
+
 .ninty-per-wide{
 	width: 90%;
+}
+
+/*percentage height*/
+
+.hundred-tall{
+	height: 100%;
 }
