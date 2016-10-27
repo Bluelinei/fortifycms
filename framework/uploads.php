@@ -17,6 +17,7 @@ $targetDir = ".".$ds."uploads";
 setDir($targetDir);
 $finalPath = $targetDir.$ds.$fn;
 if($UPLOAD) move_uploaded_file($file['tmp_name'], $finalPath);
+if(!file_exists($finalPath)) return;
 echo $fn;
 
 ?>

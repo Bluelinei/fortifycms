@@ -58,7 +58,7 @@ function newCase()
 {
 	pushStack('newCase');
 	var f = new FormData();
-	f.append('function', 'getuid');
+	f.append('function', 'set');
 	f.append('table', 'quickreport');
 	$.ajax({
 		url: 'framework/functions.php',
@@ -78,7 +78,7 @@ function newCaseFile(uploadedfile)
 {
 	pushStack('newCaseFile');
 	var f = new FormData();
-	f.append('function', 'getuid');
+	f.append('function', 'set');
 	f.append('table', 'evidence');
 	$.ajax({
 		url: 'framework/functions.php',
@@ -442,7 +442,7 @@ Case.prototype.postCase = function() {
 	var filelist = []
 	var len = this.files.length;
 	for(var i=0; i<len; i++) {filelist.push(this.files[i].uid);}
-	f.append('evidence',filelist.join('<#>'));
+	f.append('evidence',filelist.join(''));
 	f.append('admin',(this.admin?1:0));
 	f.append('officer', 'Hue G. Tool')
 	$.ajax({
@@ -576,7 +576,7 @@ function Casefile(f, uid)
 	casefiles.push(this);
 	this.newMediaElement();
 	this.newElement();
-	this.addMediaAddButton();
+	this.setButtonFunction();
 	popStack();
 }
 
@@ -586,7 +586,7 @@ Casefile.prototype.newElement = function() {
 	this.element = $('<li>');
 	this.element.addClass('casefile-element');
 	this.element.append('<p class="left ten-padding bold">(' + getFileType(this.file.type) + ')</p>');
-	this.element.append(this.addRemoveButton());
+	this.element.append('<div class="delete-icon link-button point-cursor '+this.uid+'_removebutton"><i class="fa fa-minus-circle" aria-hidden="true"></i></div>');
 	this.element.append('<a href="view" class="view-icon link-button"><i class="fa fa-eye" aria-hidden="true"></i></a>');
 	this.element.append('<p class="right ten-padding">'+ d.toLocaleDateString() + ' ' + d.toLocaleTimeString() +'</p>');
 	this.element.append('<div class="clear"></div>');
@@ -691,21 +691,10 @@ Casefile.prototype.updateElement = function() {
 	popStack();
 };
 
-Casefile.prototype.addRemoveButton = function() {
-	pushStack('Casefile.addDeleteButton')
-	var button = $('<div>');
-	button.addClass('delete-icon link-button point-cursor');
-	button.addClass(this.uid+"_removebutton");
-	button.html('<i class="fa fa-minus-circle" aria-hidden="true"></i>');
-	$(document).on('click', '.'+this.uid+"_removebutton", clickHandler(removeFileFromCase, this));
-	popStack();
-	return button;
-}
-
-Casefile.prototype.addMediaAddButton = function() {
-	pushStack('Casefile.addMediaAddButton');
+Casefile.prototype.setButtonFunction = function() {
 	$(document).on('click', '.'+this.uid+'_addfilebutton', clickHandler(addFileToCase, this));
-	popStack();
+	$(document).on('click', '.'+this.uid+"_removebutton", clickHandler(removeFileFromCase, this));
+}
 	/*
 	OKAY, LISTEN UP, ASSHOLE!
 
@@ -718,7 +707,6 @@ Casefile.prototype.addMediaAddButton = function() {
 	By the way...
 	YOU'RE A MOTHERFUCKING WIZARD!
 	*/
-}
 
 
 

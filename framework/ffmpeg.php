@@ -11,6 +11,7 @@ function redactVideo($source, $start, $end, $output)
 
 function captureFrame($source, $time, $output)
 {
+	setDir($_POST['dir']);
 	exec(".\\ffmpeg\\bin\\ffmpeg.exe -y -ss 00:00:00 -i $source -frames:v 1 $output", $out);
 	echo "FFMPEG: Thumbnail generated in $output";
 }
