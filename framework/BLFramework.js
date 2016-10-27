@@ -2,6 +2,15 @@
 
 const address = 'http://192.168.1.27/';
 
+var databaseload = 0;
+
+function loading(v)
+{
+	databaseload+=v;
+	if(databaseload) $('.pageload-overlay').removeClass('hidden');
+	else $('.pageload-overlay').addClass('hidden');
+}
+
 var workingcase;
 
 var drag_enter_target;
@@ -46,30 +55,6 @@ function fileOutput(files) //Outputs the information for the uploaded file onto 
 }
 
 //File Upload functions
-
-function postSQL(cf)
-{
-	var fdata = new FormData();
-	fdata.append('uid', cf.uid);
-	fdata.append('nickname', cf.name);
-	fdata.append('file_path', cf.filepath);
-	fdata.append('file_type', getFileType(cf.file.type));
-	fdata.append('upload_date', cf.uploaddate);
-	fdata.append('case_index', cf.caseindex.join('<#>'));
-	fdata.append('state', cf.state);
-	fdata.append('officer', 'Hue G. Tool');
-
-	$.ajax({
-		url: 'framework/filepost.php',
-		method: 'POST',
-		data: fdata,
-		processData: false,
-		contentType: false,
-		success: function(response) {
-			log(response);
-		}
-	});
-}
 
 function postFiles(files) //Sends file and file data to PHP for processing and uploading.
 {
@@ -141,11 +126,168 @@ function setEventListeners()
 	$('#page-body').on('click', closeMediaBrowser);
 }
 
+function getDatabase()
+{
+	var f = new FormData();
+	f.append('table', 'quickreport');
+	f.append('function', 'get');
+	loading(1);
+	var compiled = [];
+	$.ajax({
+		url: 'framework/functions.php',
+		method: 'POST',
+		data: f,
+		processData: false,
+		contentType: false,
+		success: function(response) {
+			var o = JSON.parse(response);
+			if(o.length)
+			{
+				//LOAD CASES
+				var len = o.length;
+				for(var i=0; i<len; i++)
+				{
+					var x = o[i];
+					var c = new Case(x.uid);
+					c.nickname = x.nickname;
+					c.casenum = (x.casenum?x.casenum:'[No Report Number]');
+					c.location = x.location;
+					c.type = (x.type=='undefined'?'':x.type);
+					c.tags = tokenize(x.tags, '<#>');
+					c.admin = (x.admin=="1"?true:false);
+					c.officer = x.officer;
+					var evidence = tokenizeUID(x.evidence);
+
+					//FROM CASES COMPILE LIST OF ALL FILES THAT NEED TO BE LOADED
+					compiled = concatLists(compiled, evidence);
+					log(compiled);
+				}
+				setAsActiveCase(cases[0]);
+				//ONCE WE'RE DONE COMPILING THE EVIDENCE LIST, BEGIN LOADING ALL EVIDENCE
+				len = compiled.length;
+				for(var i=0; i<len; i++)
+				{
+					f = new FormData();
+					f.append('table', 'evidence');
+					f.append('function', 'get');
+					f.append('uid', compiled[i]);
+					loading(1);
+					$.ajax({
+						url: 'framework/functions.php',
+						method: 'POST',
+						data: f,
+						processData: false,
+						contentType: false,
+						success: function(response) {
+							var file = JSON.parse(response);
+							var cf = new Casefile(file.filepath, file.type, file.uid);
+							cf.caseindex = tokenizeUID(file.caseindex);
+							cf.uploaddate = file.uploaddate;
+							cf.name = file.nickname;
+							cf.officer = file.officer;
+
+							var caselen = cf.caseindex.length;
+							for(var j=0; j<caselen; j++)
+							{
+								var indx = getCaseById(cf.caseindex[j]);
+								indx.files.push(cf);
+							}
+							updateCases();
+							updateCaseFiles();
+							updateReport();
+							loading(-1);
+						}
+					});
+				}
+			}
+			else {newCase();}
+			loading(-1);
+		}
+	});
+}
+
 window.onload = function()
 {
 	getAPISupport();
-	newCase();
+	getDatabase();
 	generateTags();
 	setEventListeners();
-	if(SHOW_CALLSTACK) log('******* END OF INIT *******');
 }
+
+/*for(var j=0; j<elen; j++)
+					{
+						var cf = getCasefileById(evidence[j]);
+						if(cf) //CHECK TO SEE IF THE EVIDENCE IS ALREADY LOADED
+						{
+							//Check to see if they're already in there...
+
+							c.files.push(cf);
+							updateCases();
+							updateCaseFiles();
+							updateReport();
+						}
+						else //IF NOT, THEN PULL IT FROM THE SERVER.
+						{
+							f = new FormData();
+							f.append('table', 'evidence');
+							f.append('function', 'get');
+							f.append('uid', evidence[j]);
+							loading(1);
+							$.ajax({
+								url: 'framework/functions.php',
+								method: 'POST',
+								data: f,
+								processData: false,
+								contentType: false,
+								success: function(response) {
+									var file = JSON.parse(response);
+									var cf = getCasefileById(file.uid)
+									if(cf)
+									{
+										c.files.push(cf);
+										updateCases();
+										updateCaseFiles();
+										updateReport();
+										return;
+									}
+									cf = new Casefile(file.filepath, file.type, file.uid);
+									cf.caseindex = tokenizeUID(file.caseindex);
+									cf.uploaddate = file.uploaddate;
+									cf.officer = file.officer;
+									switch(cf.filetype)
+									{
+										case 'VIDEO':
+											cf.thumbnail = 'framework/thumbs/'+cf.uid+'.png';
+											break;
+										case 'IMAGE':
+											cf.thumbnail = 'framework/uploads/'+cf.uid+'.png';
+											break;
+										case 'DOCUMENT':
+											cf.thumbnail = 'img/docicon.png';
+											break;
+										case 'TEXT':
+											cf.thumbnail = 'img/texticon.png';
+											break;
+										case 'AUDIO':
+											cf.thumbnail = 'img/audioicon.png';
+											break;
+									}
+
+									var cilen = cf.caseindex.length;
+									for(var k=0; k<cilen; k++)
+									{
+										var indx = getCaseById(cf.caseindex[k]);
+										indx.files.push(cf);
+									}
+
+									setAsActiveCase(c);
+
+									updateCases();
+									updateCaseFiles();
+									updateReport();
+
+									loading(-1);
+								}
+							});
+						}
+					}*/

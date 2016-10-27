@@ -102,7 +102,7 @@
                 </ul>
               </div>
             </div>
-          </div><!--END tag-column>
+          </div><!--END tag-column-->
 <!--FORTIFY case button-->
             <div class="fortify-case-button-container">
               <div id="fortify-button" class="one-wide fortify-case-button point-cursor text-bold"><p class="vertical-middle">Fortify Case</p></div>
@@ -118,7 +118,7 @@
         <div style="height: 5px; background: #fff; width: 100%;"></div>
         <h3 class="seventy-per-wide left ten-padding">Reference ID</h3>
         <h3 class="twenty-per-wide left ten-padding">Files</h3>
-        <h3 class="ten-per-wide left ten-padding new-case" id="new-case"><i class="fa fa-plus-circle" style="font-size: 14px; color: #fff" aria-hidden="true"></i></h3>
+        <h3 class="ten-per-wide left new-case" style="padding: 8px" id="new-case"><i class="fa fa-plus-circle" style="font-size: 19px; color: #fff" aria-hidden="true"></i></h3>
         <div class="clear"></div>
 <!--CASE LIST-->
         <ul id="case-list">
@@ -128,6 +128,10 @@
     </div><!--END Content Pane-->
     <div class="clear"></div>
     <input method="post" type="file" id="openfilebrowser" name="files[]" enctype="multipart/form-data" style="display:none;" multiple />
+
+    <div class="pageload-overlay">
+      <img class="loading-gif" style="height: 300px; width: 300px" src="../img/loader.gif"/>
+    </div>
 
 
 <?php require 'footer.php'; ?>

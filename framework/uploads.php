@@ -12,6 +12,8 @@ if(!isset($_FILES['file']))
 $file = $_FILES['file'];
 error_reporting(E_ALL);
 
+echo error_get_last();
+
 $fn = $_POST['uid'].".".$_POST['ext'];
 $targetDir = ".".$ds."uploads";
 setDir($targetDir);

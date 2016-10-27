@@ -93,10 +93,26 @@ function tokenize(string, delim)
 	while(string)
 	{
 		pos = string.indexOf(delim);
-		tokens.push(string.substr(1, pos));
+		if(pos==-1)
+		{
+			tokens.push(string);
+			break;
+		}
+		tokens.push(string.substr(0, pos));
 		string = string.substr(pos+delim.length);
 	}
 	return tokens;
+}
+
+function tokenizeUID(string)
+{
+	var uids = [];
+	while(string)
+	{
+		uids.push(string.substr(0,16));
+		string = string.substr(16);
+	}
+	return uids;
 }
 
 function truncateText(str, len, filler, end=0)
@@ -135,4 +151,22 @@ function getVideoThumbnail(filename, ext, callback)
 		}
 	});
 	popStack();
+}
+
+function inList(list, item)
+{
+	var len = list.length;
+	for(var i=0; i<len; i++) {if(list[i]==item) return true;}
+	return false;
+}
+
+function concatLists(list, items)
+{
+	var concat = list;
+	var len = items.length;
+	for(var i=0; i<len; i++)
+	{
+		if(!inList(list, items[i])) concat.push(items[i]);
+	}
+	return concat;
 }

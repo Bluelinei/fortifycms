@@ -6,7 +6,7 @@ $username=	'user';
 $pass=		'';
 $database= 	'fortify';
 
-function getError($e) {die("CASEPOST: (".$sql.") ".$e->getMessage());}
+function getError($e) {die("CASEPOST: ".$e->getMessage());}
 
 try{
 	$conn = new PDO("mysql:host=$hostname; port=$port; dbname=$database; charset=UTF8;", $username, $pass);
@@ -33,7 +33,6 @@ function newEntry($conn)
 }
 
 try {
-	//$conn = new PDO("mysql:host=$hostname; port=$port; dbname=$database; charset=UTF8;", $username, $pass);
 	$ifexist = "SELECT EXISTS(SELECT 1 FROM quickreport WHERE uid=?)";
 	$stmt = $conn->prepare($ifexist);
 	$stmt->execute(array($_POST['uid']));
