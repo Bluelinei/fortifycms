@@ -60,7 +60,7 @@ body{
   top: 0;
   left: 0;
   background: #242533;
-  transition: transform 1s ease 1.5s, opacity 0.8s ease 1.7s;
+  transition: transform 1s cubic-bezier(0.9, 0, 0.1, 1) 1.5s, opacity 0.8s cubic-bezier(0.9, 0, 0.1, 1) 1.7s;
 }
 
 #pageload-overlay.hidden {
@@ -512,7 +512,7 @@ h3.new-case:active{
   z-index: 1005;
   height: 100%;
   transform: translateX(100%);
-  transition: all 0.3s;
+  transition: all 0.2s;
 }
 
 .overlay-container.show{

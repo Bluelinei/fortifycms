@@ -21,9 +21,9 @@ function getData($conn)
 		case 'quickreport':
 		{
 			try {
-				$sql = "SELECT * FROM quickreport";
+				$sql = "SELECT * FROM quickreport WHERE officer=?";
 				$stmt = $conn->prepare($sql);
-				$stmt->execute();
+				$stmt->execute(array($_POST['officer']));
 				$response = $stmt->fetchALL(PDO::FETCH_ASSOC);
 				echo json_encode($response);
 			} catch(PDOException $e) {getError($e);}
