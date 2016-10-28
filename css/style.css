@@ -53,12 +53,6 @@ body{
   color: #777;
 }
 
-.hidden {
-  opacity: 0;
-  transform: translateY(-100%);
-  pointer-events: none;
-}
-
 #pageload-overlay {
   position: absolute;
   width: 100%;
@@ -66,7 +60,13 @@ body{
   top: 0;
   left: 0;
   background: #242533;
-  transition: transform 1s ease 1s, opacity 0.8s ease 1.2s;
+  transition: transform 1s ease 1.5s, opacity 0.8s ease 1.7s;
+}
+
+#pageload-overlay.hidden {
+  opacity: 0;
+  transform: translateY(-100%);
+  pointer-events: none;
 }
 
 .loading-gif {
@@ -74,6 +74,21 @@ body{
   top:50%;
   left:50%;
   transform: translate(-50%, -50%);
+}
+
+#fortify-notification {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: opacity 0.5s linear 1.5s;
+  opacity: 1;
+  pointer-events: none;
+}
+
+#fortify-notification.hidden {
+  display: block;
+  opacity: 0;
 }
 
 /**00.02 Background Colors **/

@@ -202,6 +202,9 @@ function deleteCase(c)
 function fortifyActiveCase()
 {
 	pushStack('fortifyActiveCase');
+	$('#fortify-notification').removeClass('hidden');
+	$('#fortify-notification').addClass('hidden');
+	log($('#fortify-notification').attr('class'));
 	postCases();
 	updateInfo();
 	popStack();

@@ -1,6 +1,6 @@
 //GLOBAL VARIABLES (MAINLY FOR DEBUGGING)
 
-const address = 'http://192.168.1.27/';
+const address = 'http://68.169.178.232/';
 
 var databaseload = 0;
 
@@ -139,6 +139,7 @@ function getDatabase()
 		processData: false,
 		contentType: false,
 		success: function(response) {
+			log(response);
 			var o = JSON.parse(response);
 			if(o.length)
 			{

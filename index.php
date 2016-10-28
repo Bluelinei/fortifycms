@@ -102,6 +102,7 @@
                 </ul>
               </div>
             </div>
+            <div id="fortify-notification" class="hidden">Cases Saved</div>
           </div><!--END tag-column-->
 <!--FORTIFY case button-->
             <div class="fortify-case-button-container">
