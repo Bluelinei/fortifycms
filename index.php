@@ -1,5 +1,8 @@
 <?php require 'header.php'; ?>
 
+    <script src="./framework/casemanager.js"></script>
+    <script src="./framework/BLFramework.js"></script>
+
 <!--START Content-pane-->
     <div class="content-pane fourty-padding" id="page-body">
 

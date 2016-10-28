@@ -1,4 +1,7 @@
 <?php require 'header.php'; ?>
+
+  <script src="framework/videoplayer/video.js"></script>
+
 <!--START Content-pane-->
   <div class="content-pane" id="page-body" style="overflow: auto;">
 <!--START video container main-->
@@ -8,7 +11,7 @@
 
 <!--START video box-->
         <div style="margin-bottom: -2px;">
-          <video style="width: 100%;">
+          <video id="video" style="width: 100%;">
             <source src="video/test-video.mp4" type="video/mp4">
           </video>
 
@@ -18,7 +21,7 @@
               <div class="ten-per-wide hundred-tall left">
 <!--START play button-->
                 <div class="vertical-middle">
-                  <img src="img/play-button.png" class="play-button"/>
+                  <img id="video-toggle" src="img/play-button.png" class="play-button point-cursor"/>
                 </div>
               </div><!--END play button-->
 

@@ -17,8 +17,6 @@
 
     <script src="./framework/jquery3.1.1.js"></script>
     <script src="./framework/toolkit.js"></script>
-    <script src="./framework/casemanager.js"></script>
-    <script src="./framework/BLFramework.js"></script>
 
   </head>
   <body>
@@ -36,7 +34,7 @@
       <nav>
         <ul>
           <li style="display: none;"><div>Upload</div></li>
-          <li><a href="video.php"><div>Search</div></a></li>
+          <li><div id="video-player">Search</div></li>
           <li><div>Recent</div></li>
           <li><div id="nav-evidence">Evidence</div></li>
         </ul>

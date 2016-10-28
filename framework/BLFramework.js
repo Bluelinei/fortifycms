@@ -123,6 +123,7 @@ function setEventListeners()
 	$('#add-evidence').on('click', toggleMediaBrowser);
 	$('#close-media-browser').on('click', closeMediaBrowser);
 	$('#page-body').on('click', closeMediaBrowser);
+	$('#video-player').on('click', clickHandler(href, 'video.php'));
 }
 
 function getDatabase()
@@ -181,9 +182,27 @@ function getDatabase()
 							var file = JSON.parse(response);
 							var cf = new Casefile(file.filepath, file.type, file.uid);
 							cf.caseindex = tokenizeUID(file.caseindex);
-							cf.uploaddate = file.uploaddate;
-							cf.name = file.nickname;
+							cf.uploaddate = Number(file.uploaddate);
+							cf.name = (file.nickname?file.filename:'');
 							cf.officer = file.officer;
+							switch(cf.filetype)
+							{
+								case 'VIDEO':
+									cf.thumbnail = 'framework/thumbs/'+cf.uid+'.png';
+									break;
+								case 'IMAGE':
+									cf.thumbnail = 'framework/uploads/'+cf.uid+'.'+getExtension(cf.filepath);
+									break;
+								case 'DOCUMENT':
+									cf.thumbnail = 'img/docicon.png';
+									break;
+								case 'TEXT':
+									cf.thumbnail = 'img/texticon.png';
+									break;
+								case 'AUDIO':
+									cf.thumbnail = 'img/audioicon.png';
+									break;
+							}
 
 							var caselen = cf.caseindex.length;
 							for(var j=0; j<caselen; j++)

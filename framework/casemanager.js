@@ -555,7 +555,7 @@ function Casefile(filename, type, uid)
 {
 	pushStack('CaseFile');
 	this.uid = uid;
-	this.name = filename;
+	this.name;
 	this.filetype = type;
 	this.filepath = filename;
 	var date = new Date();
@@ -577,7 +577,7 @@ Casefile.prototype.postFile = function() {
 	pushStack('Casefile.postFile');
 	var fdata = new FormData();
 	fdata.append('uid', this.uid);
-	fdata.append('nickname', this.name);
+	fdata.append('nickname', (this.name?this.name:''));
 	fdata.append('file_path', this.filepath);
 	fdata.append('file_type', this.filetype);
 	fdata.append('upload_date', this.uploaddate);
@@ -598,12 +598,16 @@ Casefile.prototype.postFile = function() {
 	popStack()
 }
 
+Casefile.prototype.truncName = function(y, n){
+	return (this.name?truncateText(this.name, y, '...'):truncateText(this.filepath, n, '...', getExtension(this.filepath)));
+}
+
 Casefile.prototype.newElement = function() {
 	pushStack('CaseFile.newElement');
 	var d = new Date(this.uploaddate);
 	this.element = $('<li>');
 	this.element.addClass('casefile-element');
-	this.element.append('<p class="left ten-padding bold">'+this.name+' ('+this.filetype+')</p>');
+	this.element.append('<p class="left ten-padding bold">'+this.truncName(22, 17)+' ('+this.filetype+')</p>');
 	this.element.append('<div class="delete-icon link-button point-cursor '+this.uid+'_removebutton"><i class="fa fa-minus-circle" aria-hidden="true"></i></div>');
 	this.element.append('<div class="view-icon link-button point-cursor"><i class="fa fa-eye" aria-hidden="true"></i></div>');
 	this.element.append('<p class="right ten-padding">'+ d.toLocaleDateString() + ' ' + d.toLocaleTimeString() +'</p>');
@@ -619,7 +623,7 @@ Casefile.prototype.newMediaElement = function() {
 	var inner = $('<div class="block" style="border:'+this.checkState()+';">');
 	var e = [];
 	e.push('<div class="ev-curtain"><div class="vertical-middle">');
-	e.push('<h3>'+this.name+'</h3>');
+	e.push('<h3>'+this.truncName(17, 15)+'</h3>');
 	e.push('<p>'+d.toLocaleDateString()+'</p><br>');
 	e.push('<div style="display: inline;"><i class="fa fa-eye point-cursor" aria-hidden="true" style="margin-right: 30px;"></i></div>');
 	e.push('<div style="display: inline;"><i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i></div>');
@@ -632,7 +636,6 @@ Casefile.prototype.newMediaElement = function() {
 	});
 	this.mediaelement.append(inner);
 	popStack();
-	popStack();
 }
 
 Casefile.prototype.updateMediaElement = function(thumb) {
@@ -642,7 +645,7 @@ Casefile.prototype.updateMediaElement = function(thumb) {
 	var inner = $('<div class="block" style="border:'+this.checkState()+';">');
 	var e = [];
 	e.push('<div class="ev-curtain"><div class="vertical-middle">');
-	e.push('<h3>'+this.name+'</h3>');
+	e.push('<h3>'+this.truncName(17, 15)+'</h3>');
 	e.push('<p>'+d.toLocaleDateString()+'</p><br>');
 	e.push('<div style="display: inline;"><i class="fa fa-eye point-cursor" aria-hidden="true" style="margin-right: 30px;"></i></div>');
 	e.push('<div style="display: inline;"><i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i></div>');
@@ -654,7 +657,6 @@ Casefile.prototype.updateMediaElement = function(thumb) {
 		'background-position': 'center'
 	});
 	this.mediaelement.append(inner);
-	popStack();
 	popStack();
 }
 
@@ -701,12 +703,15 @@ Casefile.prototype.updateElement = function() {
 	switch(this.state)
 	{
 		case UNFORT:
+			popStack();
 			return '5px solid rgb(255,100,100)';
 			break;
 		case UNUSED:
+			popStack();
 			return 'none';
 			break;
 		case INUSE:
+			popStack();
 			return '5px solid rgb(100,255,100)';
 			break;
 		default: break;

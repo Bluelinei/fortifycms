@@ -170,3 +170,7 @@ function concatLists(list, items)
 	}
 	return concat;
 }
+
+function href(url) {window.location.href = url;}
+
+function redirect(url) {window.location.replace(url);}
