@@ -725,54 +725,12 @@ margin: 0px;
 }
 
 /**05.06 video comment buttons**/
-.add-video-comment-button{
-  background: #66ff99;
-  border: 1px solid #448899;
-  float: left;
-  margin-top: 5px;
-  padding: 10px;
-  text-align: center;
-  width: 20%;
-}
-
-.add-video-comment-spacer{
-  float: left;
-  padding: 5px 5px 0 5px;
-  width: 40%;
-}
-
-.add-video-comment-spacer-inner{
-  background: #777;
-  border: 1px solid #555;
-  padding: 10px;
+.video-comment-control-container{
   width: 100%;
-}
+  padding: 20px;
+  background: #999;
+  border: 1px solid #777;
 
-.video-comment-skip-button{
-  background: #aaa;
-  border: 1px solid #888;
-  float: left;
-  font-weight: bold;
-  margin-top: 5px;
-  padding: 10px;
-  text-align: center;
-  width: 4%;
-}
-
-.video-comment-count-container{
-  float: left;
-  margin-top: 5px;
-  padding: 0 5px;
-  width: 32%;
-}
-
-.video-comment-count-inner{
-  background: #aaa;
-  border: 1px solid #888;
-  font-weight: bold;
-  padding: 10px;
-  text-align: center;
-  width: 100%;
 }
 
 /**05.07 video page side bar**/

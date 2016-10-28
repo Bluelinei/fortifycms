@@ -100,11 +100,11 @@
 
 
 <!--START Add Video Comment Container-->
-        <div style="width: 100%; padding: 20px;background: #999;border: 1px solid #777;">
+        <div class="video-comment-control-container">
 <!--START add video commment button -->
           <div class="left point-cursor" style="color: #99ff99;">
             <i class="fa fa-plus-circle" aria-hidden="true"></i> <span style="color: #fff;">New Comment</span>
-          </div><!--END add video comment button->
+          </div><!--END add video comment button-->
 <!--START count video comments-->
           <div class="right" style="color:#fff;">
             <i class="fa fa-arrow-circle-left" aria-hidden="true"></i> 8 Comments available <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
@@ -129,7 +129,8 @@
     <div class="video-sidebar-container">
 <!--START video sidebar inner-content -->
       <div class="video-sidebar-inner">
-
+        <div style="background: #555; color: #fff; font-size: 18px; padding: 20px; text-align: center;">Roadside drug bust</div>
+        <div style="background: #666; color: #fff; font-size: 10px; padding: 10px; text-align: center;">Oct. 25, 2016</div>
 
       </div><!--END video sidebar inner -->
     </div><!--END video sidebar container-->
