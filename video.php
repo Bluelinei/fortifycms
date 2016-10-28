@@ -95,27 +95,24 @@
           <div class="clear"></div>
         </div><!--END video comment box-->
 
-<!--START add/skip comment container-->
-        <div class="add-video-comment-button point-cursor">
-          Add Comment
-        </div>
 
-        <div class="add-video-comment-spacer">
-          <div class="add-video-comment-spacer-inner">&nbsp</div>
-        </div>
+<!--START Add Video Comment Container-->
+        <div style="width: 100%; padding: 20px;background: #999;border: 1px solid #777;">
+<!--START add video commment button -->
+          <div class="left point-cursor" style="color: #99ff99;">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> <span style="color: #fff;">New Comment</span>
+          </div><!--END add video comment button->
+<!--START count video comments-->
+          <div class="right" style="color:#fff;">
+            <i class="fa fa-arrow-circle-left" aria-hidden="true"></i> 8 Comments available <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
 
-        <div class="video-comment-skip-button">
-          <
-        </div>
-        <div class="video-comment-count-container">
-          <div class="video-comment-count-inner">
-            8 comments total
+
           </div>
-        </div>
 
-        <div class="video-comment-skip-button">
-          >
-        </div>
+          <div class="clear"></div><!--Clear the add video comment buttons-->
+        </div><!--END add video comment container-->
+
+
 
         <div class="clear"></div><!--CLEAR the floated add comment containers (three in total)-->
 
