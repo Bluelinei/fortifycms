@@ -12,7 +12,7 @@
 03.01 Case Builder Block
 03.02 Case Manager Block
 04.00 Evidence Manager
-05.00
+05.00 video page
 06.00
 07.00
 08.00
@@ -610,6 +610,176 @@ margin: 0px;
   transition: all 1s;
 }
 
+/** 05.00 Video Page**/
+
+/**05.01 video page main container**/
+
+.video-main-container{
+  float: left;
+  height: 200px;
+  padding: 30px;
+  padding-right: 20px;
+  width: 80%;
+}
+
+.video-container-inner{
+  background: #ccc;
+  height:100%;
+  width: 100%;
+}
+
+
+/**05.02 video control container**/
+
+.video-control-container{
+  background: rgba(000,000,000,0.6);
+  bottom: 2px;
+  height: 60px;
+  position: absolute;
+  width: 100%;
+}
+
+/**05.03 video page controls**/
+
+.play-button{
+  display: block;
+  height: 50px;
+  margin-left:auto;
+}
+
+.time-code-box{
+  border-radius: 5px;
+  background: #666;
+  color: #fff;
+  display: block;
+  font-size: 10px;
+  text-align: center;
+  padding: 15px;
+  width: 50%;
+}
+
+.progress-bar{
+  background: #ff5555;
+  float: left;
+  height: 100%;
+  width:60%;
+}
+
+.play-head{
+  background: #ffbbbb;
+  height: 100%;
+  float: left;
+  width:4%;
+}
+
+.progress-bar-base{
+  float: left;
+  background: #fff;
+  height: 100%;
+  width:36%;
+}
+
+.video-player-button{
+  display: block;
+  float: left;
+  height: 40px;
+}
+
+/**05.04 video page advanced tool bar**/
+.advanced-toolbar-container{
+  background:#ccc;
+  border: 1px solid #aaa;
+  border-top: 0;
+  padding: 20px;
+  width: 100%;
+}
+
+/**05.05video comment container**/
+.video-comment-container{
+  background:#cfcfcf;
+  border: 1px solid #aaa;
+  border-top: 0px;
+  color: #999;
+  height: 90px;
+  width: 100%;
+}
+
+.video-comment-focused{
+  background: #ddd;
+  color: #000;
+}
+
+/**05.06 video comment buttons**/
+.add-video-comment-button{
+  background: #66ff99;
+  border: 1px solid #448899;
+  float: left;
+  margin-top: 5px;
+  padding: 10px;
+  text-align: center;
+  width: 20%;
+}
+
+.add-video-comment-spacer{
+  float: left;
+  padding: 5px 5px 0 5px;
+  width: 40%;
+}
+
+.add-video-comment-spacer-inner{
+  background: #777;
+  border: 1px solid #555;
+  padding: 10px;
+  width: 100%;
+}
+
+.video-comment-skip-button{
+  background: #aaa;
+  border: 1px solid #888;
+  float: left;
+  font-weight: bold;
+  margin-top: 5px;
+  padding: 10px;
+  text-align: center;
+  width: 4%;
+}
+
+.video-comment-count-container{
+  float: left;
+  margin-top: 5px;
+  padding: 0 5px;
+  width: 32%;
+}
+
+.video-comment-count-inner{
+  background: #aaa;
+  border: 1px solid #888;
+  font-weight: bold;
+  padding: 10px;
+  text-align: center;
+  width: 100%;
+}
+
+/**05.07 video page side bar**/
+.video-sidebar-container{
+  float: left;
+  height: 100%;
+  padding: 30px;
+  padding-bottom: 80px;
+  position: fixed;
+  right: 0;
+  width: 20%;
+}
+
+.video-sidebar-inner{
+  background: #ccc;
+  border: 1px solid #aaa;
+  height: 100%;
+  width: 100%;
+}
+
+
+
 
 
 /** 09.00 Header **/
@@ -665,11 +835,13 @@ nav li div:hover{
 /** 10.00 Footer **/
 
 footer{
-	background: #3d3d3d;
+  background: #3f3f3f;
   width: 100%;
 	height: 6%;
 	width: 100%;
 }
+
+
 
 .notification-button{
   background: #509ace;
@@ -686,4 +858,10 @@ footer .headshot{
   display: block;
   height: 80%;
   padding: 10px;
+}
+
+.video-footer-pusher{
+  background: #fff;
+  height: 30px;
+  width: 100%;
 }

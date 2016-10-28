@@ -35,7 +35,7 @@
 
       <nav>
         <ul>
-          <li><div>Upload</div></li>
+          <li style="display: none;"><div>Upload</div></li>
           <li><div>Search</div></li>
           <li><div>Recent</div></li>
           <li><div id="nav-evidence">Evidence</div></li>
