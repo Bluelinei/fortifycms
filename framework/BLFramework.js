@@ -7,8 +7,7 @@ var databaseload = 0;
 function loading(v)
 {
 	databaseload+=v;
-	if(databaseload) $('.pageload-overlay').removeClass('hidden');
-	else $('.pageload-overlay').addClass('hidden');
+	if(!databaseload) $('#pageload-overlay').addClass('hidden');
 }
 
 var workingcase;
@@ -160,7 +159,6 @@ function getDatabase()
 
 					//FROM CASES COMPILE LIST OF ALL FILES THAT NEED TO BE LOADED
 					compiled = concatLists(compiled, evidence);
-					log(compiled);
 				}
 				setAsActiveCase(cases[0]);
 				//ONCE WE'RE DONE COMPILING THE EVIDENCE LIST, BEGIN LOADING ALL EVIDENCE

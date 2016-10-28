@@ -129,9 +129,8 @@
     <div class="clear"></div>
     <input method="post" type="file" id="openfilebrowser" name="files[]" enctype="multipart/form-data" style="display:none;" multiple />
 
-    <div class="pageload-overlay">
-      <img class="loading-gif" style="height: 300px; width: 300px" src="../img/loader.gif"/>
-    </div>
-
-
 <?php require 'footer.php'; ?>
+
+<div id="pageload-overlay">
+  <img class="loading-gif" style="width:300px; height:auto;" src="../img/fortifyloading.gif"/>
+</div>
