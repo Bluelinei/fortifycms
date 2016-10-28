@@ -101,7 +101,6 @@ function newCaseFile(uploadedfile)
 				processData: false,
 				contentType: false,
 				success: function(response) {
-					log('Fuck');
 					log(response);
 					switch(cf.filetype)
 					{
@@ -599,7 +598,7 @@ Casefile.prototype.postFile = function() {
 }
 
 Casefile.prototype.truncName = function(y, n){
-	return (this.name?truncateText(this.name, y, '...'):truncateText(this.filepath, n, '...', getExtension(this.filepath)));
+	return (this.name?truncateText(this.name, y, '...'):truncateText(this.filepath, n, '...', getExtension(this.filepath).length));
 }
 
 Casefile.prototype.newElement = function() {
@@ -623,7 +622,7 @@ Casefile.prototype.newMediaElement = function() {
 	var inner = $('<div class="block" style="border:'+this.checkState()+';">');
 	var e = [];
 	e.push('<div class="ev-curtain"><div class="vertical-middle">');
-	e.push('<h3>'+this.truncName(17, 15)+'</h3>');
+	e.push('<h3>'+this.truncName(15, 12)+'</h3>');
 	e.push('<p>'+d.toLocaleDateString()+'</p><br>');
 	e.push('<div style="display: inline;"><i class="fa fa-eye point-cursor" aria-hidden="true" style="margin-right: 30px;"></i></div>');
 	e.push('<div style="display: inline;"><i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i></div>');
@@ -645,7 +644,7 @@ Casefile.prototype.updateMediaElement = function(thumb) {
 	var inner = $('<div class="block" style="border:'+this.checkState()+';">');
 	var e = [];
 	e.push('<div class="ev-curtain"><div class="vertical-middle">');
-	e.push('<h3>'+this.truncName(17, 15)+'</h3>');
+	e.push('<h3>'+this.truncName(15, 12)+'</h3>');
 	e.push('<p>'+d.toLocaleDateString()+'</p><br>');
 	e.push('<div style="display: inline;"><i class="fa fa-eye point-cursor" aria-hidden="true" style="margin-right: 30px;"></i></div>');
 	e.push('<div style="display: inline;"><i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i></div>');

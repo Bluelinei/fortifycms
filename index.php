@@ -24,7 +24,7 @@
 <!--START QUESTION/ INVENTORY CONTAINER-->
           <div class="question-inventory-container">
   <!--REPORT QUESTION CONTAINER-->
-            <div class="two-wide left report-question-block">
+            <div class="two-wide left report-question-block" style="overflow-x: auto;">
               <div class="thirty-padding vertical-middle">
 
     <!--REPORT QUESTION-->

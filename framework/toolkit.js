@@ -117,11 +117,11 @@ function tokenizeUID(string)
 
 function truncateText(str, len, filler, end=0)
 {
-	if(str.length > len)
+	if(str.length > len+filler.length+end)
 	{
 		var sub = '';
-		if(end) sub = str.slice(-end);
-		str = str.substr(0, len);
+		if(end) sub = str.substring(str.length-end);
+		str = str.substring(0, len);
 		str += filler;
 		str += sub;
 	}
