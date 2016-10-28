@@ -36,7 +36,7 @@
       <nav>
         <ul>
           <li style="display: none;"><div>Upload</div></li>
-          <li><div>Search</div></li>
+          <li><a href="video.php"><div>Search</div></a></li>
           <li><div>Recent</div></li>
           <li><div id="nav-evidence">Evidence</div></li>
         </ul>
