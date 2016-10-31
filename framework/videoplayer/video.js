@@ -16,8 +16,16 @@ function formatTimecode(t)
 function togglePlayPause()
 {
 	var video = document.getElementById('video');
-	if(video.paused) video.play();
-	else video.pause();
+	if(video.paused)
+	{
+		video.play();
+		$('#video-toggle').attr('src', 'img/pause-button.png');
+	}
+	else
+	{
+		video.pause();
+		$('#video-toggle').attr('src', 'img/play-button.png');
+	}
 }
 
 function setCurTime()
@@ -31,7 +39,11 @@ function setCurTime()
 function setEventListeners()
 {
 	$('#video-toggle').on('click', togglePlayPause);
+	$('#video').on('click', togglePlayPause);
 	$('#video').on('timeupdate', setCurTime);
+	$('#video').on('ended', function(){
+		$('#video-toggle').attr('src', 'img/play-button.png');
+	});
 }
 
 window.onload = function(){

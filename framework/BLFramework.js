@@ -123,7 +123,7 @@ function setEventListeners()
 	$('#add-evidence').on('click', toggleMediaBrowser);
 	$('#close-media-browser').on('click', closeMediaBrowser);
 	$('#page-body').on('click', closeMediaBrowser);
-	$('#video-player').on('click', clickHandler(href, 'video.php'));
+	$('#video-player').on('click', clickHandler(href, 'video.php?view=test-video.mp4'));
 }
 
 function getDatabase()

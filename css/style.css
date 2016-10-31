@@ -677,7 +677,7 @@ margin: 0px;
   background: #ffbbbb;
   float: left;
   height: 100%;
-  width:60%;
+  width:0%;
 }
 
 .play-head{
@@ -685,6 +685,7 @@ margin: 0px;
   height: 100%;
   float: left;
   width:2%;
+  cursor: pointer;
 }
 
 .progress-bar-base{
