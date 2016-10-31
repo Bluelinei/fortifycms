@@ -12,7 +12,7 @@
       <div class="video-container-inner">
 
 <!--START video box-->
-        <div style="margin-bottom: -0px;">
+        <div style="margin-bottom: -2px;">
           <video id="video" style="width: 100%;" class="point-cursor" autoplay>
             <source src="framework/uploads/<?php echo $_GET['view'].".".$_GET['type'] ?>" type="video/<?php echo $_GET['type'] ?>">
           </video>
@@ -67,11 +67,23 @@
 
 <!--START advanced tool bar (hidden until revealed by gear button)-->
         <div class="advanced-toolbar-container">
-          <div class="advanced-tool text-bold">Trim Tool</div>
-          <div class="advanced-tool-img"><img src="img/speaker-l.png" /></div>
-          <div class="advanced-tool-img"><img src="img/speaker-r.png" /></div>
-          <div class="advanced-tool-img"><img src="img/zoom-plus.png" /></div>
-          <div class="advanced-tool-img"><img src="img/zoom-minus.png" /></div>
+          <div class="advacned-toolbar-inner">
+            <div class="advanced-tool-spacer">
+            <div class="advanced-tool text-bold">Trim Tool</div>
+            </div>
+            <div class="advanced-tool-spacer">
+              <div class="advanced-tool-img"><img src="img/speaker-l.png" /></div>
+              <div class="advanced-tool-img"><img src="img/speaker-r.png" /></div>
+            </div>
+            <div class="advanced-tool-spacer">
+              <div class="advanced-tool-img"><img src="img/zoom-plus.png" /></div>
+              <div class="advanced-tool-img"><img src="img/zoom-minus.png" /></div>
+            </div>
+            <div class="advanced-tool-spacer">
+              <div class="advanced-tool-img"><img src="img/camera-icon.png" /></div>
+            </div>
+            <div class="clear"></div>
+          </div>
         </div><!--END advanced tool bar-->
 
 
@@ -109,7 +121,7 @@
 <!--START Add Video Comment Container-->
         <div class="video-comment-control-container">
 <!--START add video commment button -->
-          <div class="left point-cursor" style="color: #99ff99;">
+          <div class="left point-cursor" style="color: #fff;">
             <i class="fa fa-plus-circle" aria-hidden="true"></i> <span style="color: #fff;">New Comment</span>
           </div><!--END add video comment button-->
 <!--START count video comments-->

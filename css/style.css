@@ -704,15 +704,26 @@ margin: 0px;
 /**05.04 video page advanced tool bar**/
 .advanced-toolbar-container{
   background:#333;
-  border: 1px solid #aaa;
+  border: 0px solid #aaa;
   border-top: 0;
   padding: 10px;
   width: 100%;
 }
 
+.advacned-toolbar-inner{
+  margin: 0px auto;
+  width: 800px;
+}
+
+.advanced-tool-spacer{
+  float: left;
+  width: 14.285%;
+}
+
 .advanced-tool{
   background: #fff;
   border-radius: 5px;
+  cursor: pointer;
   display: inline-block;
   font-size: 10px;
   padding: 10px;
@@ -721,15 +732,16 @@ margin: 0px;
 .advanced-tool-img{
   background: #fff;
   border-radius: 5px;
+  cursor: pointer;
   display: inline-block;
   font-size: 5px;
-  padding: 7px;
+  padding: 4px;
   vertical-align: middle;
 }
 
 .advanced-tool-img img{
   display: inline;
-  width: 15px;
+  width: 20px;
 }
 
 /**05.05video comment container**/
