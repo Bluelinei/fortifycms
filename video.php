@@ -1,4 +1,11 @@
-<?php require 'header.php'; ?>
+<?php require 'header.php';
+
+if(!isset($_GET['view'])&&!isset($_GET['type']))
+{
+  header('Location: http://68.169.178.232');
+}
+
+?>
 
   <script src="framework/videoplayer/video.js"></script>
 
@@ -12,7 +19,7 @@
 <!--START video box-->
         <div style="margin-bottom: -2px;">
           <video id="video" style="width: 100%;" class="point-cursor" autoplay>
-            <source src="framework/uploads/<?php echo $_GET['view'] ?>" type="video/mp4">
+            <source src="framework/uploads/<?php echo $_GET['view'].".".$_GET['type'] ?>" type="video/<?php echo $_GET['type'] ?>">
           </video>
 
 <!--START video control container-->

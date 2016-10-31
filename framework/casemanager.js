@@ -725,7 +725,7 @@ Casefile.prototype.setButtonFunction = function() {
 	$(document).on('click', '.'+this.uid+"_removebutton", clickHandler(removeFileFromCase, this));
 	if(this.filetype == 'VIDEO')
 	{
-		$(document).on('click', '.'+this.uid+'_view-button', clickHandler(href, 'video.php?view='+this.filepath));
+		$(document).on('click', '.'+this.uid+'_view-button', clickHandler(href, 'video.php?view='+this.uid+'&type='+getExtension(this.filepath)));
 	}
 }
 	/*
