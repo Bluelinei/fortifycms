@@ -450,7 +450,7 @@ Case.prototype.postCase = function() {
 	for(var i=0; i<len; i++) {this.files[i].postFile();}
 	f.append('evidence',filelist.join(''));
 	f.append('admin',(this.admin?1:0));
-	f.append('officer', 'Hue G. Tool')
+	f.append('officer', 'M Hutcheson')
 	$.ajax({
 		url:'framework/casepost.php',
 		method: 'POST',
@@ -557,7 +557,7 @@ function Casefile(filename, type, uid)
 	this.uid = uid;
 	this.name;
 	this.filetype = type;
-	this.filepath = filename;
+	this.filepath = this.uid+'.'+getExtension(filename);
 	var date = new Date();
 	this.uploaddate = date.getTime();
 	this.element;
@@ -584,7 +584,7 @@ Casefile.prototype.postFile = function() {
 	fdata.append('upload_date', this.uploaddate);
 	fdata.append('case_index', this.caseindex.join(''));
 	fdata.append('state', (this.state==UNFORT?0:1));
-	fdata.append('officer', 'Hue G. Tool');
+	fdata.append('officer', 'M Hutcheson');
 
 	$.ajax({
 		url: 'framework/filepost.php',
@@ -608,9 +608,9 @@ Casefile.prototype.newElement = function() {
 	var d = new Date(this.uploaddate);
 	this.element = $('<li>');
 	this.element.addClass('casefile-element');
-	this.element.append('<p class="left ten-padding bold">'+this.truncName(22, 17)+' ('+this.filetype+')</p>');
+	this.element.append('<p class="left ten-padding bold">'+this.filetype+'</p>');
 	this.element.append('<div class="delete-icon link-button point-cursor '+this.uid+'_removebutton"><i class="fa fa-minus-circle" aria-hidden="true"></i></div>');
-	this.element.append('<div class="view-icon link-button point-cursor"><i class="fa fa-eye" aria-hidden="true"></i></div>');
+	this.element.append('<div class="view-icon link-button point-cursor '+this.uid+'_view-button"><i class="fa fa-eye" aria-hidden="true"></i></div>');
 	this.element.append('<p class="right ten-padding">'+ d.toLocaleDateString() + ' ' + d.toLocaleTimeString() +'</p>');
 	this.element.append('<div class="clear"></div>');
 	this.element.id = this.uid+"_case";
@@ -626,7 +626,7 @@ Casefile.prototype.newMediaElement = function() {
 	e.push('<div class="ev-curtain"><div class="vertical-middle">');
 	e.push('<h3>'+this.truncName(15, 12)+'</h3>');
 	e.push('<p>'+d.toLocaleDateString()+'</p><br>');
-	e.push('<div style="display: inline;"><i class="fa fa-eye point-cursor" aria-hidden="true" style="margin-right: 30px;"></i></div>');
+	e.push('<div class="'+this.uid+'_view-button" style="display: inline;"><i class="fa fa-eye point-cursor" aria-hidden="true" style="margin-right: 30px;"></i></div>');
 	e.push('<div style="display: inline;"><i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i></div>');
 	e.push('</div></div>');
 	inner.append(e.join(''));
@@ -648,7 +648,7 @@ Casefile.prototype.updateMediaElement = function(thumb) {
 	e.push('<div class="ev-curtain"><div class="vertical-middle">');
 	e.push('<h3>'+this.truncName(15, 12)+'</h3>');
 	e.push('<p>'+d.toLocaleDateString()+'</p><br>');
-	e.push('<div style="display: inline;"><i class="fa fa-eye point-cursor" aria-hidden="true" style="margin-right: 30px;"></i></div>');
+	e.push('<div class="'+this.uid+'_view-button" style="display: inline;"><i class="fa fa-eye point-cursor" aria-hidden="true" style="margin-right: 30px;"></i></div>');
 	e.push('<div style="display: inline;"><i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i></div>');
 	e.push('</div></div>');
 	inner.append(e.join(''));
@@ -723,6 +723,10 @@ Casefile.prototype.updateElement = function() {
 Casefile.prototype.setButtonFunction = function() {
 	$(document).on('click', '.'+this.uid+'_addfilebutton', clickHandler(addFileToCase, this));
 	$(document).on('click', '.'+this.uid+"_removebutton", clickHandler(removeFileFromCase, this));
+	if(this.filetype == 'VIDEO')
+	{
+		$(document).on('click', '.'+this.uid+'_view-button', clickHandler(href, 'video.php?view='+this.uid+'&type='+getExtension(this.filepath)));
+	}
 }
 	/*
 	OKAY, LISTEN UP, ASSHOLE!
