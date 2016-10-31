@@ -7,7 +7,7 @@
   </head>
   <body style= "background: linear-gradient(#bfbfbf, #fff);">
 
-      <div class="vertical-middle" style="width:500px;margin: 0px auto;">
+      <div class="vertical-middle login-page" style="width:500px;margin: 0px auto;">
         <img src="img/Fortify-Logo-Brushed.png" style="width: 100%;" />
         <input type="text" placeholder="User Name" class="left"/>
         <input type="text" placeholder="Password" class="right"/>

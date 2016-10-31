@@ -65,7 +65,11 @@
 
 <!--START advanced tool bar (hidden until revealed by gear button)-->
         <div class="advanced-toolbar-container">
-          Advanced Tool Bar
+          <div class="advanced-tool text-bold">Trim Tool</div>
+          <div class="advanced-tool-img"><img src="img/speaker-l.png" /></div>
+          <div class="advanced-tool-img"><img src="img/speaker-r.png" /></div>
+          <div class="advanced-tool-img"><img src="img/zoom-plus.png" /></div>
+          <div class="advanced-tool-img"><img src="img/zoom-minus.png" /></div>
         </div><!--END advanced tool bar-->
 
 

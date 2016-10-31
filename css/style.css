@@ -702,11 +702,33 @@ margin: 0px;
 
 /**05.04 video page advanced tool bar**/
 .advanced-toolbar-container{
-  background:#ccc;
+  background:#333;
   border: 1px solid #aaa;
   border-top: 0;
-  padding: 20px;
+  padding: 10px;
   width: 100%;
+}
+
+.advanced-tool{
+  background: #fff;
+  border-radius: 5px;
+  display: inline-block;
+  font-size: 10px;
+  padding: 10px;
+}
+
+.advanced-tool-img{
+  background: #fff;
+  border-radius: 5px;
+  display: inline-block;
+  font-size: 5px;
+  padding: 7px;
+  vertical-align: middle;
+}
+
+.advanced-tool-img img{
+  display: inline;
+  width: 15px;
 }
 
 /**05.05video comment container**/
@@ -753,7 +775,7 @@ margin: 0px;
 
 /**6.0 Login**/
 
-input[type="text"]{
+.login-page input[type="text"]{
   background: transparent;
   border: 0px;
   border-bottom: 5px solid #444;
@@ -766,7 +788,7 @@ input[type="text"]{
   width: 49%;
 }
 
-input[type="submit"]{
+.login-page input[type="submit"]{
   background: #444;
   border: 0px;
   color: #fff;
