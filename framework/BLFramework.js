@@ -131,7 +131,7 @@ function getDatabase()
 	var f = new FormData();
 	f.append('table', 'quickreport');
 	f.append('function', 'get');
-	f.append('officer', 'Hue G. Tool');
+	f.append('officer', 'M Hutcheson');
 	loading(1);
 	var compiled = [];
 	$.ajax({

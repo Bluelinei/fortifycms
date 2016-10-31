@@ -79,6 +79,7 @@ function getFileType(file)
 	else if(!file.indexOf('audio')) return 'AUDIO';
 	else if(!file.indexOf('text')) return 'TEXT';
 	else if(!file.indexOf('image')) return 'IMAGE';
+	
 	else return 'DOCUMENT';
 }
 

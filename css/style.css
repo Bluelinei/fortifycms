@@ -674,24 +674,24 @@ margin: 0px;
 }
 
 .progress-bar{
-  background: #ff5555;
+  background: #ffbbbb;
   float: left;
   height: 100%;
   width:60%;
 }
 
 .play-head{
-  background: #ffbbbb;
+  background: #ff5555; 
   height: 100%;
   float: left;
-  width:4%;
+  width:2%;
 }
 
 .progress-bar-base{
   float: left;
   background: #fff;
   height: 100%;
-  width:36%;
+  width:100%;
 }
 
 .video-player-button{

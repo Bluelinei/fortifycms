@@ -426,6 +426,7 @@ function Case(uid)
 	this.element;
 	this.admin = false;
 	this.type;
+	this.officer;
 	this.DELETED = false;
 
 	cases.push(this);
@@ -563,6 +564,7 @@ function Casefile(filename, type, uid)
 	this.mediaelement;
 	this.thumbnail;
 	this.state;
+	this.officer;
 	this.caseindex = [];
 
 	casefiles.push(this);

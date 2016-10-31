@@ -28,23 +28,24 @@
 <!--START time code box left-->
               <div class="fifteen-per-wide hundred-tall left">
                 <div class="vertical-middle">
-                  <div class="time-code-box push-right">10:22:15</div>
+                  <div id="video-curtime" class="time-code-box push-right">00:00:00</div>
                 </div>
               </div><!--END time code box left-->
 
 <!--START progress bar-->
                 <div class="fifty-per-wide hundred-tall left">
                   <div class="one-wide hundred-tall ten-padding">
-                    <div class="progress-bar"></div>
-                    <div class="play-head"></div>
-                    <div class="progress-bar-base"></div>
+                    <div class="progress-bar-base">
+                      <div class="progress-bar"></div>
+                      <div class="play-head"></div>
+                    </div>
                   </div>
                 </div><!--END progress bar-->
 
 <!--START time code box right-->
                 <div class="fifteen-per-wide hundred-tall left">
                   <div class="vertical-middle">
-                    <div class="time-code-box">-03:40:18</div>
+                    <div id="video-duration" class="time-code-box">00:00:00</div>
                   </div>
                 </div><!--END time code box-right-->
 
