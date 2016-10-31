@@ -712,7 +712,7 @@ margin: 0px;
 
 .advacned-toolbar-inner{
   margin: 0px auto;
-  width: 800px;
+  width: 65%;
 }
 
 .advanced-tool-spacer{
@@ -780,10 +780,28 @@ margin: 0px;
 }
 
 .video-sidebar-inner{
-  background: #ccc;
-  border: 1px solid #aaa;
+  background: #555;
   height: 100%;
   width: 100%;
+}
+
+.video-meta-header{
+  background: rgba(000,000,000,0.5);
+}
+
+.video-meta-body{
+  background: rgba(000,000,000,0.2);
+}
+.video-meta-container li{
+  background: #aaffaa;
+  border-bottom: 1px solid #aaffbb;
+  color: #fff;
+  font-size: 11px;
+  text-align: center;
+}
+
+.video-meta-container li:last-child{
+  border-bottom: 0px;
 }
 
 /**6.0 Login**/

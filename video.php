@@ -148,8 +148,21 @@
     <div class="video-sidebar-container">
 <!--START video sidebar inner-content -->
       <div class="video-sidebar-inner">
-        <div style="background: #555; color: #fff; font-size: 18px; padding: 20px; text-align: center;">Roadside drug bust</div>
-        <div style="background: #666; color: #fff; font-size: 10px; padding: 10px; text-align: center;">Oct. 25, 2016</div>
+        <div style="background: #333; color: #fff; font-size: 18px; padding: 40px 0 40px 0; text-align: center;">Roadside drug bust</div>
+        <div style="background: #666; color: #fff; font-size: 10px; padding: 20px; text-align: center;">Oct. 25, 2016</div>
+
+        <ul class="video-meta-container">
+          <li>
+            <div class="fourty-per-wide ten-padding left video-meta-header">Status</div>
+            <div class="sixty-per-wide ten-padding left video-meta-body">Fortified</div>
+            <div class="clear"></div>
+          </li>
+          <li>
+            <div class="fourty-per-wide ten-padding left video-meta-header">Purging</div>
+            <div class="sixty-per-wide ten-padding left video-meta-body">10/25/2016</div>
+            <div class="clear"></div>
+          </li>
+        </ul>
 
       </div><!--END video sidebar inner -->
     </div><!--END video sidebar container-->
