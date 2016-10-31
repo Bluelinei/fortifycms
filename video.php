@@ -69,7 +69,7 @@
         <div class="advanced-toolbar-container">
           <div class="advacned-toolbar-inner">
             <div class="advanced-tool-spacer">
-            <div class="advanced-tool text-bold">Trim Tool</div>
+              <div class="advanced-tool text-bold">Trim Tool</div>
             </div>
             <div class="advanced-tool-spacer">
               <div class="advanced-tool-img"><img src="img/speaker-l.png" /></div>
@@ -81,6 +81,20 @@
             </div>
             <div class="advanced-tool-spacer">
               <div class="advanced-tool-img"><img src="img/camera-icon.png" /></div>
+            </div>
+            <div class="advanced-tool-spacer">
+              <div class="advanced-tool text-bold">x2</div>
+              <div class="advanced-tool text-bold">x4</div>
+              <div class="advanced-tool text-bold">x8</div>
+            </div>
+            <div class="advanced-tool-spacer">
+              <div class="advanced-tool text-bold">-2</div>
+              <div class="advanced-tool text-bold">-4</div>
+              <div class="advanced-tool text-bold">-8</div>
+            </div>
+            <div class="advanced-tool-spacer">
+              <div class="advanced-tool text-bold">< Step</div>
+              <div class="advanced-tool text-bold">Step ></div>
             </div>
             <div class="clear"></div>
           </div>
