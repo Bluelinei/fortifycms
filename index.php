@@ -30,7 +30,7 @@
     <!--REPORT QUESTION-->
                 <div class="report-question thirty-margin-bottom">
                   <p class="one-wide report-question-header">What is the report number?</p>
-                  <input id="report-number" type="text" placeholder="Report Number" class="one-wide">
+                  <input id="report-number" type="text" placeholder="Report Number" class="one-wide"/>
                 </div><!--END QUESTION-->
 
   <!--REPORT QUESTION-->

@@ -1,11 +1,6 @@
-<?php require 'header.php';
+<?php require 'header.php'; ?>
 
-if(!isset($_GET['view'])&&!isset($_GET['type']))
-{
-  header('Location: http://68.169.178.232');
-}
-
-?>
+<?php /*if(!isset($_GET['view'])||!isset($_GET['type'])) header('Location: http://68.169.178.232/')*/ ?>
 
   <script src="framework/videoplayer/video.js"></script>
 
