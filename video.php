@@ -178,6 +178,8 @@
           </li>
         </ul>
 
+        <div style="position: absolute; bottom: 0; background: #509ace; padding: 20px;width: 100%;">test</div>
+
       </div><!--END video sidebar inner -->
     </div><!--END video sidebar container-->
     <div class="clear"></div>
