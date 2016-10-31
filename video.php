@@ -17,7 +17,7 @@ if(!isset($_GET['view'])&&!isset($_GET['type']))
       <div class="video-container-inner">
 
 <!--START video box-->
-        <div style="margin-bottom: -2px;">
+        <div style="margin-bottom: -0px;">
           <video id="video" style="width: 100%;" class="point-cursor" autoplay>
             <source src="framework/uploads/<?php echo $_GET['view'].".".$_GET['type'] ?>" type="video/<?php echo $_GET['type'] ?>">
           </video>
