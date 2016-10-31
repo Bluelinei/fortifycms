@@ -13,7 +13,7 @@
 03.02 Case Manager Block
 04.00 Evidence Manager
 05.00 video page
-06.00
+06.00 login
 07.00
 08.00
 09.00 Header
@@ -681,7 +681,7 @@ margin: 0px;
 }
 
 .play-head{
-  background: #ff5555; 
+  background: #ff5555;
   height: 100%;
   float: left;
   width:2%;
@@ -751,6 +751,40 @@ margin: 0px;
   width: 100%;
 }
 
+/**6.0 Login**/
+
+input[type="text"]{
+  background: transparent;
+  border: 0px;
+  border-bottom: 5px solid #444;
+  display: block;
+  font-size: 15px;
+  margin: 0px auto;
+  margin-top: 20px;
+  padding-bottom: 10px;
+  text-align: center;
+  width: 49%;
+}
+
+input[type="submit"]{
+  background: #444;
+  border: 0px;
+  color: #fff;
+  cursor: pointer;
+  margin: 0px auto;
+  margin-top: 5px;
+  padding: 20px;
+  -webkit-appeearance: none;
+  width: 100%;
+}
+
+.msg{
+  background: #ff3333;
+  color: #fff;
+  margin-top: 5px;
+  padding: 20px;
+  text-align: center;
+}
 
 
 
