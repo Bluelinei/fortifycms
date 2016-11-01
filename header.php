@@ -23,12 +23,36 @@
     <?php require 'evidence-overlay.php'; ?>
 
 <!--START quick-notify-->
-  <div class="quick-notify upload-complete">
-    <div class="left quick-notify-close"><i class="fa fa-times-circle vertical-middle" aria-hidden="true"></i>
-</div>
+  <div class="quick-notify case-fortified hidden">
+    <div class="left quick-notify-close point-cursor"><i class="fa fa-times-circle vertical-middle" aria-hidden="true"></i></div>
     <div class="left quick-notify-content"><p class="vertical-middle">Your files have been uploaded</p></div>
   </div>
 <!--END quick-notify-->
+
+<script>
+  var notification_timer;
+
+  function notify(msg)
+  {
+    clearTimeout(notification_timer);
+    $('.quick-notify-content>p').html(msg);
+    $('.quick-notify').removeClass('hidden');
+    notification_timer = setTimeout(function(){
+      $('.quick-notify').addClass('hidden');
+    }, 2000);
+  }
+  $(document).on('click', '.quick-notify-close', function() {
+    $('.quick-notify').addClass('hidden');
+  });
+  $(document).on('mouseenter', '.quick-notify', function (){
+    clearTimeout(notification_timer);
+  });
+  $(document).on('mouseleave', '.quick-notify', function (){
+    notification_timer = setTimeout(function(){
+      $('.quick-notify').addClass('hidden');
+    }, 2000);
+  });
+</script>
 
 <!--START Main Content Area wrapper (side-bar + content pane)-->
 <!--  <div class="content-wrapper"> -->

@@ -1,6 +1,7 @@
 //GLOBAL VARIABLES (MAINLY FOR DEBUGGING)
 
 const address = 'http://68.169.178.232/';
+var USER = $_GET['user'];
 
 var databaseload = 0;
 
@@ -129,7 +130,7 @@ function getDatabase()
 	var f = new FormData();
 	f.append('table', 'quickreport');
 	f.append('function', 'get');
-	f.append('officer', 'M Hutcheson');
+	f.append('officer', USER);
 	loading(1);
 	var compiled = [];
 	$.ajax({
@@ -230,81 +231,3 @@ window.onload = function()
 	generateTags();
 	setEventListeners();
 }
-
-/*for(var j=0; j<elen; j++)
-					{
-						var cf = getCasefileById(evidence[j]);
-						if(cf) //CHECK TO SEE IF THE EVIDENCE IS ALREADY LOADED
-						{
-							//Check to see if they're already in there...
-
-							c.files.push(cf);
-							updateCases();
-							updateCaseFiles();
-							updateReport();
-						}
-						else //IF NOT, THEN PULL IT FROM THE SERVER.
-						{
-							f = new FormData();
-							f.append('table', 'evidence');
-							f.append('function', 'get');
-							f.append('uid', evidence[j]);
-							loading(1);
-							$.ajax({
-								url: 'framework/functions.php',
-								method: 'POST',
-								data: f,
-								processData: false,
-								contentType: false,
-								success: function(response) {
-									var file = JSON.parse(response);
-									var cf = getCasefileById(file.uid)
-									if(cf)
-									{
-										c.files.push(cf);
-										updateCases();
-										updateCaseFiles();
-										updateReport();
-										return;
-									}
-									cf = new Casefile(file.filepath, file.type, file.uid);
-									cf.caseindex = tokenizeUID(file.caseindex);
-									cf.uploaddate = file.uploaddate;
-									cf.officer = file.officer;
-									switch(cf.filetype)
-									{
-										case 'VIDEO':
-											cf.thumbnail = 'framework/thumbs/'+cf.uid+'.png';
-											break;
-										case 'IMAGE':
-											cf.thumbnail = 'framework/uploads/'+cf.uid+'.png';
-											break;
-										case 'DOCUMENT':
-											cf.thumbnail = 'img/docicon.png';
-											break;
-										case 'TEXT':
-											cf.thumbnail = 'img/texticon.png';
-											break;
-										case 'AUDIO':
-											cf.thumbnail = 'img/audioicon.png';
-											break;
-									}
-
-									var cilen = cf.caseindex.length;
-									for(var k=0; k<cilen; k++)
-									{
-										var indx = getCaseById(cf.caseindex[k]);
-										indx.files.push(cf);
-									}
-
-									setAsActiveCase(c);
-
-									updateCases();
-									updateCaseFiles();
-									updateReport();
-
-									loading(-1);
-								}
-							});
-						}
-					}*/

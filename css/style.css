@@ -877,6 +877,19 @@ margin: 0px;
   width: 49%;
 }
 
+.login-page input[type="password"]{
+  background: transparent;
+  border: 0px;
+  border-bottom: 5px solid #444;
+  display: block;
+  font-size: 15px;
+  margin: 0px auto;
+  margin-top: 20px;
+  padding-bottom: 10px;
+  text-align: center;
+  width: 49%;
+}
+
 .login-page input[type="submit"]{
   background: #444;
   border: 0px;
@@ -889,14 +902,18 @@ margin: 0px;
   width: 100%;
 }
 
-.msg{
+.login-message{
   background: #ff3333;
   color: #fff;
   margin-top: 5px;
   padding: 20px;
   text-align: center;
+  transition: all 0.2s ease;
 }
 
+.login-message.hidden{
+  opacity: 0;
+}
 
 
 
@@ -1002,6 +1019,11 @@ footer .headshot{
   top: 0;
   width: 300px;
   z-index: 1009;
+  transition: all 0.2s ease;
+}
+
+.quick-notify.hidden{
+  transform: translateX(100%);
 }
 
 .quick-notify-close{

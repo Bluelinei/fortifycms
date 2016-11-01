@@ -215,7 +215,7 @@ function fortifyActiveCase()
 	pushStack('fortifyActiveCase');
 	$('#fortify-notification').removeClass('hidden');
 	$('#fortify-notification').addClass('hidden');
-	log($('#fortify-notification').attr('class'));
+	notify('All Cases Fortified');
 	postCases();
 	updateInfo();
 	popStack();
@@ -462,7 +462,7 @@ Case.prototype.postCase = function() {
 	for(var i=0; i<len; i++) {this.files[i].postFile();}
 	f.append('evidence',filelist.join(''));
 	f.append('admin',(this.admin?1:0));
-	f.append('officer', 'M Hutcheson')
+	f.append('officer', USER)
 	$.ajax({
 		url:'framework/casepost.php',
 		method: 'POST',
@@ -596,7 +596,7 @@ Casefile.prototype.postFile = function() {
 	fdata.append('upload_date', this.uploaddate);
 	fdata.append('case_index', this.caseindex.join(''));
 	fdata.append('state', (this.state==UNFORT?0:1));
-	fdata.append('officer', 'M Hutcheson');
+	fdata.append('officer', USER);
 
 	$.ajax({
 		url: 'framework/filepost.php',
