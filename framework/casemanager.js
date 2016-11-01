@@ -88,10 +88,22 @@ function newCaseFile(uploadedfile)
 		processData: false,
 		contentType: false,
 		success: function(uid) {
-			var cf = new Casefile(uploadedfile.name, getFileType(uploadedfile.type), uid);
-			var ext = getExtension(uploadedfile.name);
+			var cf;
+			var ext;
+			if(getFileType(uploadedfile.type)=='VIDEO')
+			{
+				cf = new Casefile(uid+'.mp4', getFileType(uploadedfile.type), uid);
+				ext = 'mp4';
+			}
+			else
+			{
+				cf = new Casefile(uploadedfile.name, getFileType(uploadedfile.type), uid);
+				ext = getFileType(uploadedfile.name);
+			}
+			
 			var formData = new FormData();
 			formData.append('file', uploadedfile);
+			formData.append('isvid', (uploadedfile.type.indexOf('video')!=-1?1:0));
 			formData.append('ext', ext);
 			formData.append('uid', cf.uid);
 			$.ajax({
@@ -101,7 +113,7 @@ function newCaseFile(uploadedfile)
 				processData: false,
 				contentType: false,
 				success: function(response) {
-					log(response);
+					log('Upload: '+response);
 					switch(cf.filetype)
 					{
 						case 'VIDEO':
