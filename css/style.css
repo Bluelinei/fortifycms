@@ -20,6 +20,8 @@
 09.02 Nav bar list
 09.01 Logo
 10.00 Footer
+11.00 notification
+12.00 search
 
 **/
 
@@ -47,6 +49,20 @@ body{
 
 .point-cursor:hover{
   cursor: pointer !important;
+}
+
+.exit-overlay{
+  position: absolute;
+  top: 30px;
+  right: 30px;
+}
+
+.exit-overlay::after{
+  background: #fff;
+  border-radius: 100px;
+  color: #000;
+  content: "x";
+  padding: 20px;
 }
 
 .grey-text {
@@ -1013,6 +1029,7 @@ footer .headshot{
 
 .quick-notify{
   color: #fff;
+  display: none;
   height: 60px;
   position: fixed;
   right: 0;
@@ -1038,4 +1055,49 @@ footer .headshot{
   font-size: 11px;
   text-align: center;
   width: 85%;
+}
+
+/**12.00 search**/
+
+.search-box{
+  background: rgba(224,82,58,0.8);
+  color: #fff;
+  height: 100%;
+  padding: 20px 0px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1009;
+}
+
+.search-box input[type="text"]{
+  background: #FAE0B7;
+  border: 10px solid #4C1C14;
+  border-left: 0px;
+  border-right: 0px;
+  display: block;
+  color: #000;
+  float: left;
+  font-size: 20px;
+  padding: 50px 20px;
+  transition: all .5s;
+  width: 80%;
+}
+
+.search-box input[type="text"]:focus{
+  padding-left: 40px;
+}
+
+.search-box input[type="submit"]{
+  background: linear-gradient(#DB5C24, #C4432A);
+  border: 0px;
+  border: 10px solid #4C1C14;
+  border-right: 0px;
+  color: #fff;
+  cursor: pointer;
+  float: left;
+  font-size: 20px;
+  padding: 50px 0;
+  text-align: center;
+  width: 20%;
 }
