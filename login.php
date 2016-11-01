@@ -12,11 +12,17 @@
         <input type="text" placeholder="User Name" class="left"/>
         <input type="text" placeholder="Password" class="right"/>
         <div class="clear"></div>
-        <input type="submit" value="Login">
+        <input id="login" type="submit" value="Login">
         <div class="msg">
           Please Login First
         </div>
       </div>
-
+      <script>
+        function doLogin()
+        {
+          
+        }
+        $(document).on('click', '#login', doLogin);
+      </script>
   </body>
 </html>

@@ -7,7 +7,7 @@ var databaseload = 0;
 function loading(v)
 {
 	databaseload+=v;
-	if(!databaseload) $('#pageload-overlay').addClass('hidden');
+	if(!databaseload) {$('#pageload-overlay').addClass('hidden'); log('Page Finished Loading')}
 }
 
 var workingcase;

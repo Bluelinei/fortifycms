@@ -60,7 +60,7 @@ body{
   top: 0;
   left: 0;
   background: #242533;
-  transition: transform 1s cubic-bezier(0.9, 0, 0.1, 1) 1.5s, opacity 0.8s cubic-bezier(0.9, 0, 0.1, 1) 1.7s;
+  transition: transform 1s cubic-bezier(0.9, 0, 0.1, 1), opacity 0.8s cubic-bezier(0.9, 0, 0.1, 1) 0.2s;
 }
 
 #pageload-overlay.hidden {
