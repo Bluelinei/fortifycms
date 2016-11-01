@@ -983,3 +983,37 @@ footer .headshot{
   height: 30px;
   width: 100%;
 }
+
+/**11.00 notifications **/
+
+.upload-complete{
+  background: #ff9999 !important;
+}
+
+.case-fortified{
+  background: #77aa77 !important;
+}
+
+.quick-notify{
+  color: #fff;
+  height: 60px;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 300px;
+  z-index: 1009;
+}
+
+.quick-notify-close{
+  background: rgba(255,255,255,0.3);
+  height: 100%;
+  text-align: center;
+  width: 15%;
+}
+
+.quick-notify-content{
+  height: 100%;
+  font-size: 11px;
+  text-align: center;
+  width: 85%;
+}
