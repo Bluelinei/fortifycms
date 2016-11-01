@@ -28,6 +28,13 @@ function togglePlayPause()
 	}
 }
 
+function toggleAdvanced()
+{
+	var atc = $('.advanced-toolbar-container');
+	if(atc.hasClass('hidden')) atc.removeClass('hidden');
+	else atc.addClass('hidden');
+}
+
 function setCurTime()
 {
 	var video = document.getElementById('video');
@@ -44,6 +51,7 @@ function setEventListeners()
 	$('#video').on('ended', function(){
 		$('#video-toggle').attr('src', 'img/play-button.png');
 	});
+	$('#advanced-menu-button').on('click', toggleAdvanced);
 }
 
 window.onload = function(){

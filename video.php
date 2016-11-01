@@ -57,7 +57,7 @@
 <!--GPS button to display only if GPS data is available-->
                     <img src="img/gps-icon.png" class="point-cursor video-player-button"/>
 <!--Gear button to reveal the additional tool bar-->
-                    <img src="img/gear-button.png" class="point-cursor video-player-button five-margin-left"/>
+                    <img id="advanced-menu-button" src="img/gear-button.png" class="point-cursor video-player-button five-margin-left"/>
                     <div class="clear"></div>
                   </div>
                 </div><!--END advanced control buttons-->
@@ -66,8 +66,8 @@
         </div><!--END video box-->
 
 <!--START advanced tool bar (hidden until revealed by gear button)-->
-        <div class="advanced-toolbar-container">
-          <div class="advacned-toolbar-inner">
+        <div class="advanced-toolbar-container hidden">
+          <div class="advanced-toolbar-inner">
             <div class="advanced-tool-spacer">
               <div class="advanced-tool text-bold">Trim Tool</div>
             </div>
@@ -88,9 +88,9 @@
               <div class="advanced-tool text-bold">x8</div>
             </div>
             <div class="advanced-tool-spacer">
-              <div class="advanced-tool text-bold">-2</div>
-              <div class="advanced-tool text-bold">-4</div>
-              <div class="advanced-tool text-bold">-8</div>
+              <div class="advanced-tool text-bold">.2</div>
+              <div class="advanced-tool text-bold">.4</div>
+              <div class="advanced-tool text-bold">.8</div>
             </div>
             <div class="advanced-tool-spacer">
               <div class="advanced-tool text-bold">< Step</div>
