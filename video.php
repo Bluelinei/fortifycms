@@ -1,6 +1,6 @@
 <?php require 'header.php'; ?>
 
-<?php /*if(!isset($_GET['view'])||!isset($_GET['type'])) header('Location: http://68.169.178.232/')*/ ?>
+<?php //if(!isset($_GET['view'])||!isset($_GET['type'])) header('Location: http://68.169.178.232/'); ?>
 
   <script src="framework/videoplayer/video.js"></script>
 
@@ -100,37 +100,35 @@
           </div>
         </div><!--END advanced tool bar-->
 
-
-<!--START video comment box-->
-        <div class="video-comment-container video-comment-focused">
-          <div class="fifteen-per-wide hundred-tall left text-center">
-            <div class="hundred-tall">
-              <p class="vertical-middle">10:20:15</p>
-            </div>
-          </div>
-          <div class="hundred-tall eighty-five-per-wide left twenty-padding-right">
-            <p class="vertical-middle">
-              This is just a test to see how long the comment will be before it spills over, i have a feeling it might be a whilte but then again i don't really know untill i type out a bunch of text znd just see, an because i hate lorum ipsum i just type it out myself what eve rcomes to my mind as fast as i can type it but what ever
-            </p>
-          </div>
-          <div class="clear"></div>
-        </div><!--END video comment box-->
-
-<!--START video comment box-->
-        <div class="video-comment-container">
-          <div class="fifteen-per-wide hundred-tall left text-center">
-            <div class="hundred-tall">
-              <p class="vertical-middle">10:20:15</p>
-            </div>
-          </div>
-          <div class="hundred-tall eighty-five-per-wide left twenty-padding-right">
-            <p class="vertical-middle">
-              This is just a test to see how long the comment will be before it spills over, i have a feeling it might be a whilte but then again i don't really know untill i type out a bunch of text znd just see, an because i hate lorum ipsum i just type it out myself what eve rcomes to my mind as fast as i can type it but what ever
-            </p>
-          </div>
-          <div class="clear"></div>
-        </div><!--END video comment box-->
-
+<ul class="video-comment-container">
+  <li class="video-comment-focused">
+    <div class="fifteen-per-wide hundred-tall left text-center">
+      <div class="hundred-tall">
+        <p class="vertical-middle">5:05:09</p>
+      </div>
+    </div>
+    <div class="hundred-tall eighty-five-per-wide left twenty-padding-right">
+      <p class="vertical-middle">
+        Initial infraction detected - vehicle is seen swerving multiple times from one lane to the next multiple times. Upon turning on lights the vehicle in question begins to travel at speeds exceeding 90mph.
+      </p>
+    </div>
+    <div class="clear"></div>
+    <!--END TIMELINE COMMENT-->
+  </li>
+  <li>
+    <div class="fifteen-per-wide hundred-tall left text-center">
+      <div class="hundred-tall">
+        <p class="vertical-middle">10:20:15</p>
+      </div>
+    </div>
+    <div class="hundred-tall eighty-five-per-wide left twenty-padding-right">
+      <p class="vertical-middle">
+        Assailant appears to throw a gun from the passenger side window - perceived gun hits sidewalk then bounces off to the side of the streen sign before coming to a rest under a bush.</p>
+    </div>
+    <div class="clear"></div>
+   <!--END TIMELINE COMMENT-->
+  </li>
+</ul>
 
 <!--START Add Video Comment Container-->
         <div class="video-comment-control-container">
@@ -162,8 +160,8 @@
     <div class="video-sidebar-container">
 <!--START video sidebar inner-content -->
       <div class="video-sidebar-inner">
-        <div style="background: #333; color: #fff; font-size: 18px; padding: 40px 0 40px 0; text-align: center;">Roadside drug bust</div>
-        <div style="background: #666; color: #fff; font-size: 10px; padding: 20px; text-align: center;">Oct. 25, 2016</div>
+        <h2 class="video-sidebar-header">Roadside drug bust</h2>
+        <div class="video-sidebar-date">Incident: Oct. 25, 2016</div>
 
         <ul class="video-meta-container">
           <li>
@@ -178,7 +176,35 @@
           </li>
         </ul>
 
-        <div style="position: absolute; bottom: 0; background: #509ace; padding: 20px;width: 100%;">test</div>
+        <div style="position: absolute; bottom: 0;width: 100%;">
+          <div class="video-taglist-header">Tag list</div>
+            <ul id="tag-list" class="video-taglist-body">
+                <li>
+                  <p class="left">DUI</p>
+                  <div class="fa fa-minus-circle right link-button point-cursor"></div>
+                  <div class="clear"></div>
+                </li>
+                <li>
+                  <p class="left">Child Endangerment</p>
+                  <div class="fa fa-minus-circle right link-button point-cursor"></div>
+                  <div class="clear"></div>
+                </li>
+            </ul>
+          <div style="text-align: center; padding: 20px;font-weight: bold; color: #fff;background: #333;">Associations</div>
+          <ul class="video-associate-list">
+            <li>
+              <div class="fourty-per-wide ten-padding left video-meta-header">Case</div>
+              <div class="sixty-per-wide ten-padding left video-meta-body">10SL000000987</div>
+              <div class="clear"></div>
+            </li>
+            <li>
+              <div class="fourty-per-wide ten-padding left video-meta-header">Intel</div>
+              <div class="sixty-per-wide ten-padding left video-meta-body">Gang Symbols</div>
+              <div class="clear"></div>
+            </li>
+          </ul>
+          <div class="video-associate-add-button"><i class="fa fa-plus-circle" aria-hidden="true"></i></div>
+        </div>
 
       </div><!--END video sidebar inner -->
     </div><!--END video sidebar container-->

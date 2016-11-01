@@ -717,7 +717,7 @@ margin: 0px;
 
 .advanced-toolbar-inner{
   margin: 0px auto;
-  width: 65%;
+  width: 80%;
 }
 
 .advanced-tool-spacer{
@@ -750,7 +750,7 @@ margin: 0px;
 }
 
 /**05.05video comment container**/
-.video-comment-container{
+.video-comment-container li{
   background:#cfcfcf;
   border: 1px solid #aaa;
   border-top: 0px;
@@ -759,9 +759,13 @@ margin: 0px;
   width: 100%;
 }
 
+.video-comment-container li:last-child{
+  border-bottom: 0px !important;
+}
+
 .video-comment-focused{
-  background: #ddd;
-  color: #000;
+  background: #ddd !important;
+  color: #000 !important;
 }
 
 /**05.06 video comment buttons**/
@@ -784,6 +788,22 @@ margin: 0px;
   width: 20%;
 }
 
+.video-sidebar-header{
+  background: #333;
+  color: #fff;
+  font-size: 18px;
+  padding: 40px 0 40px 0;
+  text-align: center;
+}
+
+
+.video-sidebar-date{
+  background: #666;
+  color: #fff;
+  font-size: 10px;
+  padding: 20px;
+  text-align: center;
+}
 .video-sidebar-inner{
   background: #555;
   height: 100%;
@@ -807,6 +827,39 @@ margin: 0px;
 
 .video-meta-container li:last-child{
   border-bottom: 0px;
+}
+
+
+.video-taglist-header{
+  background: #444;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+.video-taglist-body{
+  background: #555;
+  color: #fff;
+  padding: 20px;
+}
+
+.video-associate-list{
+  background: #fff;
+}
+
+.video-associate-list li{
+  border-bottom: 1px solid #000;
+}
+
+.video-associate-list li:last-child{
+  border-bottom: 0px;
+}
+
+.video-associate-add-button{
+  background: #509ace;
+  text-align: center;
+  color: #fff;
+  padding: 15px;
 }
 
 /**6.0 Login**/
