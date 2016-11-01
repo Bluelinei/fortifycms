@@ -30,6 +30,19 @@
   </div>
 <!--END quick-notify-->
 
+<!--START search box-->
+
+  <div class="search-box">
+    <div class="exit-overlay"></div>
+    <div class="vertical-middle">
+      <input type="text" placeholder="Enter Search Criteria" />
+      <input type="submit" value="Search Database" />
+      <div class="clear"></div>
+    </div>
+  </div>
+
+<!--END search box-->
+
 <!--START Main Content Area wrapper (side-bar + content pane)-->
 <!--  <div class="content-wrapper"> -->
 <!--START Nav/Logo side-bar-->
