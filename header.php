@@ -22,7 +22,13 @@
   <body>
     <?php require 'evidence-overlay.php'; ?>
 
-
+<!--START quick-notify-->
+  <div class="quick-notify upload-complete">
+    <div class="left quick-notify-close"><i class="fa fa-times-circle vertical-middle" aria-hidden="true"></i>
+</div>
+    <div class="left quick-notify-content"><p class="vertical-middle">Your files have been uploaded</p></div>
+  </div>
+<!--END quick-notify-->
 
 <!--START Main Content Area wrapper (side-bar + content pane)-->
 <!--  <div class="content-wrapper"> -->
