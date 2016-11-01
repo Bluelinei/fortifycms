@@ -1,7 +1,5 @@
 <?php
 
-$UPLOAD = true;
-
 function setDir($trdir) {if(!is_dir($trdir)) mkdir($trdir, 0777, true);}
 
 $ds = DIRECTORY_SEPARATOR;
@@ -18,7 +16,16 @@ $fn = $_POST['uid'].".".$_POST['ext'];
 $targetDir = ".".$ds."uploads";
 setDir($targetDir);
 $finalPath = $targetDir.$ds.$fn;
-if($UPLOAD) move_uploaded_file($file['tmp_name'], $finalPath);
+
+if($_POST['isvid'])
+{
+	$fn = $_POST['uid'].".mp4";
+	$finalPath = $targetDir.$ds.$fn;
+	$bitrate = shell_exec('.\\ffmpeg\\bin\\ffprobe -i '. $file['tmp_name'] .' -show_entries format=bit_rate -v quiet -of csv="p=0"');
+	$br = ($bitrate>4096000?4096:floor($bitrate/1000));
+	exec(".\\ffmpeg\\bin\\ffmpeg.exe -y -i ". $file['tmp_name'] ." -b:v ".$br."k -vcodec libx264 -acodec aac ". $finalPath, $out);
+} else {move_uploaded_file($file['tmp_name'], $finalPath);}
+
 if(!file_exists($finalPath)) return;
 echo $fn;
 

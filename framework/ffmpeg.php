@@ -13,7 +13,8 @@ function captureFrame($source, $time, $output)
 {
 	setDir($_POST['dir']);
 	exec(".\\ffmpeg\\bin\\ffmpeg.exe -y -ss 00:00:00 -i $source -frames:v 1 $output", $out);
-	echo "FFMPEG: Thumbnail generated in $output";
+	if(file_exists($output)) echo "FFMPEG: Thumbnail generated in $output";
+	else echo "FFMPEG: Could not generate for $source to $output";
 }
 
 if(isset($_POST['function']))

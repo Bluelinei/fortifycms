@@ -78,9 +78,7 @@ function toggleMediaBrowser(event)
 	else $('#media-browser').addClass('show');
 }
 
-function openFileBrowser() {
-	document.getElementById('openfilebrowser').click();
-} //Calls the file upload input which is hidden by default. This if to allow clicking of drop area to function as browse button.
+function openFileBrowser() {document.getElementById('openfilebrowser').click();} //Calls the file upload input which is hidden by default. This if to allow clicking of drop area to function as browse button.
 
 function handleFileSelect(evt) //Is called when the browser is used for uploading files
 {
