@@ -120,7 +120,7 @@ body{
 /** 02.00 Nav/Side bar **/
 
 .nav-side-bar{
-	background: linear-gradient(#103266, #2234A8);
+	background: linear-gradient(#13244A, #2234A8);
 	float: left;
 	height: 92%;
 	width: 10%;
@@ -821,7 +821,7 @@ margin: 0px;
   text-align: center;
 }
 .video-sidebar-inner{
-  background: #555;
+  background: linear-gradient(#555, #222);
   height: 100%;
   width: 100%;
 }
@@ -1091,7 +1091,7 @@ footer .headshot{
 .search-box{
   background: rgba(255,255,255,0.9);
   color: #fff;
-  display: block;
+  display: none;
   height: 100%;
   padding: 20px 0px;
   position: fixed;
