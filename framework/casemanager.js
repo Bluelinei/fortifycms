@@ -98,7 +98,7 @@ function newCaseFile(uploadedfile)
 			else
 			{
 				cf = new Casefile(uploadedfile.name, getFileType(uploadedfile.type), uid);
-				ext = getFileType(uploadedfile.name);
+				ext = getExtension(uploadedfile.name);
 			}
 			
 			var formData = new FormData();

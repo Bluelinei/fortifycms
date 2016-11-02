@@ -1,6 +1,6 @@
 <?php require 'header.php'; ?>
 
-<script>USER = getURIVar('user');</script>
+<script>USER = getURIVar('user').toLowerCase();</script>
     <script src="./framework/casemanager.js"></script>
     <script src="./framework/BLFramework.js"></script>
 

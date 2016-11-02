@@ -6,7 +6,7 @@ tinymce.init({
 });
 </script>
 
-<?php //if(!isset($_GET['view'])||!isset($_GET['type'])) header('Location: http://68.169.178.232/'); ?>
+<?php //if(!isset($_GET['view'])||!isset($_GET['type'])) header('Location: http://68.169.178.232/index.php?user='+USER); ?>
 
   <script src="framework/videoplayer/video.js"></script>
 

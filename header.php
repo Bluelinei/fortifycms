@@ -1,3 +1,4 @@
+<?php if(!isset($_GET['user'])) header('Location: http://68.169.178.232/login.php'); ?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -30,8 +31,34 @@
   </div>
 <!--END quick-notify-->
 
+<?php include 'search.php'; ?>
+<?php include 'notification-bar.php'; ?>
+
+<!--START Main Content Area wrapper (side-bar + content pane)-->
+<!--  <div class="content-wrapper"> -->
+<!--START Nav/Logo side-bar-->
+    <div class="nav-side-bar">
+
+      <img src="img/logo.png" class="logo"/>
+
+      <nav>
+        <ul>
+          <li id="search-button"><div>Search</div></li>
+          <li><div>Recent</div></li>
+          <li id="nav-evidence"><div>Evidence</div></li>
+        </ul>
+      </nav>
+
+    </div><!--END Nav/Logo side-bar-->
+
 <script>
   var notification_timer;
+
+  function toggleNotifications()
+  {
+    if($('.notification-button-container').hasClass('hidden')) $('.notification-button-container').removeClass('hidden');
+    else $('.notification-button-container').addClass('hidden');
+  }
 
   function notify(msg)
   {
@@ -53,24 +80,10 @@
       $('.quick-notify').addClass('hidden');
     }, 2000);
   });
+  $('#search-button').on('click', function(){$('.search-box').removeClass('hidden');});
+  $('.search-close').on('click', function(e){
+    if(e.target!=this) return;
+    $('.search-box').addClass('hidden');
+  });
+  $('.note-header').on('click', toggleNotifications);
 </script>
-
-<?php include 'search.php'; ?>
-<?php include 'notification-bar.php'; ?>
-
-<!--START Main Content Area wrapper (side-bar + content pane)-->
-<!--  <div class="content-wrapper"> -->
-<!--START Nav/Logo side-bar-->
-    <div class="nav-side-bar">
-
-      <img src="img/logo.png" class="logo"/>
-
-      <nav>
-        <ul>
-          <li id="search-button"><div>Search</div></li>
-          <li><div>Recent</div></li>
-          <li id="nav-evidence"><div>Evidence</div></li>
-        </ul>
-      </nav>
-
-    </div><!--END Nav/Logo side-bar-->

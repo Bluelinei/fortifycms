@@ -3,14 +3,18 @@
 <!--START footer-->
   <footer>
 
-    <a href="" class="logout-button"><p class="vertical-middle">Log Out</p></a>
-
+    <div class="logout-button point-cursor"><p class="vertical-middle">Log Out</p></div>
 
     <div class="twenty-per-wide notification-button point-cursor">
 
     </div>
     <div class="clear"></div>
   </footer><!--END Footer-->
+  <script>
+  	$('.logout-button').on('click', function(){
+  		href('login.php');
+  	})
+  </script>
 
 
   </body>

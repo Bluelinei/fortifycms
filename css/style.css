@@ -73,6 +73,7 @@ body{
   top: 0;
   left: 0;
   background: #242533;
+  z-index: 500;
   transition: transform 1s cubic-bezier(0.9, 0, 0.1, 1), opacity 0.8s cubic-bezier(0.9, 0, 0.1, 1) 0.2s;
 }
 
@@ -525,7 +526,7 @@ h3.new-case:active{
   width: 40%;
   position: absolute;
   right: 0;
-  z-index: 100; 
+  z-index: 500; 
   height: 100%;
   transform: translateX(100%);
   transition: all 0.2s;

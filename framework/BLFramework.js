@@ -110,12 +110,6 @@ function handleDragover(evt) //Sets drag over cursor elements just to make it lo
 	evt.dataTransfer.dropEffect = 'copy';
 }
 
-function toggleNotifications()
-{
-	if($('.notification-button-container').hasClass('hidden')) $('.notification-button-container').removeClass('hidden');
-	else $('.notification-button-container').addClass('hidden');
-}
-
 function setEventListeners()
 {
 	$('#openfilebrowser').on('change', handleFileSelect);
@@ -134,12 +128,6 @@ function setEventListeners()
 	$('#add-evidence').on('click', toggleMediaBrowser);
 	$('#close-media-browser').on('click', closeMediaBrowser);
 	$('#page-body').on('click', closeAllBrowsers);
-	$('#search-button').on('click', function(){$('.search-box').removeClass('hidden');});
-	$('.search-close').on('click', function(e){
-		if(e.target!=this) return;
-		$('.search-box').addClass('hidden');
-	});
-	$('.note-header').on('click', toggleNotifications);
 }
 
 function getDatabase()
