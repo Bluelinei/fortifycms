@@ -1093,7 +1093,6 @@ footer .headshot{
 .search-box{
   background: rgba(255,255,255,0.9);
   color: #fff;
-  display: none;
   height: 100%;
   padding: 20px 0px;
   position: fixed;

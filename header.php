@@ -57,19 +57,6 @@
 
 <?php include 'search.php'; ?>
 
-<!--START search box-->
-
-  <div class="search-box hidden">
-    <div class="exit-overlay"></div>
-    <div class="vertical-middle">
-      <input type="text" placeholder="Enter Search Criteria" />
-      <input type="submit" value="Search Database" />
-      <div class="clear"></div>
-    </div>
-  </div>
-
-<!--END search box-->
-
 <!--START Main Content Area wrapper (side-bar + content pane)-->
 <!--  <div class="content-wrapper"> -->
 <!--START Nav/Logo side-bar-->
@@ -79,13 +66,9 @@
 
       <nav>
         <ul>
-          <li id="video-player">Search</li>
-          <li>Recent</li>
-          <li id="nav-evidence">Evidence</li>
-          <li style="display: none;"><div>Upload</div></li>
-          <li><div id="search">Search</div></li>
+          <li id="search-button"><div>Search</div></li>
           <li><div>Recent</div></li>
-          <li><div id="nav-evidence">Evidence</div></li>
+          <li id="nav-evidence"><div>Evidence</div></li>
         </ul>
       </nav>
 
