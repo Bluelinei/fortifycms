@@ -58,6 +58,7 @@
 
 
 <?php include 'search.php'; ?>
+<?php include 'notification-bar.php'; ?>
 
 <!--START Main Content Area wrapper (side-bar + content pane)-->
 <!--  <div class="content-wrapper"> -->
