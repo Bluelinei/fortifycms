@@ -1,7 +1,7 @@
 <div class="notification-button-container hidden">
   <div class="note-header point-cursor" style="background: #222; padding: 22px;">
     <div style="width: auto;display: inline-block;margin-left: 40px;">
-      <div class="left notify-count">12</div>
+      <div class="left notify-count">3</div>
       <div class="left notify-text">Notifications</div>
       <div class="clear"></div>
     </div>

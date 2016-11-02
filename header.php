@@ -69,6 +69,7 @@
         <ul>
           <li id="search-button"><div>Search</div></li>
           <li><div>Recent</div></li>
+          <li id="nav-evidence"><div>Builder</div></li>
           <li id="nav-evidence"><div>Evidence</div></li>
         </ul>
       </nav>
