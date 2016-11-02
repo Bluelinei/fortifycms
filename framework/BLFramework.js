@@ -104,12 +104,6 @@ function handleDragover(evt) //Sets drag over cursor elements just to make it lo
 	evt.dataTransfer.dropEffect = 'copy';
 }
 
-function toggleSearch()
-{
-	if($('.search-box').hasClass('hidden')) $('.search-box').removeClass('hidden');
-	else $('.search-box').addClass('hidden');
-}
-
 function setEventListeners()
 {
 	$('#openfilebrowser').on('change', handleFileSelect);
@@ -128,10 +122,10 @@ function setEventListeners()
 	$('#add-evidence').on('click', toggleMediaBrowser);
 	$('#close-media-browser').on('click', closeMediaBrowser);
 	$('#page-body').on('click', closeMediaBrowser);
-	$('#search').on('click', toggleSearch);
-	$('.search-box').on('click', function(e){
+	$('#search-button').on('click', function(){$('.search-box').removeClass('hidden');});
+	$('.search-close').on('click', function(e){
 		if(e.target!=this) return;
-		toggleSearch();
+		$('.search-box').addClass('hidden');
 	});
 }
 
