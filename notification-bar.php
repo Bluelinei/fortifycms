@@ -5,7 +5,7 @@
       <div class="left notify-text">Notifications</div>
       <div class="clear"></div>
     </div>
-         <i class="fa fa-chevron-circle-<?php if(1 == 1){echo 'down';} else {echo 'up';} ?>" aria-hidden="true" style="position: absolute; right: 0; z-index: 101;color: #fff;margin-top: 5px;margin-right: 30px;"></i>
+         <i id="note-arrow" class="fa fa-chevron-circle-up" aria-hidden="true" style="position: absolute; right: 0; z-index: 101;color: #fff;margin-top: 5px;margin-right: 30px;"></i>
   </div>
 
   <div style="width: 100%; height: 60px; background: #509ace;margin: 1px 0; color: #fff;" class="point-cursor">

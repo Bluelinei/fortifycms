@@ -57,8 +57,18 @@
 
   function toggleNotifications()
   {
-    if($('.notification-button-container').hasClass('hidden')) $('.notification-button-container').removeClass('hidden');
-    else $('.notification-button-container').addClass('hidden');
+    if($('.notification-button-container').hasClass('hidden'))
+    {
+      $('#note-arrow').removeClass('fa-chevron-circle-up');
+      $('#note-arrow').addClass('fa-chevron-circle-down');
+      $('.notification-button-container').removeClass('hidden');
+    }
+    else
+    {
+      $('#note-arrow').removeClass('fa-chevron-circle-down');
+      $('#note-arrow').addClass('fa-chevron-circle-up');
+      $('.notification-button-container').addClass('hidden');
+    }
   }
 
   function notify(msg)

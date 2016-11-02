@@ -116,7 +116,7 @@
           </div><!--END tag-column-->
 <!--FORTIFY case button-->
             <div class="fortify-case-button-container">
-              <div id="fortify-button" class="one-wide fortify-case-button point-cursor text-bold"><p class="vertical-middle">Fortify Case</p></div>
+              <div id="fortify-button" class="one-wide fortify-case-button point-cursor text-bold"><p class="vertical-middle">Fortify Cases</p></div>
             </div><!--END fortify case button-->
           </div><!--END further admin block // this is the 100% block that contains the tag list and the button, it's how we get the 5px spacing between the evidence inventory block and then the 5px spacing between the fortify case button and the tag list-->
 
