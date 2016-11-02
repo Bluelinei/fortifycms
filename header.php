@@ -29,7 +29,6 @@
   </div>
 <!--END quick-notify-->
 
-<<<<<<< HEAD
 <script>
   var notification_timer;
 
@@ -54,10 +53,9 @@
     }, 2000);
   });
 </script>
-=======
 <!--START search box-->
 
-  <div class="search-box">
+  <div class="search-box hidden">
     <div class="exit-overlay"></div>
     <div class="vertical-middle">
       <input type="text" placeholder="Enter Search Criteria" />
@@ -67,7 +65,6 @@
   </div>
 
 <!--END search box-->
->>>>>>> 8bbbcec0217d5e1aa11a33170cab537622c35977
 
 <!--START Main Content Area wrapper (side-bar + content pane)-->
 <!--  <div class="content-wrapper"> -->
@@ -79,7 +76,7 @@
       <nav>
         <ul>
           <li style="display: none;"><div>Upload</div></li>
-          <li><div id="video-player">Search</div></li>
+          <li><div id="search">Search</div></li>
           <li><div>Recent</div></li>
           <li><div id="nav-evidence">Evidence</div></li>
         </ul>
