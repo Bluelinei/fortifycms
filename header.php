@@ -67,15 +67,9 @@
 
       <nav>
         <ul>
-<<<<<<< HEAD
-          <li id="video-player">Search</li>
-          <li>Recent</li>
-          <li id="nav-evidence">Evidence</li>
-=======
           <li id="search-button"><div>Search</div></li>
           <li><div>Recent</div></li>
           <li id="nav-evidence"><div>Evidence</div></li>
->>>>>>> master
         </ul>
       </nav>
 
