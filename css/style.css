@@ -1083,6 +1083,7 @@ footer .headshot{
 }
 
 .quick-notify-content{
+  background: linear-gradient(rgba(255,255,255,0),rgba(000,000,000,.1));
   height: 100%;
   font-size: 11px;
   text-align: center;
