@@ -67,6 +67,12 @@ function postFiles(files) //Sends file and file data to PHP for processing and u
 	popStack();
 }
 
+function closeAllBrowsers()
+{
+	$('#media-browser').removeClass('show');
+	$('.notification-button-container').addClass('hidden');
+}
+
 function closeMediaBrowser()
 {
 	$('#media-browser').removeClass('show');
@@ -104,10 +110,16 @@ function handleDragover(evt) //Sets drag over cursor elements just to make it lo
 	evt.dataTransfer.dropEffect = 'copy';
 }
 
+function toggleNotifications()
+{
+	if($('.notification-button-container').hasClass('hidden')) $('.notification-button-container').removeClass('hidden');
+	else $('.notification-button-container').addClass('hidden');
+}
+
 function setEventListeners()
 {
 	$('#openfilebrowser').on('change', handleFileSelect);
-	$(fileuploadElementID).on('click', openFileBrowser);	
+	$(fileuploadElementID).on('click', openFileBrowser);
 	$('#fortify-button').on('click', fortifyActiveCase);
 	$('#new-case').on('click', newCase);
 	$('#report-number').on('input', updateInfo);
@@ -121,12 +133,13 @@ function setEventListeners()
 	$('#nav-evidence').on('click', toggleMediaBrowser);
 	$('#add-evidence').on('click', toggleMediaBrowser);
 	$('#close-media-browser').on('click', closeMediaBrowser);
-	$('#page-body').on('click', closeMediaBrowser);
+	$('#page-body').on('click', closeAllBrowsers);
 	$('#search-button').on('click', function(){$('.search-box').removeClass('hidden');});
 	$('.search-close').on('click', function(e){
 		if(e.target!=this) return;
 		$('.search-box').addClass('hidden');
 	});
+	$('.note-header').on('click', toggleNotifications);
 }
 
 function getDatabase()
