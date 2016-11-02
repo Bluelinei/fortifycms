@@ -1,7 +1,7 @@
 
 <!--START search box-->
 
-  <div class="search-box search-close hidden">
+  <div class="search-box search-close hidden" style="z-index: 3000;">
     <div class="exit-overlay">
       <i class="fa fa-times-circle search-close" aria-hidden="false"></i>
     </div>
