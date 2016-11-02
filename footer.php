@@ -4,7 +4,6 @@
   <footer>
 
     <div class="logout-button point-cursor"><p class="vertical-middle">Log Out</p></div>
-
     <div class="twenty-per-wide notification-button point-cursor">
 
     </div>

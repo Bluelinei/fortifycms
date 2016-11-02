@@ -152,7 +152,7 @@ body{
 }
 
 .builder-block .header{
-  background: #e7e7e7;
+  background: #ccc;
   border: 1px solid #bbb;
 	display: block;
 	font-weight: bold;
@@ -443,7 +443,7 @@ select:-moz-focusring {
 
 
 .manager-container h2{
-  background: #e7e7e7;
+  background: #ccc;
   border: 1px solid #bbb;
 	display: block;
 	font-weight: bold;
@@ -526,7 +526,7 @@ h3.new-case:active{
   width: 40%;
   position: absolute;
   right: 0;
-  z-index: 500; 
+  z-index: 500;
   height: 100%;
   transform: translateX(100%);
   transition: all 0.2s;
@@ -1084,6 +1084,7 @@ footer .headshot{
 }
 
 .quick-notify-content{
+  background: linear-gradient(rgba(255,255,255,0),rgba(000,000,000,.1));
   height: 100%;
   font-size: 11px;
   text-align: center;

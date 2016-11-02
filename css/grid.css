@@ -65,7 +65,7 @@
 }
 
 .seventy-per-wide{
-	width: 70%;
+	width: 70% !important;
 }
 
 .eighty-per-wide{
