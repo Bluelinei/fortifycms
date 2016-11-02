@@ -120,7 +120,7 @@ body{
 /** 02.00 Nav/Side bar **/
 
 .nav-side-bar{
-	background: linear-gradient(#1D5EBF, #2234A8);
+	background: linear-gradient(#103266, #2234A8);
 	float: left;
 	height: 92%;
 	width: 10%;
@@ -1025,7 +1025,7 @@ footer{
 .notification-button{
   background: #103266;
   bottom: 0;
-  border-left: 5px solid #333;
+//  border-left: 5px solid #333;
   color: #fff;
   float: right;
   height: 100%;
