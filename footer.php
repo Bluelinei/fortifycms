@@ -4,7 +4,18 @@
   <footer>
 
     <a href="" class="logout-button"><p class="vertical-middle">Log Out</p></a>
-    <div class="twenty-per-wide notification-button point-cursor"><p class="vertical-middle">(10) Notifications</p></div>
+    
+      
+    <div class="twenty-per-wide notification-button point-cursor">
+      <div class="vertical-middle">
+
+<div style="width: auto;display: inline-block;">
+          <div class="left notify-count">12</div>
+          <div class="left notify-text">Notifications</div>
+          <div class="clear"></div>
+</div>
+      </div>
+    </div>
     <div class="clear"></div>
   </footer><!--END Footer-->
 

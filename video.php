@@ -1,5 +1,11 @@
 <?php require 'header.php'; ?>
 
+<script>
+tinymce.init({
+  selector: '#commentBox'
+});
+</script>
+
 <?php //if(!isset($_GET['view'])||!isset($_GET['type'])) header('Location: http://68.169.178.232/'); ?>
 
   <script src="framework/videoplayer/video.js"></script>
@@ -179,6 +185,11 @@
         <div style="position: absolute; bottom: 0;width: 100%;">
           <div class="video-taglist-header">Tag list</div>
             <ul id="tag-list" class="video-taglist-body">
+              <li style="background: #cc3333;">
+                <p class="left">Murder</p>
+                <div class="fa fa-minus-circle right link-button point-cursor"></div>
+                <div class="clear"></div>
+              </li>
                 <li>
                   <p class="left">DUI</p>
                   <div class="fa fa-minus-circle right link-button point-cursor"></div>
@@ -203,8 +214,11 @@
               <div class="clear"></div>
             </li>
           </ul>
-          <div class="video-associate-add-button"><i class="fa fa-plus-circle" aria-hidden="true"></i></div>
+          <div class="video-associate-add-button"><i class="fa fa-plus-circle" aria-hidden="false"></i></div>
+
         </div>
+
+
 
       </div><!--END video sidebar inner -->
     </div><!--END video sidebar container-->

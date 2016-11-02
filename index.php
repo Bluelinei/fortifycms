@@ -1,12 +1,19 @@
 <?php require 'header.php'; ?>
 
-<?php if(!isset($_GET['user'])) header('Location: http://68.169.178.232/login.php'); ?>
+<!--REMOVE THIS ASAP-->
+<style>
+  #pageload-overlay{
+    display: none;
+  }
+</style>
+
+<?php //if(!isset($_GET['user'])) header('Location: http://68.169.178.232/login.php'); ?>
 
     <script src="./framework/casemanager.js"></script>
     <script src="./framework/BLFramework.js"></script>
 
 <!--START Content-pane-->
-    <div class="content-pane fourty-padding" id="page-body">
+    <div class="content-pane" id="page-body">
 
 <!--START  Builder wrapper-->
       <div class="builder-container">
@@ -54,6 +61,8 @@
                   <select class="one-wide" id="report-type">
                     <option>Arrest Report</option>
                     <option>CAD Report</option>
+                    <option>Incident Report</option>
+                    <option>No Report</option>
                   </select>
                 </div><!--END QUESTION-->
     <!--REPORT QUESTION-->

@@ -52,18 +52,15 @@ body{
 }
 
 .exit-overlay{
+  color: #000;
   position: absolute;
-  top: 30px;
-  right: 30px;
+  top: 20px; 
+  right: 20px; 
+  z-index: 1100;
+  font-size:40px;
+  cursor: pointer;
 }
 
-.exit-overlay::after{
-  background: #fff;
-  border-radius: 100px;
-  color: #000;
-  content: "x";
-  padding: 20px;
-}
 
 .grey-text {
   color: #777;
@@ -116,23 +113,26 @@ body{
 
 /** 01.00 Content Wrapper **/
 .content-wrapper{
+  height: 100%;
 	width: 100%;
-	height: 100%;
 }
 
 /** 02.00 Nav/Side bar **/
 
 .nav-side-bar{
-	background: #242533;
+	background: linear-gradient(#1D5EBF, #2234A8);
 	float: left;
-	height: 94%;
+	height: 92%;
 	width: 10%;
 }
 
 /** 03.00 Content Pane **/
 .content-pane{
-	float: left;
-	height: 94%;
+  background: #fafafa;
+	box-sizing: border-box;
+  float: left;
+	height: 92%;
+  padding: 40px;
 	width: 90%;
 }
 
@@ -264,19 +264,18 @@ body{
 .fortify-case-button{
   background: #bd3333;
   font-weight: normal;
-  font-size: 15px;
+  font-size: 13px;
   height: 100%;
   text-align: center;
   color: #fff;
-  font-weight: bold;
   text-decoration: none;
   transition: all .1s;
 }
 
 .fortify-case-button:hover{
+  background: #bf4444;
   cursor: pointer;
-  border-radius: 10px;
-
+  text-shadow: 0 1px #000;
 }
 
 .fortify-case-button:active{
@@ -648,7 +647,6 @@ margin: 0px;
 .video-main-container{
   float: left;
   height: 200px;
-  padding: 30px;
   padding-right: 20px;
   width: 80%;
 }
@@ -680,7 +678,7 @@ margin: 0px;
 
 .time-code-box{
   border-radius: 5px;
-  background: #666;
+  background: #444;
   color: #fff;
   display: block;
   font-size: 10px;
@@ -714,7 +712,8 @@ margin: 0px;
 .video-player-button{
   display: block;
   float: left;
-  height: 40px;
+  height: 30px;
+  width: 30px;
 }
 
 /**05.04 video page advanced tool bar**/
@@ -798,7 +797,8 @@ margin: 0px;
   float: left;
   height: 100%;
   padding: 30px;
-  padding-bottom: 80px;
+  padding-top: 0;
+  padding-bottom: 130px; 
   position: fixed;
   right: 0;
   width: 20%;
@@ -865,6 +865,8 @@ margin: 0px;
 
 .video-associate-list li{
   border-bottom: 1px solid #000;
+  font-size: 10px;
+  text-align: center;
 }
 
 .video-associate-list li:last-child{
@@ -872,7 +874,8 @@ margin: 0px;
 }
 
 .video-associate-add-button{
-  background: #509ace;
+  background: #444;
+  cursor: pointer;
   text-align: center;
   color: #fff;
   padding: 15px;
@@ -941,6 +944,7 @@ margin: 0px;
   background: rgba(000,000,000,0.3);
   width: 100%;
   margin: 0px auto;
+  margin-bottom: 40px;
   display: block;
   padding: 30px;
 }
@@ -948,7 +952,7 @@ margin: 0px;
   /**09.02 Nav**/
 
 .logout-button{
-  background: #333445;
+  background: #1B3266;
   bottom: 0;
   color: #fff;
   float: left;
@@ -959,24 +963,27 @@ margin: 0px;
   width: 10%;
 }
 
-nav{
-}
 
 nav li{
   width: 100%;
 }
-nav li div{
+nav li{
   background: rgba(255,255,255,0.1);
   color: #fff;
   display: block;
-  margin-bottom: 2px;
+  margin-bottom: 1px;
   padding: 20px 10px;
   text-align: center;
   text-decoration: none;
   transition: all .1s;
 }
 
-nav li div:hover{
+nav li:nth-child(even){
+    background: rgba(255,255,255,0.05);
+  
+}
+
+nav li:hover{
   background: rgba(255,255,255,0.3);
   cursor: pointer;
 }
@@ -987,16 +994,38 @@ nav li div:hover{
 
 footer{
   background: #3f3f3f;
-  width: 100%;
-	height: 6%;
+//  border-top: 5px solid #333;
+	height: 8%;
 	width: 100%;
 }
 
+.notify-count{
+  background: linear-gradient(#dd0000, #dd4444);
+  border-radius: 5px;
+  color: #fff;
+  display: inline-block;
+  font-size: 11px;
+  font-weight: bold;
+  height: 30px;
+  line-height: 30px;
+  text-shadow: 0px 2px #000;
+  vertical-align: middle;
+  width: 30px;
+}
+
+
+.notify-text{
+  color: #fff;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 20px 0 5px;
+}
 
 
 .notification-button{
-  background: #509ace;
+  background: #103266;
   bottom: 0;
+  border-left: 5px solid #333;
   color: #fff;
   float: right;
   height: 100%;
@@ -1060,8 +1089,9 @@ footer .headshot{
 /**12.00 search**/
 
 .search-box{
-  background: rgba(224,82,58,0.8);
+  background: rgba(255,255,255,0.9);
   color: #fff;
+  display: block;
   height: 100%;
   padding: 20px 0px;
   position: fixed;
@@ -1070,17 +1100,23 @@ footer .headshot{
   z-index: 1009;
 }
 
+.search-box img{
+  display: block;
+  margin: 0px auto;
+  margin-bottom: 20px;
+  width: 20%;
+}
+
 .search-box input[type="text"]{
-  background: #FAE0B7;
-  border: 10px solid #4C1C14;
-  border-left: 0px;
-  border-right: 0px;
+  background: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 0  10px #bbb;
   display: block;
   color: #000;
-  float: left;
-  font-size: 20px;
-  padding: 50px 20px;
-  transition: all .5s;
+  font-size: 30px;
+  margin: 0px auto;
+  padding: 20px;
+  transition: all 1s;
   width: 80%;
 }
 
@@ -1088,16 +1124,18 @@ footer .headshot{
   padding-left: 40px;
 }
 
+
+
 .search-box input[type="submit"]{
-  background: linear-gradient(#DB5C24, #C4432A);
-  border: 0px;
-  border: 10px solid #4C1C14;
-  border-right: 0px;
-  color: #fff;
+  background: #bbb;
+  border: 1px solid #aaa;
+  color: #555;
   cursor: pointer;
-  float: left;
-  font-size: 20px;
-  padding: 50px 0;
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0px auto;
+  margin-top: 20px;
+  padding: 20px 35px;
   text-align: center;
-  width: 20%;
 }

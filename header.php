@@ -17,6 +17,7 @@
 
     <script src="./framework/jquery3.1.1.js"></script>
     <script src="./framework/toolkit.js"></script>
+    <script src='//cdn.tinymce.com/4/tinymce.min.js'></script>
 
   </head>
   <body>
@@ -29,7 +30,7 @@
   </div>
 <!--END quick-notify-->
 
-<<<<<<< HEAD
+
 <script>
   var notification_timer;
 
@@ -54,20 +55,9 @@
     }, 2000);
   });
 </script>
-=======
-<!--START search box-->
 
-  <div class="search-box">
-    <div class="exit-overlay"></div>
-    <div class="vertical-middle">
-      <input type="text" placeholder="Enter Search Criteria" />
-      <input type="submit" value="Search Database" />
-      <div class="clear"></div>
-    </div>
-  </div>
 
-<!--END search box-->
->>>>>>> 8bbbcec0217d5e1aa11a33170cab537622c35977
+<?php include 'search.php'; ?>
 
 <!--START Main Content Area wrapper (side-bar + content pane)-->
 <!--  <div class="content-wrapper"> -->
@@ -78,10 +68,9 @@
 
       <nav>
         <ul>
-          <li style="display: none;"><div>Upload</div></li>
-          <li><div id="video-player">Search</div></li>
-          <li><div>Recent</div></li>
-          <li><div id="nav-evidence">Evidence</div></li>
+          <li id="video-player">Search</li>
+          <li>Recent</li>
+          <li id="nav-evidence">Evidence</li>
         </ul>
       </nav>
 
