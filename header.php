@@ -83,10 +83,6 @@
           <li id="video-player">Search</li>
           <li>Recent</li>
           <li id="nav-evidence">Evidence</li>
-          <li style="display: none;"><div>Upload</div></li>
-          <li><div id="search">Search</div></li>
-          <li><div>Recent</div></li>
-          <li><div id="nav-evidence">Evidence</div></li>
         </ul>
       </nav>
 

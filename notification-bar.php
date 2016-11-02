@@ -7,4 +7,14 @@
     </div>
          <i class="fa fa-chevron-circle-<?php if(1 == 1){echo 'down';} else {echo 'up';} ?>" aria-hidden="true" style="position: absolute; right: 0; z-index: 1100;color: #fff;margin-top: 5px;margin-right: 30px;"></i>
   </div>
+
+  <div style="width: 100%; height: 60px; background: #509ace;margin: 1px 0; color: #fff;">
+    <div class="quick-notify-close left">
+        <div class="vertical-middle"><i class="fa fa-times-circle" aria-hidden="true"></i></div>
+    </div>
+    <div class="quick-notify-content left">
+      <div class="vertical-middle">You have 12 cases to follow-up on</div>
+    </div>
+  </div>
+
 </div>
