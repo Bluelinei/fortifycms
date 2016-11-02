@@ -613,11 +613,10 @@ margin: 0px;
 .ev-curtain{
   background: rgba(000,000,000,0.5);
   color: #cfcfcf;
-  display: none;
+  opacity: 0;
   font-size: 12px;
   height: 100%;
   position: absolute;
-  transition: all 1s;
   text-align: center;
   width: 100%;
   z-index: 200; /*Above main page but below notifications*/
@@ -638,8 +637,11 @@ margin: 0px;
 }
 
 .media-block li:hover .ev-curtain{
-  display: block;
-  transition: all 1s;
+  opacity: 1;
+}
+
+.media-block li .hidden{
+  display: none;
 }
 
 /** 05.00 Video Page**/

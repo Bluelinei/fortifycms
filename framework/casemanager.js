@@ -49,7 +49,7 @@ function updateCaseFiles()
 {
 	pushStack('updateCaseFiles');
 	var len = casefiles.length;
-	for(var i=0; i<len; i++) {casefiles[i].updateMediaElement();}
+	for(var i=0; i<len; i++) {casefiles[i].checkState(); casefiles[i].updateMediaElement();}
 	popStack();
 }
 
@@ -100,6 +100,7 @@ function newCaseFile(uploadedfile)
 				cf = new Casefile(uploadedfile.name, getFileType(uploadedfile.type), uid);
 				ext = getExtension(uploadedfile.name);
 			}
+			log('Pre-Upload: '+cf.filepath+' | Ext: '+ext);
 			
 			var formData = new FormData();
 			formData.append('file', uploadedfile);
@@ -458,7 +459,7 @@ Case.prototype.postCase = function() {
 	f.append('reporttags',this.tags.join('<#>'));
 	var filelist = []
 	var len = this.files.length;
-	for(var i=0; i<len; i++) {filelist.push(this.files[i].uid);}
+	for(var i=0; i<len; i++) {log(this.files[i]); filelist.push(this.files[i].uid);}
 	for(var i=0; i<len; i++) {this.files[i].postFile();}
 	f.append('evidence',filelist.join(''));
 	f.append('admin',(this.admin?1:0));
@@ -623,7 +624,7 @@ Casefile.prototype.newElement = function() {
 	this.element.append('<p class="left ten-padding bold">'+this.filetype+'</p>');
 	this.element.append('<div class="delete-icon link-button point-cursor '+this.uid+'_removebutton"><i class="fa fa-minus-circle" aria-hidden="true"></i></div>');
 	this.element.append('<div class="view-icon link-button point-cursor '+this.uid+'_view-button"><i class="fa fa-eye" aria-hidden="true"></i></div>');
-	this.element.append('<p class="right ten-padding">'+ d.toLocaleDateString() + ' ' + d.toLocaleTimeString() +'</p>');
+	this.element.append('<p class="right ten-padding">'+ d.toLocaleDateString() + '</p>');
 	this.element.append('<div class="clear"></div>');
 	this.element.id = this.uid+"_case";
 	popStack();
@@ -633,7 +634,7 @@ Casefile.prototype.newMediaElement = function() {
 	pushStack('Casefile.newMediaElement');
 	var d = new Date(this.uploaddate);
 	this.mediaelement = $('<li>');
-	var inner = $('<div class="block" style="border:'+this.checkState()+';">');
+	var inner = $('<div class="block" style="'+this.checkState()+'">');
 	var e = [];
 	e.push('<div class="ev-curtain"><div class="vertical-middle">');
 	e.push('<h3>'+this.truncName(15, 12)+'</h3>');
@@ -654,8 +655,8 @@ Casefile.prototype.newMediaElement = function() {
 Casefile.prototype.updateMediaElement = function(thumb) {
 	pushStack('Casefile.updateMediaElement');
 	var d = new Date(this.uploaddate);
-	this.mediaelement = $('<li>');
-	var inner = $('<div class="block" style="border:'+this.checkState()+';">');
+	this.mediaelement = $('<li style="'+this.doHide()+'">');
+	var inner = $('<div class="block" style="'+this.checkState()+'">');
 	var e = [];
 	e.push('<div class="ev-curtain"><div class="vertical-middle">');
 	e.push('<h3>'+this.truncName(15, 12)+'</h3>');
@@ -664,9 +665,9 @@ Casefile.prototype.updateMediaElement = function(thumb) {
 	e.push('<div style="display: inline;"><i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i></div>');
 	e.push('</div></div>');
 	inner.append(e.join(''));
-	inner.css({'background-image': (this.thumbnail ? ('url('+address+this.thumbnail+')') : ('url("'+address+'/img/docicon.png")')),
+	inner.css({'background-image': (this.thumbnail ? ('url('+address+this.thumbnail+')') : ('url("'+address+'/img/loading.gif")')),
 		'background-repeat': 'no-repeat',
-		'background-size': 'cover',
+		'background-size': (this.thumbnail?'cover':'50px 50px'),
 		'background-position': 'center'
 	});
 	this.mediaelement.append(inner);
@@ -717,27 +718,34 @@ Casefile.prototype.updateElement = function() {
 	{
 		case UNFORT:
 			popStack();
-			return '5px solid rgb(255,100,100)';
+			return '';
 			break;
 		case UNUSED:
 			popStack();
-			return 'none';
+			return 'display: none;';
 			break;
 		case INUSE:
 			popStack();
-			return '5px solid rgb(100,255,100)';
+			return 'border: 5px solid rgb(100,255,100);';
 			break;
 		default: break;
 	}
 	popStack();
 };
 
+Casefile.prototype.doHide = function() {
+	if(this.state == UNUSED) return 'display: none;';
+	else return '';
+}
+
 Casefile.prototype.setButtonFunction = function() {
 	$(document).on('click', '.'+this.uid+'_addfilebutton', clickHandler(addFileToCase, this));
 	$(document).on('click', '.'+this.uid+"_removebutton", clickHandler(removeFileFromCase, this));
 	if(this.filetype == 'VIDEO')
 	{
-		$(document).on('click', '.'+this.uid+'_view-button', clickHandler(href, 'video.php?view='+this.uid+'&type='+getExtension(this.filepath)));
+		$(document).on('click', '.'+this.uid+'_view-button', function() {
+			clickHandler(href, 'video.php?view='+this.uid+'&type='+getExtension(this.filepath));
+		});
 	}
 }
 	/*

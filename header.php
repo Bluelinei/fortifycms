@@ -1,4 +1,3 @@
-<?php if(!isset($_GET['user'])) header('Location: http://68.169.178.232/login.php'); ?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -27,7 +26,7 @@
 <!--START quick-notify-->
   <div class="quick-notify case-fortified hidden">
     <div class="left quick-notify-close point-cursor"><i class="fa fa-times-circle vertical-middle" aria-hidden="true"></i></div>
-    <div class="left quick-notify-content"><p class="vertical-middle">Your files have been uploaded</p></div>
+    <div class="left quick-notify-content" style="pointer-events:none;"><p class="vertical-middle">Your files have been uploaded</p></div>
   </div>
 <!--END quick-notify-->
 

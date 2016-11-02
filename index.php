@@ -1,4 +1,5 @@
 <?php require 'header.php'; ?>
+<?php if(!isset($_GET['user'])) echo "<script>href('login.php')</script>"; ?>
 
 <script>USER = getURIVar('user').toLowerCase();</script>
     <script src="./framework/casemanager.js"></script>

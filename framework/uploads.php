@@ -17,7 +17,7 @@ $targetDir = ".".$ds."uploads";
 setDir($targetDir);
 $finalPath = $targetDir.$ds.$fn;
 
-if($_POST['isvid'])
+if($_POST['isvid']&&$_POST['ext']!='mp4')
 {
 	$fn = $_POST['uid'].".mp4";
 	$finalPath = $targetDir.$ds.$fn;

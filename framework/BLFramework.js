@@ -213,7 +213,7 @@ function getDatabase()
 							for(var j=0; j<caselen; j++)
 							{
 								var indx = getCaseById(cf.caseindex[j]);
-								indx.files.push(cf);
+								indx.addFile(cf);
 							}
 							updateCases();
 							updateCaseFiles();
