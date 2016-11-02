@@ -8,6 +8,9 @@
 </style>
 
 <?php //if(!isset($_GET['user'])) header('Location: http://68.169.178.232/login.php'); ?>
+<?php if(!isset($_GET['user'])) header('Location: http://68.169.178.232/login.php'); ?>;
+
+<script>USER = getURIVar('user');</script>
 
     <script src="./framework/casemanager.js"></script>
     <script src="./framework/BLFramework.js"></script>
