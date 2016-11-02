@@ -54,8 +54,8 @@ body{
 .exit-overlay{
   color: #000;
   position: absolute;
-  top: 20px; 
-  right: 20px; 
+  top: 20px;
+  right: 20px;
   z-index: 1100;
   font-size:40px;
   cursor: pointer;
@@ -344,6 +344,7 @@ body{
 	border:0px solid #555;
 	padding: 10px;
 }
+
 
 .report-question-header{
   background: #999;padding: 10px;font-size: 10px;color: #fff;
@@ -798,7 +799,7 @@ margin: 0px;
   height: 100%;
   padding: 30px;
   padding-top: 0;
-  padding-bottom: 130px; 
+  padding-bottom: 130px;
   position: fixed;
   right: 0;
   width: 20%;
@@ -942,6 +943,7 @@ margin: 0px;
 
 .logo{
   background: rgba(000,000,000,0.3);
+  box-shadow: 0px 3px 20px #111;
   width: 100%;
   margin: 0px auto;
   margin-bottom: 40px;
@@ -980,7 +982,7 @@ nav li{
 
 nav li:nth-child(even){
     background: rgba(255,255,255,0.05);
-  
+
 }
 
 nav li:hover{

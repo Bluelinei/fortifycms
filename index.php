@@ -22,7 +22,8 @@
 <!--START Builder Header-->
         <div class="builder-block">
           <div class="header">
-            <p class="vertical-middle fourty-padding-left left">Case Builder</p>
+            <p class="vertical-middle fourty-padding-left left"><i class="fa fa-pencil-square" aria-hidden="true"></i>
+ Case Builder</p>
 
             <div class="clear"></div>
           </div><!--END Builder Header-->
@@ -37,26 +38,28 @@
               <div class="thirty-padding vertical-middle">
 
     <!--REPORT QUESTION-->
-                <div class="report-question thirty-margin-bottom">
+                <div class="report-question twenty-margin-bottom">
                   <p class="one-wide report-question-header">What is the report number?</p>
                   <input id="report-number" type="text" placeholder="Report Number" class="one-wide"/>
                 </div><!--END QUESTION-->
 
+<!--REPORT QUESTION-->
+            <div class="report-question twenty-margin-bottom">
+              <p class="one-wide report-question-header"> What is the report nickname?</i>
+</p>
+              <input id="report-nickname" type="text" placeholder="Report Nickname" class="one-wide">
+            </div><!--END QUESTION-->
+
+
   <!--REPORT QUESTION-->
-              <div class="report-question thirty-margin-bottom">
-                <p class="one-wide report-question-header">Report Location?</p>
+              <div class="report-question twenty-margin-bottom">
+                <p class="one-wide report-question-header"><i class="fa fa-map-marker" aria-hidden="true"></i>
+ Report Location?</p>
                 <input id="report-location" type="text" placeholder="Report Location" class="one-wide">
               </div><!--END QUESTION-->
 
-  <!--REPORT QUESTION-->
-              <div class="report-question thirty-margin-bottom">
-                <p class="one-wide report-question-header">What is the report nickname?</p>
-                <input id="report-nickname" type="text" placeholder="Report Nickname" class="one-wide">
-              </div><!--END QUESTION-->
-
-
     <!--REPORT QUESTION-->
-                <div class="report-question thirty-margin-bottom">
+                <div class="report-question twenty-margin-bottom">
                   <p class="one-wide report-question-header">What is the report type?</p>
                   <select class="one-wide" id="report-type">
                     <option>Arrest Report</option>
@@ -66,7 +69,7 @@
                   </select>
                 </div><!--END QUESTION-->
     <!--REPORT QUESTION-->
-                <div class="report-question thirty-margin-bottom">
+                <div class="report-question twenty-margin-bottom">
                   <p class="one-wide report-question-header">Assign Report Tags</p>
                   <select class="one-wide grey-text" id="report-tag">
                     <option style="color:#777;" selected>SELECT TAG</option>
@@ -129,7 +132,8 @@
       </div><!--END builder wrapper-->
 <!--START manager wrapper-->
       <div class="manager-container">
-        <h2><p class="vertical-middle">Case Manager</p></h2>
+        <h2><p class="vertical-middle"><i class="fa fa-archive" aria-hidden="true"></i>
+Case Manager</p></h2>
         <div style="height: 5px; background: #fff; width: 100%;"></div>
         <h3 class="seventy-per-wide left ten-padding">Reference ID</h3>
         <h3 class="twenty-per-wide left ten-padding">Files</h3>
