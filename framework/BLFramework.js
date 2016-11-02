@@ -1,7 +1,7 @@
 //GLOBAL VARIABLES (MAINLY FOR DEBUGGING)
 
 const address = 'http://68.169.178.232/';
-var USER = $_GET['user'];
+var USER;
 
 var databaseload = 0;
 
@@ -104,6 +104,12 @@ function handleDragover(evt) //Sets drag over cursor elements just to make it lo
 	evt.dataTransfer.dropEffect = 'copy';
 }
 
+function toggleSearch()
+{
+	if($('.search-box').hasClass('hidden')) $('.search-box').removeClass('hidden');
+	else $('.search-box').addClass('hidden');
+}
+
 function setEventListeners()
 {
 	$('#openfilebrowser').on('change', handleFileSelect);
@@ -122,7 +128,11 @@ function setEventListeners()
 	$('#add-evidence').on('click', toggleMediaBrowser);
 	$('#close-media-browser').on('click', closeMediaBrowser);
 	$('#page-body').on('click', closeMediaBrowser);
-	$('#video-player').on('click', clickHandler(href, 'video.php?view=test-video.mp4'));
+	$('#search').on('click', toggleSearch);
+	$('.search-box').on('click', function(e){
+		if(e.target!=this) return;
+		toggleSearch();
+	});
 }
 
 function getDatabase()

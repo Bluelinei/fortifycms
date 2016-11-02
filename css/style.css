@@ -1112,6 +1112,12 @@ footer .headshot{
   top: 0;
   width: 100%;
   z-index: 1009;
+  transition: opacity 0.2s ease;
+}
+
+.search-box.hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .search-box img{
