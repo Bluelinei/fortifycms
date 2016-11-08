@@ -204,7 +204,11 @@ function login(user, pass)
 		success: function(response) {
 			log(response);
 			if(response) href('casebuilder.php');
-			else loginNotify('Invalid login credentials');
+			else
+			{
+				loginNotify('Invalid login credentials');
+				document.getElementById('pass').value = '';
+			}
 		}
 	});
 }

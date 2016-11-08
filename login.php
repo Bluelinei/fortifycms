@@ -41,6 +41,9 @@
           login($('#user').val(), $('#pass').val());
         }
         $(document).on('click', '#login', doLogin);
+        $(document).on('keypress', function(event){
+          if(event.keyCode==13||event.which==13) doLogin();
+        });
       </script>
   </body>
 </html>
