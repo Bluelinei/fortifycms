@@ -188,3 +188,40 @@ function getURIVar(variable)
 	}
 	return false;
 }
+
+function login(user, pass)
+{
+	var f = new FormData();
+	f.append('func', 'login');
+	f.append('user', user);
+	f.append('pass', pass);
+	$.ajax({
+		url: 'framework/login.php',
+		method: 'POST',
+		data: f,
+		processData: false,
+		contentType: false,
+		success: function(response) {
+			log(response);
+			if(response) href('casebuilder.php');
+			else loginNotify('Invalid login credentials');
+		}
+	});
+}
+
+function logout()
+{
+	var f = new FormData();
+	f.append('func', 'logout');
+	$.ajax({
+		url: 'framework/login.php',
+		method: 'POST',
+		data: f,
+		processData: false,
+		contentType: false,
+		success: function(response) {
+			log(response);
+			href('login.php');
+		}
+	});
+}

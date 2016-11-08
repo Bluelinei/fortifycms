@@ -8,6 +8,8 @@ $database=	'fortify';
 
 error_reporting(E_ALL);
 
+if(!isset($_SESSION)) session_start();
+
 function getError($e) {die("CASEPOST: ".$e->getMessage());}
 
 try{
@@ -23,7 +25,7 @@ function getData($conn)
 			try {
 				$sql = "SELECT * FROM quickreport WHERE officer=?";
 				$stmt = $conn->prepare($sql);
-				$stmt->execute(array($_POST['officer']));
+				$stmt->execute(array($_SESSION['user']));
 				$response = $stmt->fetchALL(PDO::FETCH_ASSOC);
 				echo json_encode($response);
 			} catch(PDOException $e) {getError($e);}

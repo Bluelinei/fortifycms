@@ -21,6 +21,14 @@
 
   </head>
   <body>
+    <?php
+      if(!isset($_SESSION)) session_start();
+      if(!isset($_SESSION['user']))
+      {
+        header("Location: login.php");
+        die();
+      }
+    ?>
     <?php require 'evidence-overlay.php'; ?>
 
 <!--START quick-notify-->
@@ -53,6 +61,7 @@
 
 <script>
   var notification_timer;
+  var idleTime = 0;
 
   function toggleNotifications()
   {
@@ -96,4 +105,14 @@
     $('.search-box').addClass('hidden');
   });
   $('.note-header').on('click', toggleNotifications);
+  $(document).ready(function() {
+    var idleInterval = setInterval(timerIncrement, 60000);
+    $(this).mousemove(function() {idleTime = 0;});
+    $(this).keypress(function() {idleTime = 0;});
+  });
+  function timerIncrement()
+  {
+    idleTime++;
+    if(idleTime>=10) logout();
+  }
 </script>

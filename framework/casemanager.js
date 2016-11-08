@@ -463,7 +463,6 @@ Case.prototype.postCase = function() {
 	for(var i=0; i<len; i++) {this.files[i].postFile();}
 	f.append('evidence',filelist.join(''));
 	f.append('admin',(this.admin?1:0));
-	f.append('officer', USER)
 	$.ajax({
 		url:'framework/casepost.php',
 		method: 'POST',
@@ -597,7 +596,6 @@ Casefile.prototype.postFile = function() {
 	fdata.append('upload_date', this.uploaddate);
 	fdata.append('case_index', this.caseindex.join(''));
 	fdata.append('state', (this.state==UNFORT?0:1));
-	fdata.append('officer', USER);
 
 	$.ajax({
 		url: 'framework/filepost.php',
@@ -746,18 +744,7 @@ Casefile.prototype.setButtonFunction = function() {
 		$(document).on('click', '.'+this.uid+'_view-button', clickHandler(href, 'video.php?view='+this.uid+'&type=mp4'));
 	}
 }
-	/*
-	OKAY, LISTEN UP, ASSHOLE!
 
-	YOU'RE A FUCKING MORON FOR TRYING TO CREATE A NEW BUTTON EVERY SINGLE TIME YOU UPDATE SOMETHING SO JUST STOP!
-	GIVE WHATEVER BUTTON YOU HAVE A SPECIFIC CLASS OF [this.uid]+'_WHATEVERTHEFUCKTHEBUTTONDOES'
-	THEN YOU JUST ADD A $(document).on('click') LISTENER TO THE PAGE!
-
-	REMEMBER TO FIX THIS SHIT TOMORROW AND TO STOP BEING SUCH A DIPSHIT!
-
-	By the way...
-	YOU'RE A MOTHERFUCKING WIZARD!
-	*/
 
 
 

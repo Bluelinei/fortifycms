@@ -1,7 +1,6 @@
 //GLOBAL VARIABLES (MAINLY FOR DEBUGGING)
 
 const address = 'http://68.169.178.232/';
-var USER;
 
 var databaseload = 0;
 
@@ -135,7 +134,6 @@ function getDatabase()
 	var f = new FormData();
 	f.append('table', 'quickreport');
 	f.append('function', 'get');
-	f.append('officer', USER);
 	loading(1);
 	var compiled = [];
 	$.ajax({

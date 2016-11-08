@@ -8,7 +8,7 @@
     <script src="./framework/toolkit.js"></script>
   </head>
   <body style= "background: linear-gradient(#bfbfbf, #fff);">
-
+  
       <div class="vertical-middle login-page" style="width:500px;margin: 0px auto;">
         <img src="img/Fortify-Logo-Brushed.png" style="width: 100%; pointer-events:none;" />
         <input id="user" type="text" placeholder="User Name" class="left"/>
@@ -20,24 +20,25 @@
         </div>
       </div>
       <script>
-        var login;
+        var loginnote;
         function loginNotify(msg)
         {
-          clearTimeout(login);
+          clearTimeout(loginnote);
           $('.login-message').html(msg);
           $('.login-message').removeClass('hidden');
-          login = setTimeout(function(){
+          loginnote = setTimeout(function(){
             $('.login-message').addClass('hidden');
           }, 2000);
         }
         function doLogin()
         {
-          if($('#user').val()==''||$('#pass').val()=='')
+          if($('#user').val()==''&&$('#pass').val()=='') {login('dev', 'devpass'); return;} //DO NOT FORGET TO DELEVE THIS LINE WHEN FINISHING OUT THE CODE!!!
+          else if($('#user').val()==''||$('#pass').val()=='')
           {
             loginNotify('Please enter login credentials.');
             return;
           }
-          href('index.php?user='+$('#user').val());
+          login($('#user').val(), $('#pass').val());
         }
         $(document).on('click', '#login', doLogin);
       </script>
