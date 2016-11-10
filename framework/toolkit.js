@@ -229,3 +229,9 @@ function logout()
 		}
 	});
 }
+
+function getUnixTime(time)
+{
+	if(time) return Math.floor(time/1000);
+	else return Math.floor(Date.now()/1000);
+}

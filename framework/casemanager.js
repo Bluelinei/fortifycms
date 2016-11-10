@@ -17,7 +17,12 @@ const CHANGE_STATE = true;
 function postCases()
 {
 	var len = cases.length;
-	for(var i=0; i<len; i++) {cases[i].postCase();}
+	var failed = 0;
+	for(var i=0; i<len; i++)
+	{
+		if(!cases[i].postCase()) failed++;
+	}
+	notify((cases.length-failed)+' Cases Fortified');
 }
 
 function getCaseById(id)
@@ -92,7 +97,7 @@ function newCaseFile(uploadedfile)
 			var ext;
 			if(getFileType(uploadedfile.type)=='VIDEO')
 			{
-				cf = new Casefile(uid+'.mp4', getFileType(uploadedfile.type), uid);
+				cf = new Casefile(uid+'.mp4', uid, uploadedfile);
 				ext = 'mp4';
 			}
 			else
@@ -214,9 +219,6 @@ function deleteCase(c)
 function fortifyActiveCase()
 {
 	pushStack('fortifyActiveCase');
-	$('#fortify-notification').removeClass('hidden');
-	$('#fortify-notification').addClass('hidden');
-	notify('All Cases Fortified');
 	postCases();
 	updateInfo();
 	popStack();
@@ -354,6 +356,7 @@ function setTag()
 function removeTag(t)
 {
 	pushStack('removeTag');
+	workingcase.changed = true;
 	var len = workingcase.tags.length;
 	for(var i=0; i<len; i++) {if(workingcase.tags[i] == t.name) {workingcase.tags.splice(i,1);}}
 	updateTags();
@@ -440,6 +443,8 @@ function Case(uid)
 	this.admin = false;
 	this.type;
 	this.officer;
+	this.changed = false;
+	this.activetime = -1;
 	this.DELETED = false;
 
 	cases.push(this);
@@ -448,13 +453,20 @@ function Case(uid)
 	popStack();
 }
 
+Case.prototype.changeCase = function(x) {
+	this.changed = x;
+	if(this.changed) this.element.addClass('changed');
+	else this.element.removeClass('changed');
+}
+
 Case.prototype.postCase = function() {
 	pushStack('Case.postCase');
+	if(!this.nickname||!this.casenum||!this.location||!this.type) {popStack(); return false;}
 	var f = new FormData();
 	f.append('uid',this.uid);
 	f.append('nickname',this.nickname);
 	f.append('reportnum',(this.casenum=='[No Report Number]'||this.casenum=='[New Case]'?'':this.casenum));
-	f.append('reportloc',this.location);
+	f.append('reportloc', (this.location==''?'':this.location));
 	f.append('reporttype',this.type);
 	f.append('reporttags',this.tags.join('<#>'));
 	var filelist = []
@@ -470,10 +482,12 @@ Case.prototype.postCase = function() {
 		processData: false,
 		contentType: false,
 		success: function(response) {
-			log(response);
+			//log(response);
 		}
 	});
+	this.changeCase(false);
 	popStack();
+	return true;
 }
 
 Case.prototype.newElement = function() {
@@ -563,15 +577,16 @@ Case.prototype.deleteCase = function() {
 //** CASEFILE OBJECT **********************************************************************************************************
 //*****************************************************************************************************************************
 
-function Casefile(filename, type, uid)
+function Casefile(filename, uid, file)
 {
 	pushStack('CaseFile');
+	log(getUnixTime(file.lastModified));
 	this.uid = uid;
-	this.name;
-	this.filetype = type;
+	this.name = file.name;
+	this.filetype = getFileType(file.type);
 	this.filepath = this.uid+'.'+getExtension(filename);
-	var date = new Date();
-	this.uploaddate = date.getTime();
+	this.filedate = getUnixTime(file.lastModified);
+	this.uploaddate = Date.now();
 	this.element;
 	this.mediaelement;
 	this.thumbnail;
@@ -583,6 +598,15 @@ function Casefile(filename, type, uid)
 	this.newMediaElement();
 	this.newElement();
 	this.setButtonFunction();
+
+	var send;
+	for(var i=0; i<cases.length; i++)
+	{
+		if(cases[i].activetime==-1||cases[i].activetime>this.filedate) continue;
+		if(!send||cases[i].activetime>send.activetime) send=cases[i];
+	}
+	if(send) send.addFile(this);
+
 	popStack();
 }
 
@@ -616,13 +640,13 @@ Casefile.prototype.truncName = function(y, n){
 
 Casefile.prototype.newElement = function() {
 	pushStack('CaseFile.newElement');
-	var d = new Date(this.uploaddate);
+	//var d = new Date(this.uploaddate);
 	this.element = $('<li>');
 	this.element.addClass('casefile-element');
 	this.element.append('<p class="left ten-padding bold">'+this.filetype+'</p>');
 	this.element.append('<div class="delete-icon link-button point-cursor '+this.uid+'_removebutton"><i class="fa fa-minus-circle" aria-hidden="true"></i></div>');
 	this.element.append('<div class="view-icon link-button point-cursor '+this.uid+'_view-button"><i class="fa fa-eye" aria-hidden="true"></i></div>');
-	this.element.append('<p class="right ten-padding">'+ d.toLocaleDateString() + '</p>');
+	this.element.append('<p class="right ten-padding">'+ new Date(this.uploaddate).toLocaleDateString() + '</p>');
 	this.element.append('<div class="clear"></div>');
 	this.element.id = this.uid+"_case";
 	popStack();
@@ -768,16 +792,18 @@ function ReportTag(n)
 ReportTag.prototype.newElement = function() {
 	pushStack('ReportTag.updateElement');
 	this.element = $('<li>');
+	this.element.addClass('point-cursor');
 	this.element.append('<p class="left">'+this.name+'</p>');
-	this.element.append(this.newButton());
+	this.element.append('<div class="fa fa-minus-circle right link-button"></div>');
 	this.element.append('<div class="clear"></div>');
+	this.element.on('click', clickHandler(removeTag, this));
 	popStack();
 }
 
 ReportTag.prototype.newButton = function() {
 	pushStack('ReportTag.newButton');
 	var button = $('<div>');
-	button.addClass('fa fa-minus-circle right link-button point-cursor');
+	button.addClass('<div class="fa fa-minus-circle right link-button point-cursor"></div>');
 	button.on('click', clickHandler(removeTag, this));
 	popStack();
 	return button;

@@ -496,6 +496,14 @@ h3.new-case:active{
   background: #dbfad1 !important;
 }
 
+#case-list .changed {
+  background: #fcc;
+}
+
+#case-list .changed:hover {
+  background: #ffe9e9;
+}
+
 .manager-container .case-file-count{
   text-align: center;
   background: rgba(000,000,000,0.1);

@@ -18,6 +18,7 @@
     <script src="./framework/jquery3.1.1.js"></script>
     <script src="./framework/toolkit.js"></script>
     <script src='//cdn.tinymce.com/4/tinymce.min.js'></script>
+    <!--<script src='./framework/notify.js'></script>-->
 
   </head>
   <body>
@@ -52,7 +53,7 @@
         <ul>
           <li id="search-button"><div>Search</div></li>
           <li><div>Recent</div></li>
-          <li><div>Builder</div></li>
+          <li id="nav-casebuilder"><div>Builder</div></li>
           <li id="nav-evidence"><div>Evidence</div></li>
         </ul>
       </nav>
@@ -61,6 +62,7 @@
 
 <script>
   var notification_timer;
+  var idle_timer;
   var idleTime = 0;
 
   function toggleNotifications()
@@ -106,10 +108,11 @@
   });
   $('.note-header').on('click', toggleNotifications);
   $(document).ready(function() {
-    var idleInterval = setInterval(timerIncrement, 60000);
+    idle_timer = setInterval(timerIncrement, 60000);
     $(this).mousemove(function() {idleTime = 0;});
     $(this).keypress(function() {idleTime = 0;});
   });
+  $('#nav-casebuilder').on('click', clickHandler(href, 'casebuilder.php'));
   function timerIncrement()
   {
     idleTime++;

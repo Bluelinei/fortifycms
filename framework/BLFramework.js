@@ -109,6 +109,11 @@ function handleDragover(evt) //Sets drag over cursor elements just to make it lo
 	evt.dataTransfer.dropEffect = 'copy';
 }
 
+function changeCase()
+{
+	workingcase.changeCase(true);
+}
+
 function setEventListeners()
 {
 	$('#openfilebrowser').on('change', handleFileSelect);
@@ -127,6 +132,18 @@ function setEventListeners()
 	$('#add-evidence').on('click', toggleMediaBrowser);
 	$('#close-media-browser').on('click', closeMediaBrowser);
 	$('#page-body').on('click', closeAllBrowsers);
+	$('#start-active').on('click', function(){
+		workingcase.activetime = getUnixTime();
+		notify('Case Active: '+workingcase.activetime);
+	});
+
+	//On Case change
+	$('#report-number').on('input', changeCase);
+	$('#report-nickname').on('input', changeCase);
+	$('#report-location').on('input', changeCase);
+	$('#report-tag').on('change', changeCase);
+	$('#report-type').on('change', changeCase);
+	$('#myonoffswitch').on('click', changeCase);
 }
 
 function getDatabase()

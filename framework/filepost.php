@@ -6,6 +6,8 @@ $username=	'user';
 $pass=		'';
 $database=	'fortify';
 
+if(!isset($_SESSION)) session_start();
+
 function getError($e) {die("CASEPOST: ".$e->getMessage());}
 
 try{
@@ -17,7 +19,7 @@ function updateEntry($conn)
 	try {
 		$sql = "UPDATE evidence SET nickname=?, filepath=?, type=?, uploaddate=?, caseindex=?, fortified=?, officer=? WHERE uid=?";
 		$stmt = $conn->prepare($sql);
-		$stmt->execute(array($_POST['nickname'],$_POST['file_path'],$_POST['file_type'],$_POST['upload_date'],$_POST['case_index'],$_POST['state'],$_POST['officer'],$_POST['uid']));
+		$stmt->execute(array($_POST['nickname'],$_POST['file_path'],$_POST['file_type'],$_POST['upload_date'],$_POST['case_index'],$_POST['state'],$_SESSION['user'],$_POST['uid']));
 		echo "Updated evidence in database";
 	} catch(PDOException $e) {echo getError($e);}
 }
@@ -27,7 +29,7 @@ function newEntry($conn)
 	try {
 		$sql = "INSERT INTO evidence (uid, nickname, filepath, type, uploaddate, caseindex, fortified, officer) VALUES (?,?,?,?,?,?,?,?)";
 		$stmt = $conn->prepare($sql);
-		$stmt->execute(array($_POST['uid'],$_POST['nickname'],$_POST['file_path'],$_POST['file_type'],$_POST['upload_date'],$_POST['case_index'],$_POST['state'],$_POST['officer']));
+		$stmt->execute(array($_POST['uid'],$_POST['nickname'],$_POST['file_path'],$_POST['file_type'],$_POST['upload_date'],$_POST['case_index'],$_POST['state'],$_SESSION['user']));
 		echo "Uploaded new evidence to database";
 	} catch(PDOException $e) {echo getError($e);}
 }

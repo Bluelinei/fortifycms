@@ -114,8 +114,8 @@
             <div id="fortify-notification" class="hidden">Cases Saved</div>
           </div><!--END tag-column-->
 <!--FORTIFY case button-->
-            <div class="fortify-case-button-container">
-              <div id="fortify-button" class="one-wide fortify-case-button point-cursor text-bold"><p class="vertical-middle">Pre-Link Evidence</p></div>
+            <div id="start-active" class="fortify-case-button-container">
+              <div class="one-wide fortify-case-button point-cursor text-bold"><p class="vertical-middle">Start Active Case</p></div>
             </div><!--END fortify case button-->
           </div><!--END further admin block // this is the 100% block that contains the tag list and the button, it's how we get the 5px spacing between the evidence inventory block and then the 5px spacing between the fortify case button and the tag list-->
 
@@ -124,8 +124,7 @@
       </div><!--END builder wrapper-->
 <!--START manager wrapper-->
       <div class="manager-container">
-        <h2><p class="vertical-middle"><i class="fa fa-archive" aria-hidden="true"></i>
-Case Manager</p></h2>
+        <h2><p class="vertical-middle"><i class="fa fa-archive" aria-hidden="true"></i>Case Manager</p></h2>
         <div style="height: 5px; background: #fff; width: 100%;"></div>
         <h3 class="seventy-per-wide left ten-padding">Reference ID</h3>
         <h3 class="twenty-per-wide left ten-padding">Files</h3>
@@ -134,7 +133,7 @@ Case Manager</p></h2>
 <!--CASE LIST-->
         <ul id="case-list">
         </ul>
-        <div class="fortify-case-button" style="height:auto;padding: 20px;margin-top:5px;border: 1px solid #440000;">Fortify Case</div>
+        <div id="fortify-button" class="fortify-case-button" style="height:auto;padding: 20px;margin-top:5px;border: 1px solid #440000;">Fortify Case</div>
       </div><!--END builder wrapper-->
 
     </div><!--END Content Pane-->
