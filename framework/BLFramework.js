@@ -24,7 +24,7 @@ const fileuploadElementID = '#fileupload';
 
 function getAPISupport() //Test whether or not the browser can use the html5 functionality.
 {
-	if(!window.File || !window.FileList)
+	if(!window.File || !window.FileList || !window.FileReader)
 	{
 		alert('Your internet browser does not support the necessary dependencies for this application.\nFortify CMS™ is recommended for use with the latest versions of Firefox and Chrome browsers.');
 		return false;

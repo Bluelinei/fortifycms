@@ -1,7 +1,7 @@
 <?php require 'header.php'; ?>
 
-    <script src="./framework/casemanager.js"></script>
-    <script src="./framework/BLFramework.js"></script>
+    <script src="./framework/casemanager.js?v=<?php echo sha1_file("framework/casemanager.js");?>"></script>
+    <script src="./framework/BLFramework.js?v=<?php echo sha1_file("framework/BLFramework.js");?>"></script>
 
 <!--START Content-pane-->
     <div class="content-pane" id="page-body">
@@ -115,7 +115,7 @@
           </div><!--END tag-column-->
 <!--FORTIFY case button-->
             <div id="start-active" class="fortify-case-button-container">
-              <div class="one-wide fortify-case-button point-cursor text-bold"><p class="vertical-middle">Start Active Case</p></div>
+              <div class="one-wide fortify-case-button point-cursor text-bold"><p class="vertical-middle"><i class="fa fa-clock-o fa-lg"></i> Start Active Case</p></div>
             </div><!--END fortify case button-->
           </div><!--END further admin block // this is the 100% block that contains the tag list and the button, it's how we get the 5px spacing between the evidence inventory block and then the 5px spacing between the fortify case button and the tag list-->
 
@@ -133,7 +133,7 @@
 <!--CASE LIST-->
         <ul id="case-list">
         </ul>
-        <div id="fortify-button" class="fortify-case-button" style="height:auto;padding: 20px;margin-top:5px;border: 1px solid #440000;">Fortify Case</div>
+        <div id="fortify-button" class="fortify-case-button" style="height:auto;padding: 15px;margin-top:5px;border: 1px solid #440000;"><p class="no-event"><span class="fa-stack"><i class="fa fa-shield fa-stack-2x"></i><i class="fa fa-unlock-alt fa-stack-1x fa-inverse"></i></span>  Fortify Cases</p></div>
       </div><!--END builder wrapper-->
 
     </div><!--END Content Pane-->

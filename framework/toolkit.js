@@ -1,7 +1,8 @@
 
-var SHOW_CALLSTACK = false;
+const SHOW_CALLSTACK = false;
+const SHOW_LOGS = true;
 
-function log(msg) {console.log(msg);} //Outputs a message to the browser console
+function log(msg) {if(SHOW_LOGS) console.log(msg);} //Outputs a message to the browser console
 
 function rand(n, add=1) {return Math.floor((Math.random()*n)+add);}
 

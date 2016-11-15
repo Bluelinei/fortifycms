@@ -10,8 +10,6 @@ const UNFORT = "unfortified"; //File has not been assigned to a case
 const INUSE = "inuse"; //File is assigned to the current working case
 const UNUSED = "unused"; //File is assigned to a case, but not the current one
 
-const CHANGE_STATE = true;
-
 // *** GLOBAL FUNCTIONS ********************************************************************************************************
 
 function postCases()
@@ -22,7 +20,8 @@ function postCases()
 	{
 		if(!cases[i].postCase()) failed++;
 	}
-	notify((cases.length-failed)+' Cases Fortified');
+	if(cases.length-failed) notify((cases.length-failed)+((cases.length-failed)==1?' case':' cases')+' fortified');
+	if(failed) notify(failed+(failed==1?' case':' cases')+' could not be fortified', WARN_NOTE);
 }
 
 function getCaseById(id)
@@ -97,7 +96,7 @@ function newCaseFile(uploadedfile)
 			var ext;
 			if(getFileType(uploadedfile.type)=='VIDEO')
 			{
-				cf = new Casefile(uid+'.mp4', uid, uploadedfile);
+				cf = new Casefile(uid+'.mp4', 'VIDEO', uid);
 				ext = 'mp4';
 			}
 			else
@@ -105,6 +104,7 @@ function newCaseFile(uploadedfile)
 				cf = new Casefile(uploadedfile.name, getFileType(uploadedfile.type), uid);
 				ext = getExtension(uploadedfile.name);
 			}
+			cf.uploaddate = getUnixTime(uploadedfile.lastModified());
 			log('Pre-Upload: '+cf.filepath+' | Ext: '+ext);
 			
 			var formData = new FormData();
@@ -441,7 +441,7 @@ function Case(uid)
 	this.tags = [];
 	this.element;
 	this.admin = false;
-	this.type;
+	this.type = 'No Report';
 	this.officer;
 	this.changed = false;
 	this.activetime = -1;
@@ -577,15 +577,14 @@ Case.prototype.deleteCase = function() {
 //** CASEFILE OBJECT **********************************************************************************************************
 //*****************************************************************************************************************************
 
-function Casefile(filename, uid, file)
+function Casefile(filename, type, uid)
 {
 	pushStack('CaseFile');
-	log(getUnixTime(file.lastModified));
 	this.uid = uid;
-	this.name = file.name;
-	this.filetype = getFileType(file.type);
+	this.name = filename;
+	this.filetype = type;
 	this.filepath = this.uid+'.'+getExtension(filename);
-	this.filedate = getUnixTime(file.lastModified);
+	this.filedate;
 	this.uploaddate = Date.now();
 	this.element;
 	this.mediaelement;

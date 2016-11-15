@@ -51,6 +51,10 @@ body{
   cursor: pointer !important;
 }
 
+.no-event {
+  pointer-events: none;
+}
+
 .exit-overlay{
   color: #000;
   position: absolute;
@@ -1062,23 +1066,15 @@ footer .headshot{
 
 /**11.00 notifications **/
 
-.upload-complete{
-  background: #ff9999 !important;
-}
-
-.case-fortified{
-  background: #77aa77 !important;
-}
-
 .quick-notify{
   color: #fff;
   height: 60px;
   position: fixed;
   right: 0;
-  top: 0;
+  top: 20px;
   width: 300px;
   z-index: 300; /*Above everything but search*/
-  transition: all 0.2s ease;
+  transition: transform 0.2s ease;
 }
 
 .quick-notify.hidden{
@@ -1098,6 +1094,18 @@ footer .headshot{
   font-size: 11px;
   text-align: center;
   width: 85%;
+}
+
+.quick-notify.upld-note{
+  background: #aaf;
+}
+
+.quick-notify.dflt-note{
+  background: #7a7;
+}
+
+.quick-notify.warn-note{
+  background: #f77;
 }
 
 .notification-button-container{

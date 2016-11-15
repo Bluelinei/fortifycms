@@ -5,14 +5,14 @@
     <title>Please Login</title>
     <link href="css/style.css" rel="stylesheet"/>
     <script src="./framework/jquery3.1.1.js"></script>
-    <script src="./framework/toolkit.js"></script>
+    <script src="./framework/toolkit.js?v=<?php echo sha1_file("framework/toolkit.js");?>"></script>
   </head>
   <body style= "background: linear-gradient(#bfbfbf, #fff);">
   
       <div class="vertical-middle login-page" style="width:500px;margin: 0px auto;">
         <img src="img/Fortify-Logo-Brushed.png" style="width: 100%; pointer-events:none;" />
-        <input id="user" type="text" placeholder="User Name" class="left"/>
-        <input id="pass" type="password" placeholder="Password" class="right"/>
+        <input id="user" type="text" placeholder="User Name" autocomplete="off" class="left"/>
+        <input id="pass" type="password" placeholder="Password" autocomplete="off" class="right"/>
         <div class="clear"></div>
         <input id="login" type="submit" value="Login" />
         <div class="login-message hidden">
