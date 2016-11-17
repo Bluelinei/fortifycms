@@ -26,7 +26,7 @@
 <!--START QUESTION/ INVENTORY CONTAINER-->
           <div class="question-inventory-container">
   <!--REPORT QUESTION CONTAINER-->
-            <div class="two-wide left report-question-block" style="overflow-x: auto;">
+            <div class="one-wide left report-question-block" style="overflow-x: auto;">
               <div class="thirty-padding vertical-middle">
 
     <!--REPORT QUESTION-->
@@ -75,53 +75,112 @@
                 </div><!--END QUESTION-->
               </div>
             </div><!--END Repport Question Block-->
+          </div><!--END question block-->
 
 
 
-            <!--INVENTORY LIST CONTAINER-->
-                      <div class="two-wide left evidence-inventory-block">
-                        <div class="fifteen-padding text-center">
-                          <h3>Evidence Inventory</h3>
-                          <div id="add-evidence" class="link-button point-cursor"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add Evidence</div>
-                        </div>
-            <!--INVENTORY LIST-->
-                        <ul id="evidence-inventory" class="evidence-inventory-list">
-                        </ul>
-                      </div><!--END inventory list container-->
-                  </div><!--END QUESTION/ INVENTORY CONTAINER-->
 
-<!--Further Admin Block-->
-          <div class="twenty-per-wide left tag-block">
-<!--START tag-column-->
-            <div class="tag-column">
-              <div class="twenty-padding">
-              <h3>Follow Up?</h3>
-  <!--Toggle Switch-->
-              <div class="onoffswitch center">
-                  <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
-                  <label class="onoffswitch-label" for="myonoffswitch">
-                      <span class="onoffswitch-inner"></span>
-                      <span class="onoffswitch-switch"></span>
-                  </label>
-              </div><!--END toggle switch-->
+<!--START div that contains the evidence inventory and the follow up column -- this is how we get the proper spacing and stack the date/ time selector for pre-linking -->
+          <div class="evidence-followup-wrapper">
+            <div class="evidence-followup-block"><!--SETS the height of the top block, containing the evidence inventory and the follow up block-->
 
-              <div class="thirty-margin-top">
-                <h3>Tag List</h3>
-                <ul id="tag-list">
-                </ul>
+      <!--INVENTORY LIST CONTAINER-->
+                <div class="left evidence-inventory-block">
+                  <div class="fifteen-padding text-center">
+                    <h3>Evidence Inventory</h3>
+                    <div id="add-evidence" class="link-button point-cursor"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add Evidence</div>
+                  </div>
+      <!--INVENTORY LIST-->
+                  <ul id="evidence-inventory" class="evidence-inventory-list">
+                  </ul>
+                </div><!--END inventory list container-->
+
+      <!--Further Admin Block-->
+                <div class="fourty-per-wide left tag-block">
+      <!--START tag-column-->
+                  <div class="tag-column">
+                    <div class="twenty-padding">
+                    <h3>Follow Up?</h3>
+        <!--Toggle Switch-->
+                    <div class="onoffswitch center">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
+                        <label class="onoffswitch-label" for="myonoffswitch">
+                            <span class="onoffswitch-inner"></span>
+                            <span class="onoffswitch-switch"></span>
+                        </label>
+                    </div><!--END toggle switch-->
+
+                    <div class="thirty-margin-top">
+                      <h3>Tag List</h3>
+                      <ul id="tag-list">
+                      </ul>
+                    </div>
+                  </div>
+                  <div id="fortify-notification" class="hidden">Cases Saved</div>
+                </div><!--END tag-column-->
+                </div><!--END further admin block // this is the 100% block that contains the tag list and the button, it's how we get the 5px spacing between the evidence inventory block and then the 5px spacing between the fortify case button and the tag list-->
+              </div><!--END INVENTORY/follow up CONTAINER-->
+
+    <!--START date/ time selector for pre-linking -->
+            <div class="prelink-wrapper">
+
+              <div class="timeset-wrapper">
+                <div class="one-wide" style="display: block;background: rgba(255,187,187,0.8);color:#fff;height: 100%;font-size: 11px;text-align: center;">
+                  <div class="clock-container">
+                    <div class="increment"><p class="vertical-middle">+</p></div>
+                    <div class="time"><p class="vertical-middle">11</p></div>
+                    <div class="increment"><p class="vertical-middle">-</p></div>
+                  </div>
+                  <div class="clock-container">
+                    <div class="increment"><p class="vertical-middle">+</p></div>
+                    <div class="time"><p class="vertical-middle">23</p></div>
+                    <div class="increment"><p class="vertical-middle">-</p></div>
+                  </div>
+                  <div class="clock-container">
+                    <div class="increment"><p class="vertical-middle">+</p></div>
+                    <div class="time"><p class="vertical-middle">pm</p></div>
+                    <div class="increment"><p class="vertical-middle">-</p></div>
+                  </div>
+                  <div class="clock-container" style="background: #550000;">
+                    <div class="clock-month"><p style="position: absolute; bottom: 0;width: 100%; text-align: center;">Nov</p></div>
+                    <div class="clock-day">16</div>
+                  </div>
+                  <div class="clock-container" style="background: rgba(000,255,000,0.3);">
+                    <div class="vertical-middle" style="font-size: 35px;"><i class="fa fa-check-circle-o" aria-hidden="true"></i>
+                  </div>
+                      </div>
+                    <div class="clear"></div>
+                  </div>
+              </div>
+
+              <div class="prelink-block">
+
+                <div class="three-wide" style="height: 100%; background: #55ff55;">
+                  <div class="vertical-middle">pre-linking on</div>
+                  </div>
+                <div class="three-wide" style="height: 100%;background: #ff8888;">
+                  <div class="vertical-middle">Start<br>11:52am</div>
+                </div>
+                <div class="three-wide" style="height: 100%; background: #ff8888;">
+                  <div class="vertical-middle">End<br>12:25pm</div>
+                </div>
               </div>
             </div>
-            <div id="fortify-notification" class="hidden">Cases Saved</div>
-          </div><!--END tag-column-->
-<!--FORTIFY case button-->
-            <div id="start-active" class="fortify-case-button-container">
-              <div class="one-wide fortify-case-button point-cursor text-bold"><p class="vertical-middle"><i class="fa fa-clock-o fa-lg"></i> Start Active Case</p></div>
-            </div><!--END fortify case button-->
-          </div><!--END further admin block // this is the 100% block that contains the tag list and the button, it's how we get the 5px spacing between the evidence inventory block and then the 5px spacing between the fortify case button and the tag list-->
+          </div><!--END evidence inventory/follow up wrapper that houses evidence inventory and follupw up blocks as well as the date/time selector for prelinking stack-->
+          </div><!--END builder-block content wrapper-->
+          </div><!--END builder-block-->
+        </div><!--END builder wrapper-->
 
-        </div><!--END builder-block content wrapper-->
-        </div><!--END builder-block-->
-      </div><!--END builder wrapper-->
+
+
+
+
+
+
+
+
+
+
 <!--START manager wrapper-->
       <div class="manager-container">
         <h2><p class="vertical-middle"><i class="fa fa-archive" aria-hidden="true"></i>Case Manager</p></h2>

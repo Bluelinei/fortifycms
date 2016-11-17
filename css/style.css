@@ -177,9 +177,9 @@ body{
 }
 
 .question-inventory-container{
-  width: 80%;
+  width: 40%;
   height: 100%;
-  padding-right:5px;
+//  padding-right:5px;
   float: left;
   margin-top: 5px;
 }
@@ -187,7 +187,9 @@ body{
 .evidence-inventory-block{
 	background: #d9d9d9;
   border: 1px solid #bbb;
+  border-right: 0px;
 	height: 100%;
+  width: 60%;
 }
 
 
@@ -230,6 +232,41 @@ body{
 
 .evidence-inventory-list .delete-icon:active {
   background: #e92f4e;
+}
+
+.evidence-followup-wrapper{
+  width: 60%;
+  height: 100%;
+  float: left;
+  margin-top: 5px;
+  padding-left: 5px;
+}
+
+.evidence-followup-block{
+  height: 85%;
+}
+
+.prelink-wrapper{
+  height: 15%;
+  padding-top:5px;
+  width: 100%;
+}
+
+.prelink-block{
+  background: #cfcfcf;
+  border: 1px solid #aaa;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+}
+
+.prelink-time{
+  background: #44bb44;
+  border-radius: 5px;
+  color: #fff;
+  display: inline-block;
+  font-size: 12px;
+  padding: 10px;
 }
 
 .media-add-icon {
@@ -339,9 +376,8 @@ body{
 .report-question-block{
 	background: #dfdfdf;
 	height: 100%;
-  border-top: 1px solid #bbb;
-  border-bottom: 1px solid #bbb;
-  border-left: 1px solid #bbb;
+  border: 1px solid #bbb;
+
 }
 
 .report-question input[type="text"]{
@@ -363,6 +399,47 @@ body{
 	margin: 0px;
 	padding: 5px;
 	-webkit-appearance: none;
+}
+
+.timeset-wrapper{
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(000,000,000,0.6);
+  z-index: 2000;
+}
+
+
+.clock-container{
+  float: left;
+  height: 100%;
+  width: 20%;
+}
+
+.increment{
+  color: #fff;
+  font-weight: bold;
+  height: 30%;
+  width: 100%;
+  background: rgba(221,68,68,.3);
+}
+
+.clock-month{
+  color: #fff;
+  font-size: 13px;
+  height: 50%;
+}
+
+.clock-day{
+  color: #fff;
+  font-size: 20px;
+  height: 50%;
+}
+
+.time{
+  height: 40%;
+  width: 100%;
 }
 
 .report-question  select:hover {
@@ -416,13 +493,12 @@ select:-moz-focusring {
 }
 
 .tag-block{
-  margin-top: 5px;
   height: 100%;
 }
 
 .tag-column{
   background: #dfdfdf;
-	height: 90%;
+	height: 100%;
   border: 1px solid #bbb;
 }
 
@@ -431,7 +507,7 @@ select:-moz-focusring {
 	border-radius: 4px;
 	color: #fff;
 	font-size: 10px;
-	margin-bottom: 4px;
+  margin-bottom:3px;
 	padding: 10px;
 	text-align: center;
 }
