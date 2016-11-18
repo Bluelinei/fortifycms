@@ -54,7 +54,7 @@
         <div class="vertical-middle"><i class="fa fa-times-circle" aria-hidden="true"></i></div>
     </div>
     <div class="quick-notify-content left">
-      <div class="vertical-middle">New message from Sergeant Solo </div>
+      <div class="vertical-middle">New message from Captain Solo </div>
     </div>
     <div class="clear"></div>
   </div>
