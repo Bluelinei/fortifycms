@@ -54,9 +54,6 @@
                 <div class="report-question twenty-margin-bottom">
                   <p class="one-wide report-question-header">What is the report type?</p>
                   <select class="one-wide" id="report-type">
-                    <option>Arrest Report</option>
-                    <option>CAD Report</option>
-                    <option>Incident Report</option>
                     <option>No Report</option>
                   </select>
                 </div><!--END QUESTION-->
@@ -65,12 +62,6 @@
                   <p class="one-wide report-question-header">Assign Report Tags</p>
                   <select class="one-wide grey-text" id="report-tag">
                     <option style="color:#777;" selected>SELECT TAG</option>
-                    <option>Domestic Abuse</option>
-                    <option>Child Endangerment</option>
-                    <option>Sexual Assault</option>
-                    <option>DUI</option>
-                    <option>Speeding</option>
-                    <option>Drug Possesion</option>
                   </select>
                 </div><!--END QUESTION-->
               </div>
@@ -145,3 +136,14 @@
 <div id="pageload-overlay">
   <img class="loading-gif" style="width:300px; height:auto;" src="../img/fortifyloading.gif"/>
 </div>
+
+<div class="media-preview-overlay hidden no-event"></div>
+
+<script>
+  $('.media-preview-overlay-bg').on('click', function(e){
+    $('.media-preview-overlay').addClass('hidden');
+    $('#overlay-video').empty();
+    $('#overlay-video').remove();
+    $('#overlay-image').attr('src','');
+  });
+</script>

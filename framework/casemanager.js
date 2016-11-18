@@ -16,12 +16,15 @@ function postCases()
 {
 	var len = cases.length;
 	var failed = 0;
+	var noev = 0;
 	for(var i=0; i<len; i++)
 	{
-		if(!cases[i].postCase()) failed++;
+		if(!cases[i].postCase()) {failed++; continue;}
+		if(!cases[i].files.length) noev++;
 	}
 	if(cases.length-failed) notify((cases.length-failed)+((cases.length-failed)==1?' case':' cases')+' fortified');
 	if(failed) notify(failed+(failed==1?' case':' cases')+' could not be fortified', WARN_NOTE);
+	if(noev) notify(noev+(noev==1?' case':' cases')+' fortified without evidence', WARN_NOTE);
 }
 
 function getCaseById(id)
@@ -66,11 +69,7 @@ function newCase()
 	f.append('function', 'set');
 	f.append('table', 'quickreport');
 	$.ajax({
-		url: 'framework/functions.php',
-		method: 'POST',
-		data: f,
-		processData: false,
-		contentType: false,
+		url: 'framework/functions.php', method: 'POST', data: f, processData: false, contentType: false,
 		success: function(uid) {
 			var c = new Case(uid);
 			setAsActiveCase(c);
@@ -86,11 +85,7 @@ function newCaseFile(uploadedfile)
 	f.append('function', 'set');
 	f.append('table', 'evidence');
 	$.ajax({
-		url: 'framework/functions.php',
-		method: 'POST',
-		data: f,
-		processData: false,
-		contentType: false,
+		url: 'framework/functions.php', method: 'POST', data: f, processData: false, contentType: false,
 		success: function(uid) {
 			var cf;
 			var ext;
@@ -104,7 +99,7 @@ function newCaseFile(uploadedfile)
 				cf = new Casefile(uploadedfile.name, getFileType(uploadedfile.type), uid);
 				ext = getExtension(uploadedfile.name);
 			}
-			cf.uploaddate = getUnixTime(uploadedfile.lastModified());
+			cf.uploaddate = getUnixTime(uploadedfile.lastModified);
 			log('Pre-Upload: '+cf.filepath+' | Ext: '+ext);
 			
 			var formData = new FormData();
@@ -113,11 +108,7 @@ function newCaseFile(uploadedfile)
 			formData.append('ext', ext);
 			formData.append('uid', cf.uid);
 			$.ajax({
-				url: 'framework/uploads.php',
-				method: 'POST',
-				data: formData,
-				processData: false,
-				contentType: false,
+				url: 'framework/uploads.php', method: 'POST', data: formData, processData: false, contentType: false,
 				success: function(response) {
 					log('Upload: '+response);
 					switch(cf.filetype)
@@ -421,6 +412,13 @@ function toggleAdmin()
 	popStack();
 }
 
+function clearPreview()
+{
+	$('.media-preview-overlay').addClass('hidden');
+	$('video').trigger('pause');
+	$('.media-preview-overlay').empty();
+}
+
 
 
 
@@ -621,13 +619,9 @@ Casefile.prototype.postFile = function() {
 	fdata.append('state', (this.state==UNFORT?0:1));
 
 	$.ajax({
-		url: 'framework/filepost.php',
-		method: 'POST',
-		data: fdata,
-		processData: false,
-		contentType: false,
+		url: 'framework/filepost.php', method: 'POST', data: fdata, processData: false, contentType: false,
 		success: function(response) {
-			log(response);
+			//log(response);
 		}
 	});
 	popStack()
@@ -760,12 +754,55 @@ Casefile.prototype.doHide = function() {
 }
 
 Casefile.prototype.setButtonFunction = function() {
+	var ref = this;
 	$(document).on('click', '.'+this.uid+'_addfilebutton', clickHandler(addFileToCase, this));
 	$(document).on('click', '.'+this.uid+"_removebutton", clickHandler(removeFileFromCase, this));
 	if(this.filetype == 'VIDEO')
 	{
-		$(document).on('click', '.'+this.uid+'_view-button', clickHandler(href, 'video.php?view='+this.uid+'&type=mp4'));
+		$(document).on('mouseenter', '.'+this.uid+'_view-button', function(e){
+			clearPreview();
+			$('.media-preview-overlay').append('<video id="overlay-video" style="position: absolute; top:0%; right:0%; max-width: 100%; max-height: 100%;" autoplay></video>');
+			$('#overlay-video').html('<source src="framework/uploads/'+ref.uid+'.mp4" type="video/mp4"/>');
+			$('#overlay-video').get(0).oncanplay = function(){
+				var pos = getOverlayPosition(e);
+				$('.media-preview-overlay').css({top: pos.y, left: pos.x});
+				$('.media-preview-overlay').removeClass('hidden');
+			};
+		});
 	}
+	else if(this.filetype == 'IMAGE')
+	{
+		$(document).on('mouseenter', '.'+this.uid+'_view-button', function(e){
+			clearPreview();
+			$('.media-preview-overlay').append('<img id="overlay-image" src="'+ref.thumbnail+'" style="position: absolute; top:0%; right:0%; max-width: 100%; max-height: 100%;" />');
+			var pos = getOverlayPosition(e);
+			$('.media-preview-overlay').css({top: pos.y, left: pos.x});
+			$('.media-preview-overlay').removeClass('hidden');
+		});
+	}
+	$(document).on('mouseleave', '.'+this.uid+'_view-button', clearPreview);
+	$(document).on('mousemove', '.'+this.uid+'_view-button', function(e){
+		var pos = getOverlayPosition(e);
+		$('.media-preview-overlay').css({top: pos.y, left: pos.x});
+	});
+}
+
+function getOverlayPosition(e)
+{
+	var pos = {'x':'','y':''};
+	var o = $('.media-preview-overlay');
+	var w = $(window);
+	if(e.clientX < (w.width()/2)) pos.x = e.clientX+10;
+	else pos.x = e.clientX-(o.width()+10);
+	if(e.clientY < (w.height()/2)) pos.y = e.clientY+10;
+	else pos.y = e.clientY-(o.height()+10);
+
+	if(pos.x > (w.width()-o.width())) pos.x = w.width()-(o.width()-10);
+	if(pos.x < 0) pos.x = 10;
+	if(pos.y > (w.height()-o.height())) pos.x = w.height()-(o.height()-10);
+	if(pos.y < 0) pos.y = 10;
+
+	return pos;
 }
 
 

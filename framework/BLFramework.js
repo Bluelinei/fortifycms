@@ -154,11 +154,7 @@ function getDatabase()
 	loading(1);
 	var compiled = [];
 	$.ajax({
-		url: 'framework/functions.php',
-		method: 'POST',
-		data: f,
-		processData: false,
-		contentType: false,
+		url: 'framework/functions.php', method: 'POST', data: f, processData: false, contentType: false,
 		success: function(response) {
 			log(response);
 			var o = JSON.parse(response);
@@ -193,13 +189,16 @@ function getDatabase()
 					f.append('uid', compiled[i]);
 					loading(1);
 					$.ajax({
-						url: 'framework/functions.php',
-						method: 'POST',
-						data: f,
-						processData: false,
-						contentType: false,
+						url: 'framework/functions.php', method: 'POST', data: f, processData: false, contentType: false,
 						success: function(response) {
-							var file = JSON.parse(response);
+							var file;
+							try {
+								file = JSON.parse(response);
+							} catch(e) {
+								log(response+' failed to load.');
+								loading(-1);
+								return;
+							}
 							var cf = new Casefile(file.filepath, file.type, file.uid);
 							cf.caseindex = tokenizeUID(file.caseindex);
 							cf.uploaddate = Number(file.uploaddate);
@@ -211,7 +210,7 @@ function getDatabase()
 									cf.thumbnail = 'framework/thumbs/'+cf.uid+'.png';
 									break;
 								case 'IMAGE':
-									cf.thumbnail = 'framework/uploads/'+cf.uid+'.'+getExtension(cf.filepath);
+									cf.thumbnail = 'framework/uploads/'+cf.filepath;
 									break;
 								case 'DOCUMENT':
 									cf.thumbnail = 'img/docicon.png';
@@ -244,10 +243,45 @@ function getDatabase()
 	});
 }
 
+function loadINI()
+{
+	loading(1);
+	$.ajax({
+		method:'POST', url:'conf/agency.conf', dataType:'text', mimeType:'text/plain',
+		success: function(content) {
+			var tokens = content.split(/\r\n|\r|\n/g);
+			var setfor;
+			for(var i=0; i<tokens.length; i++)
+			{
+				if(tokens[i]=='[TAGS]') {setfor = 'tags'; continue;}
+				else if(tokens[i]=='[TYPE]') {setfor = 'type'; continue;}
+				else
+				{
+					if(!setfor) {log('WARNING: Malformed or corrupt CONF file on line: '+(i+1)); continue;}
+					if(setfor=='tags')
+					{
+						$('#report-tag').append('<option>'+tokens[i]+'</option>');
+						continue;
+					}
+					else if(setfor=='type')
+					{
+						$('#report-type').prepend('<option>'+tokens[i]+'</option>');
+						continue;
+					}
+				}
+			}
+			generateTags();
+			loading(-1);
+		}
+	});
+}
+
 window.onload = function()
 {
+	loading(1);
 	getAPISupport();
 	getDatabase();
-	generateTags();
 	setEventListeners();
+	loadINI();
+	loading(-1);
 }

@@ -86,15 +86,15 @@
     $('.search-box').addClass('hidden');
   });
   $('.note-header').on('click', toggleNotifications);
-  $(document).ready(function() {
+  $('#nav-casebuilder').on('click', clickHandler(href, 'casebuilder.php'))
+  /*$(document).ready(function() {
     idle_timer = setInterval(timerIncrement, 60000);
     $(this).mousemove(function() {idleTime = 0;});
     $(this).keypress(function() {idleTime = 0;});
   });
-  $('#nav-casebuilder').on('click', clickHandler(href, 'casebuilder.php'));
   function timerIncrement()
   {
     idleTime++;
     if(idleTime>=10) logout();
-  }
+  }*/
 </script>

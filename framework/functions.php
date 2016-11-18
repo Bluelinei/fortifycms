@@ -38,7 +38,8 @@ function getData($conn)
 				$stmt = $conn->prepare($sql);
 				$stmt->execute(array($_POST['uid']));
 				$response = $stmt->fetch(PDO::FETCH_ASSOC);
-				echo json_encode($response);
+				if($response) echo json_encode($response);
+				else echo $_POST['uid'];
 			} catch(PDOException $e) {getError($e);}
 			break;
 		}
@@ -51,7 +52,7 @@ function getUID($conn)
 	//GENERATE RANDOM NUMBER
 	$hex = array("0","1","2","3","4","5","6","7","8","9",
 				 "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
-				 "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"); #Generates a random uid with a 1 in 47.6 Octillion chance of being the same as something else.
+				 "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"); #Generates a random uid with a 0.000000000000000000000000000021% chance of being the same as something else.
 	$genuid;
 	$status = true;
 	while($status)
@@ -61,7 +62,7 @@ function getUID($conn)
 		while(strlen($genuid)<16) {$genuid .= $hex[rand(0,61)];}
 
 		try {
-			$ifexist = "SELECT EXISTS(SELECT 1 FROM ? WHERE uid=?";
+			$ifexist = "SELECT EXISTS(SELECT 1 FROM ? WHERE uid=?)";
 			$stmt = $conn->prepare($ifexist);
 			$stmt->execute(array($_POST['table'], $genuid));
 			if($stmt->fetch()) $status=true;

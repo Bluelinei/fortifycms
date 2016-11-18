@@ -17,9 +17,9 @@ try{
 function updateEntry($conn)
 {
 	try {
-		$sql = "UPDATE evidence SET nickname=?, filepath=?, type=?, uploaddate=?, caseindex=?, fortified=?, officer=? WHERE uid=?";
+		$sql = "UPDATE evidence SET nickname=?, filepath=?, type=?, uploaddate=?, caseindex=?, fortified=?, officer=?, checksum=? WHERE uid=?";
 		$stmt = $conn->prepare($sql);
-		$stmt->execute(array($_POST['nickname'],$_POST['file_path'],$_POST['file_type'],$_POST['upload_date'],$_POST['case_index'],$_POST['state'],$_SESSION['user'],$_POST['uid']));
+		$stmt->execute(array($_POST['nickname'],$_POST['file_path'],$_POST['file_type'],$_POST['upload_date'],$_POST['case_index'],$_POST['state'],$_SESSION['user'], sha1_file(".\\uploads\\".$_POST['file_path']),$_POST['uid']));
 		echo "Updated evidence in database";
 	} catch(PDOException $e) {echo getError($e);}
 }
@@ -27,9 +27,9 @@ function updateEntry($conn)
 function newEntry($conn)
 {
 	try {
-		$sql = "INSERT INTO evidence (uid, nickname, filepath, type, uploaddate, caseindex, fortified, officer) VALUES (?,?,?,?,?,?,?,?)";
+		$sql = "INSERT INTO evidence (uid, nickname, filepath, type, uploaddate, caseindex, fortified, officer, checksum) VALUES (?,?,?,?,?,?,?,?,?)";
 		$stmt = $conn->prepare($sql);
-		$stmt->execute(array($_POST['uid'],$_POST['nickname'],$_POST['file_path'],$_POST['file_type'],$_POST['upload_date'],$_POST['case_index'],$_POST['state'],$_SESSION['user']));
+		$stmt->execute(array($_POST['uid'],$_POST['nickname'],$_POST['file_path'],$_POST['file_type'],$_POST['upload_date'],$_POST['case_index'],$_POST['state'],$_SESSION['user']),sha1_file(".\\uploads\\".$_POST['file_path']));
 		echo "Uploaded new evidence to database";
 	} catch(PDOException $e) {echo getError($e);}
 }

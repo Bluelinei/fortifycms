@@ -12,6 +12,16 @@ error_reporting(E_ALL);
 
 echo error_get_last();
 
+try {
+	$sql = "SELECT 1 FROM evidence WHERE checksum=?";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute(array(sha1_file(file)));
+	if($stmt->fetch()) return;
+} catch(PDOException $e) {
+	return;
+}
+
+
 $fn = $_POST['uid'].".".$_POST['ext'];
 $targetDir = ".".$ds."uploads";
 setDir($targetDir);

@@ -14,7 +14,7 @@
 04.00 Evidence Manager
 05.00 video page
 06.00 login
-07.00
+07.00 Image and Video Overlay
 08.00
 09.00 Header
 09.02 Nav bar list
@@ -933,7 +933,7 @@ margin: 0px;
   margin: 0px auto;
   margin-top: 5px;
   padding: 20px;
-  -webkit-appeearance: none;
+  -webkit-appearance: none;
   width: 100%;
 }
 
@@ -950,7 +950,36 @@ margin: 0px;
   opacity: 0;
 }
 
+/** 07.00 Image and Video Overlay **/
 
+.media-preview-overlay {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: auto;
+  height: auto;
+  width: 30%;
+  height: 30%;
+  max-width: 30%;
+  max-height: 30%;
+  z-index: 500;
+  pointer-events: none;
+}
+
+.media-preview-overlay.hidden {
+  opacity: 0;
+}
+
+.media-preview-overlay-bg {
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  opacity: 0.6;
+}
+
+/** 08.00 **/
 
 /** 09.00 Header **/
 
@@ -1073,7 +1102,7 @@ footer .headshot{
   right: 0;
   top: 20px;
   width: 300px;
-  z-index: 300; /*Above everything but search*/
+  z-index: 1000; /*Above everything but search*/
   transition: transform 0.2s ease;
 }
 
@@ -1106,6 +1135,10 @@ footer .headshot{
 
 .quick-notify.warn-note{
   background: #f77;
+}
+
+.quick-notify.cond-note{
+  background: #e5df2b;
 }
 
 .notification-button-container{

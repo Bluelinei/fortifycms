@@ -4,6 +4,9 @@ var note_timer;
 const DFLT_NOTE = 0;
 const WARN_NOTE = 1;
 const UPLD_NOTE = 2;
+const COND_NOTE = 3;
+
+var notify_delay = 2500;
 
 $(document).on('mouseenter', '.quick-notify', function (){
     clearTimeout(note_timer);
@@ -28,7 +31,7 @@ $(document).on('mouseleave', '.quick-notify', function (){
 				return;
 			}
 		}, 200);
-	}, 2000);
+	}, notify_delay);
 });
 
 $(document).on('click', '.quick-notify-close', function() {
@@ -101,7 +104,7 @@ Note.prototype.show = function() {
 				return;
 			}
 		}, 200);
-	}, 2000);
+	}, notify_delay);
 }
 
 Note.prototype.start = function() {
@@ -115,7 +118,20 @@ function resetPopup(e=0)
 	x.removeClass('upld-note');
 	x.removeClass('dflt-note');
 	x.removeClass('warn-note');
-	if(e==UPLD_NOTE) x.addClass('upld-note');
-	else if(e==WARN_NOTE) x.addClass('warn-note');
-	else x.addClass('dflt-note');
+	x.removeClass('cond-note');
+	switch(e)
+	{
+		case 1:
+			x.addClass('warn-note');
+			break;
+		case 2:
+			x.addClass('upld-note');
+			break;
+		case 3:
+			x.addClass('cond-note');
+			break;
+		default:
+			x.addClass('dflt-note');
+			break;
+	}
 }
