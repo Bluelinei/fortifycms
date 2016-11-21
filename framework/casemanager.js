@@ -459,7 +459,7 @@ Case.prototype.changeCase = function(x) {
 
 Case.prototype.postCase = function() {
 	pushStack('Case.postCase');
-	if(!this.nickname||!this.casenum||!this.location||!this.type) {popStack(); return false;}
+	if(this.casenum=='[No Report Number]'||this.casenum=='[New Case]'||!this.location||!this.type) {popStack(); return false;}
 	var f = new FormData();
 	f.append('uid',this.uid);
 	f.append('nickname',this.nickname);
@@ -540,7 +540,7 @@ Case.prototype.removeFile = function(file) {
 	var len = this.files.length;
 	for(var i=0; i<len; i++) {if(this.files[i]==file) {this.files.splice(i,1);}}
 	len = file.caseindex.length;
-	for(var i=0; i<len; i++) {if(file.caseindex[i]==this.uid) {file.caseindex.splice(i,1);}}
+	for(var i=0; i<len; i++) {if(file.caseindex[i]==this.uid) {file.caseindex.splice(i,1);i--;}}
 	file.updateMediaElement();
 	this.updateElement();
 	updateFileList();
