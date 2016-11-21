@@ -1,14 +1,42 @@
-//GLOBAL VARS
-var cases = [];
-var casefiles = [];
-var reporttags = [];
+//CASEMANAGER OBJECT
 
+var cm = new Casemanager();
 const CASE = "case";
 const CASEFILE = "casefile";
 
 const UNFORT = "unfortified"; //File has not been assigned to a case
 const INUSE = "inuse"; //File is assigned to the current working case
 const UNUSED = "unused"; //File is assigned to a case, but not the current one
+
+function Casemanager(){
+	this.cases = [];
+	this.casefiles = [];
+	this.reporttags = [];
+	this.activecase;
+}
+
+Casemanager.prototype.postCases = function(){
+	var len = this.cases.length;
+	var failed = 0;
+	var noev = 0;
+	for(var i=0; i<len; i++)
+	{
+		if(!this.cases[i].postCase()) {failed++; continue;}
+		if(!this.cases[i].files.length) noev++;
+	}
+	if(this.cases.length-failed) notify((this.cases.length-failed)+((this.cases.length-failed)==1?' case':' cases')+' fortified');
+	if(failed) notify(failed+(failed==1?' case':' cases')+' could not be fortified', WARN_NOTE);
+	if(noev) notify(noev+(noev==1?' case':' cases')+' fortified without evidence', WARN_NOTE);
+};
+
+
+
+
+
+//GLOBAL VARS
+var cases = [];
+var casefiles = [];
+var reporttags = [];
 
 // *** GLOBAL FUNCTIONS ********************************************************************************************************
 
