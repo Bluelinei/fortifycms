@@ -621,7 +621,7 @@ Casefile.prototype.postFile = function() {
 	$.ajax({
 		url: 'framework/filepost.php', method: 'POST', data: fdata, processData: false, contentType: false,
 		success: function(response) {
-			//log(response);
+			log(response);
 		}
 	});
 	popStack()

@@ -145,15 +145,14 @@
               </div>
 
               <div class="prelink-block">
-
-                <div class="three-wide" style="height: 100%; background: #55ff55;">
-                  <div class="vertical-middle">pre-linking on</div>
-                  </div>
                 <div class="three-wide" style="height: 100%;background: #ff8888;">
                   <div class="vertical-middle">Start<br>11:52am</div>
                 </div>
                 <div class="three-wide" style="height: 100%; background: #ff8888;">
                   <div class="vertical-middle">End<br>12:25pm</div>
+                </div>
+                <div class="three-wide" style="height: 100%; background: #55ff55;">
+                  <div class="vertical-middle">pre-linking on</div>
                 </div>
               </div>
             </div>

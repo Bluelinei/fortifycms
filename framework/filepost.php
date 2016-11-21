@@ -29,7 +29,7 @@ function newEntry($conn)
 	try {
 		$sql = "INSERT INTO evidence (uid, nickname, filepath, type, uploaddate, caseindex, fortified, officer, checksum) VALUES (?,?,?,?,?,?,?,?,?)";
 		$stmt = $conn->prepare($sql);
-		$stmt->execute(array($_POST['uid'],$_POST['nickname'],$_POST['file_path'],$_POST['file_type'],$_POST['upload_date'],$_POST['case_index'],$_POST['state'],$_SESSION['user']),sha1_file(".\\uploads\\".$_POST['file_path']));
+		$stmt->execute(array($_POST['uid'],$_POST['nickname'],$_POST['file_path'],$_POST['file_type'],$_POST['upload_date'],$_POST['case_index'],$_POST['state'],$_SESSION['user'],sha1_file(".\\uploads\\".$_POST['file_path'])));
 		echo "Uploaded new evidence to database";
 	} catch(PDOException $e) {echo getError($e);}
 }
