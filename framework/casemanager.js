@@ -1,42 +1,14 @@
-//CASEMANAGER OBJECT
+//GLOBAL VARS
+var cases = [];
+var casefiles = [];
+var reporttags = [];
 
-var cm = new Casemanager();
 const CASE = "case";
 const CASEFILE = "casefile";
 
 const UNFORT = "unfortified"; //File has not been assigned to a case
 const INUSE = "inuse"; //File is assigned to the current working case
 const UNUSED = "unused"; //File is assigned to a case, but not the current one
-
-function Casemanager(){
-	this.cases = [];
-	this.casefiles = [];
-	this.reporttags = [];
-	this.activecase;
-}
-
-Casemanager.prototype.postCases = function(){
-	var len = this.cases.length;
-	var failed = 0;
-	var noev = 0;
-	for(var i=0; i<len; i++)
-	{
-		if(!this.cases[i].postCase()) {failed++; continue;}
-		if(!this.cases[i].files.length) noev++;
-	}
-	if(this.cases.length-failed) notify((this.cases.length-failed)+((this.cases.length-failed)==1?' case':' cases')+' fortified');
-	if(failed) notify(failed+(failed==1?' case':' cases')+' could not be fortified', WARN_NOTE);
-	if(noev) notify(noev+(noev==1?' case':' cases')+' fortified without evidence', WARN_NOTE);
-};
-
-
-
-
-
-//GLOBAL VARS
-var cases = [];
-var casefiles = [];
-var reporttags = [];
 
 // *** GLOBAL FUNCTIONS ********************************************************************************************************
 
@@ -110,6 +82,25 @@ function newCaseFile(uploadedfile)
 {
 	pushStack('newCaseFile');
 	var f = new FormData();
+	f.append('file', uploadedfile);
+	f.append('filetype', getFileType(uploadedfile.type));
+	f.append('lastModified', getUnixTime(uploadedfile.lastModified));
+	
+	//Check if the file already exists server side, if so, give it a UID and upload a new file. If not, return the uid of the object on the server.
+	$.ajax({
+		url: 'framework/fileupload.php', method: 'POST', data: f, processData: false, contentType: false,
+		success: function(response){
+			log(response);
+		}
+	});
+
+	popStack();
+}
+
+function newCaseFile2(uploadedfile)
+{
+	pushStack('newCaseFile');
+	var f = new FormData();
 	f.append('function', 'set');
 	f.append('table', 'evidence');
 	$.ajax({
@@ -119,16 +110,17 @@ function newCaseFile(uploadedfile)
 			var ext;
 			if(getFileType(uploadedfile.type)=='VIDEO')
 			{
-				cf = new Casefile(uid+'.mp4', 'VIDEO', uid);
+				cf = new Casefile(uploadedfile, uid);
 				ext = 'mp4';
 			}
 			else
 			{
-				cf = new Casefile(uploadedfile.name, getFileType(uploadedfile.type), uid);
+				cf = new Casefile(uploadedfile, uid);
 				ext = getExtension(uploadedfile.name);
 			}
 			cf.uploaddate = getUnixTime(uploadedfile.lastModified);
-			log('Pre-Upload: '+cf.filepath+' | Ext: '+ext);
+			cf.name = uploadedfile.name;
+			cf.filepath = uid+'.'+ext;
 			
 			var formData = new FormData();
 			formData.append('file', uploadedfile);
@@ -136,7 +128,7 @@ function newCaseFile(uploadedfile)
 			formData.append('ext', ext);
 			formData.append('uid', cf.uid);
 			$.ajax({
-				url: 'framework/uploads.php', method: 'POST', data: formData, processData: false, contentType: false,
+				url: 'framework/fileupload.php', method: 'POST', data: formData, processData: false, contentType: false,
 				success: function(response) {
 					log('Upload: '+response);
 					switch(cf.filetype)
@@ -528,7 +520,7 @@ Case.prototype.newElement = function() {
 	this.element.on('click', function(event) {
 		if(event.target.className.indexOf('case-delete-button-reference-class')==-1) setAsActiveCase(c);
 	});
-	$(document).on('click', '.'+this.uid, function(event) {
+	$(document).on('click', ('.'+this.uid), function(event) {
 		event.stopPropagation();
 		deleteCase(src);
 	});
@@ -603,22 +595,26 @@ Case.prototype.deleteCase = function() {
 //** CASEFILE OBJECT **********************************************************************************************************
 //*****************************************************************************************************************************
 
-function Casefile(filename, type, uid)
+function Casefile(file, uid)
 {
 	pushStack('CaseFile');
 	this.uid = uid;
-	this.name = filename;
-	this.filetype = type;
-	this.filepath = this.uid+'.'+getExtension(filename);
-	this.filedate;
-	this.uploaddate = Date.now();
+	this.name = file.name;
+	this.filetype = getFileType(file.type);
+	this.filepath;
+	this.filedate = file.lastModified;
+	this.uploaddate;
 	this.element;
 	this.mediaelement;
 	this.thumbnail;
 	this.state;
 	this.officer;
 	this.caseindex = [];
+	popStack();
+}
 
+Casefile.prototype.init = function()
+{
 	casefiles.push(this);
 	this.newMediaElement();
 	this.newElement();
@@ -631,8 +627,6 @@ function Casefile(filename, type, uid)
 		if(!send||cases[i].activetime>send.activetime) send=cases[i];
 	}
 	if(send) send.addFile(this);
-
-	popStack();
 }
 
 Casefile.prototype.postFile = function() {
@@ -677,13 +671,13 @@ Casefile.prototype.newMediaElement = function() {
 	pushStack('Casefile.newMediaElement');
 	var d = new Date(this.uploaddate);
 	this.mediaelement = $('<li>');
-	var inner = $('<div class="block" style="'+this.checkState()+'">');
+	var inner = $('<div id="'+this.uid+'_blockelement" class="block" style="'+this.checkState()+'">');
 	var e = [];
 	e.push('<div class="ev-curtain"><div class="vertical-middle">');
-	e.push('<h3>'+this.truncName(15, 12)+'</h3>');
+	e.push('<h3 id="'+this.uid+'_name">'+this.truncName(15, 12)+'</h3>');
 	e.push('<p>'+d.toLocaleDateString()+'</p><br>');
 	e.push('<div class="'+this.uid+'_view-button" style="display: inline;"><i class="fa fa-eye point-cursor" aria-hidden="true" style="margin-right: 30px;"></i></div>');
-	e.push('<div style="display: inline;"><i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i></div>');
+	e.push('<div id="'+this.uid+'_addremove" style="display: inline;"><i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i></div>');
 	e.push('</div></div>');
 	inner.append(e.join(''));
 	inner.css({'background-image': 'url("'+address+'/img/loading.gif")',
@@ -697,23 +691,23 @@ Casefile.prototype.newMediaElement = function() {
 
 Casefile.prototype.updateMediaElement = function(thumb) {
 	pushStack('Casefile.updateMediaElement');
-	var d = new Date(this.uploaddate);
-	this.mediaelement = $('<li style="'+this.doHide()+'">');
-	var inner = $('<div class="block" style="'+this.checkState()+'">');
-	var e = [];
-	e.push('<div class="ev-curtain"><div class="vertical-middle">');
-	e.push('<h3>'+this.truncName(15, 12)+'</h3>');
-	e.push('<p>'+d.toLocaleDateString()+'</p><br>');
-	e.push('<div class="'+this.uid+'_view-button" style="display: inline;"><i class="fa fa-eye point-cursor" aria-hidden="true" style="margin-right: 30px;"></i></div>');
-	e.push('<div style="display: inline;"><i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i></div>');
-	e.push('</div></div>');
-	inner.append(e.join(''));
-	inner.css({'background-image': (this.thumbnail ? ('url('+address+this.thumbnail+')') : ('url("'+address+'/img/loading.gif")')),
+	
+	$(this.uid+"_name").html(this.truncName(15,12));
+	$(this.uid+"_addremove").html('<i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i>')
+	this.checkState();
+	$(this.uid+"_blockelement").css({
+		'border': 'none',
+		'display': 'block'
+	});
+	this.checkState();
+	if(this.state==UNUSED) $(this.uid+"_blockelement").css({'display':'none'});
+	else if(this.state==INUSE) $(this.uid+"_blockelement").css({'border':'5px solid rgb(100,255,100)'});
+
+	$(this.uid+"_blockelement").css({'background-image': (this.thumbnail ? ('url('+address+this.thumbnail+')') : ('url("'+address+'/img/loading.gif")')),
 		'background-repeat': 'no-repeat',
 		'background-size': (this.thumbnail?'cover':'50px 50px'),
 		'background-position': 'center'
 	});
-	this.mediaelement.append(inner);
 	popStack();
 }
 

@@ -1,22 +1,10 @@
 <?php
 
-$hostname= 	'68.169.178.232';
-$port= 		'3306';
-$username=	'user';
-$pass=		'';
-$database=	'fortify';
-
-if(!isset($_SESSION)) session_start();
-
-function getError($e) {die("LOGIN: ".$e->getMessage());}
-
-try{
-	$conn = new PDO("mysql:host=$hostname; port=$port; dbname=$database; charset=UTF8;", $username, $pass);
-} catch(PDOException $e) {echo getError($e);}
+include 'dbconnect.php';
 
 function login($conn)
 {
-	$sql = "SELECT name FROM users WHERE username=? AND password=?";
+	$sql = "SELECT * FROM users WHERE username=? AND password=?";
 	$stmt = $conn->prepare($sql);
 	$stmt->execute(array($_POST['user'], $_POST['pass']));
 	$return = $stmt->fetch();
@@ -25,6 +13,7 @@ function login($conn)
 	{
 		$_SESSION['user'] = $_POST['user'];
 		$_SESSION['name'] = $return['name'];
+		$_SESSION['agency'] = $return['agency'];
 		echo true;
 	}
 	else echo false;

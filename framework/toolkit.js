@@ -1,136 +1,61 @@
 
 const SHOW_CALLSTACK = false;
 const SHOW_LOGS = true;
+var callstack = [];
 
-function log(msg) {if(SHOW_LOGS) console.log(msg);} //Outputs a message to the browser console
+function clearElement(node) {node.html('');} //Removes all HTML from a given element
 
-function rand(n, add=1) {return Math.floor((Math.random()*n)+add);}
-
-function idExists(sel)
+function clickHandler(func, arg) //Allowed the use of 'this' reference when using lambda functions
 {
-	var status = false;
-	if($('#'+sel).length) status = true;
-	return status;
-}
-
-function getHex(n=4)
-{
-	var hextable = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
-	var hex = [];
-	while(n)
-	{
-		hex.push(hextable[rand(16)-1]);
-		n--;
-	}
-	return hex.join('');
-}
-
-function getCaseNum(n=10)
-{
-	var cn = [];
-	while(n)
-	{
-		cn.push(rand(10,0));
-		n--;
-	}
-	return cn.join('');
-}
-
-function deleteElement(e) {e.parentNode.removeChild(e);}
-
-function moveElement(id, nodeid, append=true)
-{
-	var e = document.getElementById(id);
-	var node = document.getElementById(nodeid);
-	if(append) node.appendChild(e);
-	else node.insertBefore(e);
-}
-
-function copyElement(element) {return element.clone(true);}
-
-function copyElementById(id)
-{
-	var element = $('#'+id);
-	return element.clone(true);
-}
-
-function clickHandler(func, arg) {
 	return function() {func(arg);};
 }
 
-function classFunctionHandler(obj, func, arg) {return function() {obj.func(arg);};}
-
-var callstack = [];
-
-function pushStack(func)
+function concatLists(list, items) //concatenates two lists into one, removing duplicates
 {
-	callstack.push(func);
-	if(SHOW_CALLSTACK) log(callstack.join(' >> '));
+	var concat = list;
+	var len = items.length;
+	for(var i=0; i<len; i++)
+	{
+		if(!inList(list, items[i])) concat.push(items[i]);
+	}
+	return concat;
 }
 
-function popStack()
+function getExtension(string) //Get the extension of the supplied file path
 {
-	callstack.pop();
-	if(SHOW_CALLSTACK) log(callstack.join(' >> '));
+	if(!string) return false;
+	return string.substring(string.lastIndexOf('.')+1).toLowerCase();
 }
 
-function getFileType(file)
+function getFileType(file) //Gets the file type based on supplied MIME type.
 {
 	if(!file.indexOf('video')) return 'VIDEO';
 	else if(!file.indexOf('audio')) return 'AUDIO';
 	else if(!file.indexOf('text')) return 'TEXT';
 	else if(!file.indexOf('image')) return 'IMAGE';
-	
 	else return 'DOCUMENT';
 }
 
-function getExtension(string) {return string.substring(string.lastIndexOf('.')+1).toLowerCase();}
-
-function clearElement(node) {node.html('');}
-
-function tokenize(string, delim)
+function getUnixTime(time) //Return the number of seconds since the Unix Epoch
 {
-	var tokens = [];
-	var pos;
-	while(string)
-	{
-		pos = string.indexOf(delim);
-		if(pos==-1)
-		{
-			tokens.push(string);
-			break;
-		}
-		tokens.push(string.substr(0, pos));
-		string = string.substr(pos+delim.length);
-	}
-	return tokens;
+	if(time) return Math.floor(time/1000);
+	else return Math.floor(Date.now()/1000);
 }
 
-function tokenizeUID(string)
+function getURIVar(variable) //Split up and serialize all variables in the page URI
 {
-	var uids = [];
-	while(string)
+	var query = window.location.search.substring(1);
+	var vars = query.split('&');
+
+	for(var i=0; i<vars.length; i++)
 	{
-		uids.push(string.substr(0,16));
-		string = string.substr(16);
+		var pair = vars[i].split('=');
+		if(pair[0]==variable) return pair[1];
 	}
-	return uids;
+	return false;
 }
 
-function truncateText(str, len, filler, end=0)
-{
-	if(str.length > len+filler.length+end)
-	{
-		var sub = '';
-		if(end) sub = str.substring(str.length-end);
-		str = str.substring(0, len);
-		str += filler;
-		str += sub;
-	}
-	return str;
-}
-
-function getVideoThumbnail(filename, ext, callback)
+function getVideoThumbnail(filename, ext, callback) //Extract the first frame of a video as a PNG and return the response as a filepath.
 {
 	pushStack('getThumbnail');
 	var f = new FormData();
@@ -155,6 +80,15 @@ function getVideoThumbnail(filename, ext, callback)
 	popStack();
 }
 
+function href(url) {window.location.href = url;}
+
+function idExists(sel)
+{
+	var status = false;
+	if($('#'+sel).length) status = true;
+	return status;
+}
+
 function inList(list, item)
 {
 	var len = list.length;
@@ -162,33 +96,7 @@ function inList(list, item)
 	return false;
 }
 
-function concatLists(list, items)
-{
-	var concat = list;
-	var len = items.length;
-	for(var i=0; i<len; i++)
-	{
-		if(!inList(list, items[i])) concat.push(items[i]);
-	}
-	return concat;
-}
-
-function href(url) {window.location.href = url;}
-
-function redirect(url) {window.location.replace(url);}
-
-function getURIVar(variable)
-{
-	var query = window.location.search.substring(1);
-	var vars = query.split('&');
-
-	for(var i=0; i<vars.length; i++)
-	{
-		var pair = vars[i].split('=');
-		if(pair[0]==variable) return pair[1];
-	}
-	return false;
-}
+function log(msg) {if(SHOW_LOGS) console.log(msg);} //Outputs a message to the browser console
 
 function login(user, pass)
 {
@@ -231,8 +139,68 @@ function logout()
 	});
 }
 
-function getUnixTime(time)
+function moveElement(id, nodeid, append=true)
 {
-	if(time) return Math.floor(time/1000);
-	else return Math.floor(Date.now()/1000);
+	var e = document.getElementById(id);
+	var node = document.getElementById(nodeid);
+	if(append) node.appendChild(e);
+	else node.insertBefore(e);
+}
+
+function popStack()
+{
+	callstack.pop();
+	if(SHOW_CALLSTACK) log(callstack.join(' >> '));
+}
+
+function pushStack(func)
+{
+	callstack.push(func);
+	if(SHOW_CALLSTACK) log(callstack.join(' >> '));
+}
+
+function rand(n, add=1) {return Math.floor((Math.random()*n)+add);}
+
+function redirect(url) {window.location.replace(url);}
+
+function tokenize(string, delim)
+{
+	var tokens = [];
+	var pos;
+	while(string)
+	{
+		pos = string.indexOf(delim);
+		if(pos==-1)
+		{
+			tokens.push(string);
+			break;
+		}
+		tokens.push(string.substr(0, pos));
+		string = string.substr(pos+delim.length);
+	}
+	return tokens;
+}
+
+function tokenizeUID(string)
+{
+	var uids = [];
+	while(string)
+	{
+		uids.push(string.substr(0,16));
+		string = string.substr(16);
+	}
+	return uids;
+}
+
+function truncateText(str, len, filler, end=0)
+{
+	if(str.length > len+filler.length+end)
+	{
+		var sub = '';
+		if(end) sub = str.substring(str.length-end);
+		str = str.substring(0, len);
+		str += filler;
+		str += sub;
+	}
+	return str;
 }

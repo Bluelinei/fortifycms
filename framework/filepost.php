@@ -1,35 +1,29 @@
 <?php
 
-$hostname= 	'68.169.178.232';
-$port= 		'3306';
-$username=	'user';
-$pass=		'';
-$database=	'fortify';
+include 'dbconnect.php';
 
-if(!isset($_SESSION)) session_start();
+$ds = DIRECTORY_SEPARATOR;
 
-function getError($e) {die("CASEPOST: ".$e->getMessage());}
-
-try{
-	$conn = new PDO("mysql:host=$hostname; port=$port; dbname=$database; charset=UTF8;", $username, $pass);
-} catch(PDOException $e) {echo getError($e);}
+$uploadPath = ".".$ds."uploads".$ds.$_SESSION['agency'].$ds.$_SESSION['user'].$ds;
 
 function updateEntry($conn)
 {
+	global $uploadPath;
 	try {
 		$sql = "UPDATE evidence SET nickname=?, filepath=?, type=?, uploaddate=?, caseindex=?, fortified=?, officer=?, checksum=? WHERE uid=?";
 		$stmt = $conn->prepare($sql);
-		$stmt->execute(array($_POST['nickname'],$_POST['file_path'],$_POST['file_type'],$_POST['upload_date'],$_POST['case_index'],$_POST['state'],$_SESSION['user'], sha1_file(".\\uploads\\".$_POST['file_path']),$_POST['uid']));
+		$stmt->execute(array($_POST['nickname'],$_POST['file_path'],$_POST['file_type'],$_POST['upload_date'],$_POST['case_index'],$_POST['state'],$_SESSION['user'], sha1_file($uploadPath.$_POST['file_path']),$_POST['uid']));
 		echo "Updated evidence in database";
 	} catch(PDOException $e) {echo getError($e);}
 }
 
 function newEntry($conn)
 {
+	global $uploadPath;
 	try {
 		$sql = "INSERT INTO evidence (uid, nickname, filepath, type, uploaddate, caseindex, fortified, officer, checksum) VALUES (?,?,?,?,?,?,?,?,?)";
 		$stmt = $conn->prepare($sql);
-		$stmt->execute(array($_POST['uid'],$_POST['nickname'],$_POST['file_path'],$_POST['file_type'],$_POST['upload_date'],$_POST['case_index'],$_POST['state'],$_SESSION['user'],sha1_file(".\\uploads\\".$_POST['file_path'])));
+		$stmt->execute(array($_POST['uid'],$_POST['nickname'],$_POST['file_path'],$_POST['file_type'],$_POST['upload_date'],$_POST['case_index'],$_POST['state'],$_SESSION['user'],sha1_file($uploadPath.$_POST['file_path'])));
 		echo "Uploaded new evidence to database";
 	} catch(PDOException $e) {echo getError($e);}
 }

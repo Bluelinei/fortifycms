@@ -1,10 +1,6 @@
 <?php
 
-$hostname= 	'68.169.178.232';
-$port= 		'3306';
-$username=	'user';
-$pass=		'';
-$database=	'fortify';
+include 'dbconnect.php';
 
 function setDir($trdir) {if(!is_dir($trdir)) mkdir($trdir, 0777, true);}
 
@@ -14,19 +10,17 @@ if(!isset($_FILES['file']))
 	return;
 }
 $file = $_FILES['file'];
-error_reporting(E_ALL);
 
 echo error_get_last();
 
 try {
-	$conn = new PDO("mysql:host=$hostname; port=$port; dbname=$database; charset=UTF8;", $username, $pass);
 	$sql = "SELECT * FROM evidence WHERE checksum=?";
 	$stmt = $conn->prepare($sql);
 	$stmt->execute(array(sha1_file($file['tmp_name'])));
 	$reply = $stmt->fetch(PDO::FETCH_ASSOC);
 	if($reply)
 	{
-		echo $reply['filename'];
+		echo $reply['filepath'];
 		return;
 	}
 } catch(PDOException $e) {

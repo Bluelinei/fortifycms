@@ -732,6 +732,33 @@ margin: 0px;
   display: none;
 }
 
+.loading-bar-wrapper {
+  position: relative;
+  width:100%;
+  height: 10px;
+  border-radius: 5px;
+  background: #555;
+  overflow: hidden;
+}
+
+@keyframes loading-pulse{
+  0% {background: #4a4;}
+  50% {background:#4a4;}
+  75% {background: #7f7;}
+  100% {background: #4a4;}
+}
+
+.loading-bar {
+  position: absolute;
+  background: #4a4;
+  width: 25%;
+  height:100%;
+  animation-name: loading-pulse;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
+
 /** 05.00 Video Page**/
 
 /**05.01 video page main container**/

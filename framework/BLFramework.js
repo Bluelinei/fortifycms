@@ -1,6 +1,15 @@
 //GLOBAL VARIABLES (MAINLY FOR DEBUGGING)
 
-const address = 'http://68.169.178.232/';
+const address = 'http://localhost/';
+
+var USER;
+$.ajax({
+	url:'framework/getsession.php',
+	method:'POST',
+	processData:false,
+	contentType:false,
+	success: function(response){USER = JSON.parse(response);}
+});
 
 var databaseload = 0;
 
@@ -24,9 +33,9 @@ const fileuploadElementID = '#fileupload';
 
 function getAPISupport() //Test whether or not the browser can use the html5 functionality.
 {
-	if(!window.File || !window.FileList || !window.FileReader)
+	if(!window.File || !window.FileList)
 	{
-		alert('Your internet browser does not support the necessary dependencies for this application.\nFortify CMS™ is recommended for use with the latest versions of Firefox and Chrome browsers.');
+		alert('Your internet browser does not support the necessary dependencies for this application.\nFortify™ is recommended for use with the latest versions of Firefox and Chrome browsers.');
 		return false;
 	}
 	return true;
@@ -156,7 +165,7 @@ function getDatabase()
 	$.ajax({
 		url: 'framework/functions.php', method: 'POST', data: f, processData: false, contentType: false,
 		success: function(response) {
-			log(response);
+			log(response); 
 			var o = JSON.parse(response);
 			if(o.length)
 			{

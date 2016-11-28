@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Please Login</title>
     <link href="css/style.css" rel="stylesheet"/>
+    <link href="img/favicon.png" type="image/png" rel="icon"/>
     <script src="./framework/jquery3.1.1.js"></script>
     <script src="./framework/toolkit.js?v=<?php echo sha1_file("framework/toolkit.js");?>"></script>
   </head>

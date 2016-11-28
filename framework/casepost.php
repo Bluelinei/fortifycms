@@ -1,18 +1,6 @@
 <?php
 
-$hostname=	'68.169.178.232';
-$port= 		'3306';
-$username=	'user';
-$pass=		'';
-$database= 	'fortify';
-
-if(!isset($_SESSION)) session_start();
-
-function getError($e) {die("CASEPOST: ".$e->getMessage());}
-
-try{
-	$conn = new PDO("mysql:host=$hostname; port=$port; dbname=$database; charset=UTF8;", $username, $pass);
-} catch(PDOException $e) {getError($e);}
+include 'dbconnect.php';
 
 function updateEntry($conn)
 {
