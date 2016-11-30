@@ -254,33 +254,47 @@ function getDatabase()
 function loadINI()
 {
 	loading(1);
-	$.ajax({
-		method:'POST', url:'conf/agency.conf', dataType:'text', mimeType:'text/plain',
-		success: function(content) {
-			var tokens = content.split(/\r\n|\r|\n/g);
-			var setfor;
-			for(var i=0; i<tokens.length; i++)
-			{
-				if(tokens[i]=='[TAGS]') {setfor = 'tags'; continue;}
-				else if(tokens[i]=='[TYPE]') {setfor = 'type'; continue;}
-				else
+	ajax('framework/getsession.php', null, function(response) {
+		var session = JSON.parse(response);
+		if(!session.agency)
+		{
+			log('No session agency defined...');
+			loading(-1);
+			return;
+		}
+		$.ajax({
+			method:'POST', url:'conf/'+session.agency+'.conf', dataType:'text', mimeType:'text/plain',
+			success: function(content) {
+				var tokens = content.split(/\r\n|\r|\n/g);
+				var setfor;
+				for(var i=0; i<tokens.length; i++)
 				{
-					if(!setfor) {log('WARNING: Malformed or corrupt CONF file on line: '+(i+1)); continue;}
-					if(setfor=='tags')
+					if(tokens[i]=='[TAGS]') {setfor = 'tags'; continue;}
+					else if(tokens[i]=='[TYPE]') {setfor = 'type'; continue;}
+					else
 					{
-						$('#report-tag').append('<option>'+tokens[i]+'</option>');
-						continue;
-					}
-					else if(setfor=='type')
-					{
-						$('#report-type').prepend('<option>'+tokens[i]+'</option>');
-						continue;
+						if(!setfor) {log('WARNING: Malformed or corrupt CONF file on line: '+(i+1)); continue;}
+						if(setfor=='tags')
+						{
+							$('#report-tag').append('<option>'+tokens[i]+'</option>');
+							continue;
+						}
+						else if(setfor=='type')
+						{
+							$('#report-type').prepend('<option>'+tokens[i]+'</option>');
+							continue;
+						}
 					}
 				}
+				generateTags();
+				loading(-1);
+			},
+			error: function(err) {
+				log('ERROR LOADING AGENCY CONFIGURATION: '+session.agency+'.conf');
+				loading(-1);
+				return;
 			}
-			generateTags();
-			loading(-1);
-		}
+		});
 	});
 }
 
