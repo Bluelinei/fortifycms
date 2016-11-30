@@ -21,6 +21,17 @@ function concatLists(list, items) //concatenates two lists into one, removing du
 	return concat;
 }
 
+function excludeLists(list, exclude)
+{
+	var exclusives = list;
+	var len = exclude.length;
+	for(var i=0; i<len; i++)
+	{
+		if(inList(exclusives, exclude[i])) removeFromList(exclusives, excludep[i]);
+	}
+	return exclusives;
+}
+
 function getExtension(string) //Get the extension of the supplied file path
 {
 	if(!string) return false;
@@ -55,16 +66,16 @@ function getURIVar(variable) //Split up and serialize all variables in the page 
 	return false;
 }
 
-function getVideoThumbnail(filename, ext, callback) //Extract the first frame of a video as a PNG and return the response as a filepath.
+function getVideoThumbnail(file, callback) //Extract the first frame of a video as a PNG and return the response as a filepath.
 {
 	pushStack('getThumbnail');
 	var f = new FormData();
 	var output;
 	f.append('function', 'capture');
-	f.append('source', '.\\uploads\\'+filename+'.'+ext);
+	f.append('source', file.filepath);
 	f.append('time','00:00:00');
-	f.append('output','.\\thumbs\\'+filename+'.png');
-	f.append('dir', '.\\thumbs\\');
+	f.append('output','thumbs/'+file.uid+'.png');
+	f.append('dir', 'thumbs/');
 
 	$.ajax({
 		url:'./framework/ffmpeg.php',
@@ -73,7 +84,6 @@ function getVideoThumbnail(filename, ext, callback) //Extract the first frame of
 		processData: false,
 		contentType: false,
 		success: function(response) {
-			log(response);
 			callback(response);
 		}
 	});
@@ -162,6 +172,8 @@ function pushStack(func)
 function rand(n, add=1) {return Math.floor((Math.random()*n)+add);}
 
 function redirect(url) {window.location.replace(url);}
+
+function removeFromList(list, item) {for(var i=0; i<list.length; i++) {if(list[i] == item) {list.splice(i--,1);}}}
 
 function tokenize(string, delim)
 {

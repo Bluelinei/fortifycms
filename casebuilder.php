@@ -14,8 +14,7 @@
 <!--START Builder Header-->
         <div class="builder-block">
           <div class="header">
-            <p class="vertical-middle fourty-padding-left left"><i class="fa fa-pencil-square" aria-hidden="true"></i>
- Case Builder</p>
+            <p class="vertical-middle fourty-padding-left left"><i class="fa fa-pencil-square ten-margin-right" aria-hidden="true"></i>Case Builder</p>
 
             <div class="clear"></div>
           </div><!--END Builder Header-->
@@ -173,7 +172,7 @@
 
 <!--START manager wrapper-->
       <div class="manager-container">
-        <h2><p class="vertical-middle"><i class="fa fa-archive" aria-hidden="true"></i>Case Manager</p></h2>
+        <h2><p class="vertical-middle"><i class="fa fa-archive ten-margin-right" aria-hidden="true"></i>Case Manager</p></h2>
         <div style="height: 5px; background: #fff; width: 100%;"></div>
         <h3 class="seventy-per-wide left ten-padding">Reference ID</h3>
         <h3 class="twenty-per-wide left ten-padding">Files</h3>

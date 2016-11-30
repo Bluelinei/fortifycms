@@ -9,34 +9,29 @@ function getData($conn)
 		case 'quickreport':
 		{
 			try {
-				$sql = "SELECT * FROM quickreport WHERE officer=?";
-				$stmt = $conn->prepare($sql);
-				$stmt->execute(array($_SESSION['user']));
-				$response = $stmt->fetchALL(PDO::FETCH_ASSOC);
-				echo json_encode($response);
+				$response = query("SELECT * FROM quickreport WHERE officer=?", array($_SESSION['user']), true);
+				if($response) echo json_encode($response);
 			} catch(PDOException $e) {getError($e);}
 			break;
 		}
 		case 'evidence':
 		{
 			try {
-				$sql = "SELECT * FROM evidence WHERE uid=?";
-				$stmt = $conn->prepare($sql);
-				$stmt->execute(array($_POST['uid']));
-				$response = $stmt->fetch(PDO::FETCH_ASSOC);
+				$response = query("SELECT * FROM evidence WHERE uid=? AND user=?", array($_POST['uid'], $_SESSION['user']));
 				if($response) echo json_encode($response);
-				else echo $_POST['uid'];
 			} catch(PDOException $e) {getError($e);}
 			break;
 		}
 	}
-	
 }
 
-function getUID($conn)
+function getUnfort($conn)
 {
-	//GENERATE RANDOM NUMBER
-	
+	try {
+		$response = query("SELECT * FROM evidence WHERE fortified=0 AND user=?", array($_SESSION['user']), true);
+		if($response) echo json_encode($response);
+		return;
+	} catch(PDOException $e) {getError($e);}
 }
 
 if(isset($_POST['function'])&&isset($_POST['table']))
@@ -46,8 +41,8 @@ if(isset($_POST['function'])&&isset($_POST['table']))
 		case 'get':
 			getData($conn);
 			break;
-		case 'set':
-			getUID($conn);
+		case 'unfort':
+			getUnfort($conn);
 			break;
 		default:
 			echo "Undefined function: ".$_POST['function'];

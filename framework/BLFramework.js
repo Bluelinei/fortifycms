@@ -188,6 +188,7 @@ function getDatabase()
 					compiled = concatLists(compiled, evidence);
 				}
 				setAsActiveCase(cases[0]);
+				//GET FILES FROM DATABASE THAT ARE NOT FORTIFIED
 				//ONCE WE'RE DONE COMPILING THE EVIDENCE LIST, BEGIN LOADING ALL EVIDENCE
 				len = compiled.length;
 				for(var i=0; i<len; i++)

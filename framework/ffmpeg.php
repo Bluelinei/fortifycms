@@ -2,6 +2,8 @@
 
 $FF_DIR = ".\ffmpeg\bin\ffmpeg.exe";
 
+if(!isset($_SESSION)) session_start();
+
 function setDir($trdir) {if(!is_dir($trdir)) mkdir($trdir, 0777, true);}
 
 function redactVideo($source, $start, $end, $output)
@@ -11,10 +13,12 @@ function redactVideo($source, $start, $end, $output)
 
 function captureFrame($source, $time, $output)
 {
-	setDir($_POST['dir']);
-	exec(".\\ffmpeg\\bin\\ffmpeg.exe -y -ss 00:00:00 -i $source -frames:v 1 $output", $out);
-	if(file_exists($output)) echo "FFMPEG: Thumbnail generated in $output";
-	else echo "FFMPEG: Could not generate for $source to $output";
+	$outpath = "uploads/".$_SESSION['agency']."/".$_SESSION['user']."/".$output;
+	if(file_exists($outpath)) {echo $outpath; return;}
+	setDir("uploads/".$_SESSION['agency']."/".$_SESSION['user']."/".$_POST['dir']);
+	exec(".\\ffmpeg\\bin\\ffmpeg.exe -y -ss $time -i $source -frames:v 1 $outpath", $out);
+	if(file_exists($outpath)) echo $outpath;
+	else return;
 }
 
 if(isset($_POST['function']))

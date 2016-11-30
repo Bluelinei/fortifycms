@@ -78,6 +78,23 @@ function newCase()
 	popStack();
 }
 
+var placeholderQueue = 0;
+
+function Placeholder()
+{
+	this.queue = placeholderQueue++;
+	this.element = $('<li>');
+	this.element.attr({'id':'li_'+this.queue});
+	this.element.addClass('block');
+	var loadbar = $('<div class="block placeholder"><div class="loading-bar-wrapper"><div id="loadbar_'+this.queue+'" class="loading-bar"></div></div></div>');
+	this.element.append(loadbar);
+	$('#mediabrowser').append(this.element);
+}
+
+Placeholder.prototype.update = function(percent) {
+	$('#loadbar_'+this.queue).css({'width':percent+'%'});
+}
+
 function newCaseFile(uploadedfile)
 {
 	pushStack('newCaseFile');
@@ -85,89 +102,83 @@ function newCaseFile(uploadedfile)
 	f.append('file', uploadedfile);
 	f.append('filetype', getFileType(uploadedfile.type));
 	f.append('lastModified', getUnixTime(uploadedfile.lastModified));
+
+	var loadingPlace;
 	
 	//Check if the file already exists server side, if so, give it a UID and upload a new file. If not, return the uid of the object on the server.
 	$.ajax({
+		xhr: function() {
+			var xhr = new window.XMLHttpRequest();
+			//xhr loadstart and load functions
+			xhr.upload.addEventListener('loadstart', function(e) {
+				loadingPlace = new Placeholder();
+			}, false);
+			xhr.upload.addEventListener('progress', function(e) {
+				if(e.lengthComputable) {
+					var percent = Math.floor((e.loaded/e.total)*100);
+					loadingPlace.update(percent);
+				}
+			}, false);
+			return xhr;
+		},
 		url: 'framework/fileupload.php', method: 'POST', data: f, processData: false, contentType: false,
 		success: function(response){
-			log(response);
-		}
-	});
-
-	popStack();
-}
-
-function newCaseFile2(uploadedfile)
-{
-	pushStack('newCaseFile');
-	var f = new FormData();
-	f.append('function', 'set');
-	f.append('table', 'evidence');
-	$.ajax({
-		url: 'framework/functions.php', method: 'POST', data: f, processData: false, contentType: false,
-		success: function(uid) {
-			var cf;
-			var ext;
-			if(getFileType(uploadedfile.type)=='VIDEO')
+			log('GET OBJECT: '+response);
+			var obj = JSON.parse(response);
+			for(var i=0; i<casefiles.length; i++)
 			{
-				cf = new Casefile(uploadedfile, uid);
-				ext = 'mp4';
-			}
-			else
-			{
-				cf = new Casefile(uploadedfile, uid);
-				ext = getExtension(uploadedfile.name);
-			}
-			cf.uploaddate = getUnixTime(uploadedfile.lastModified);
-			cf.name = uploadedfile.name;
-			cf.filepath = uid+'.'+ext;
-			
-			var formData = new FormData();
-			formData.append('file', uploadedfile);
-			formData.append('isvid', (uploadedfile.type.indexOf('video')!=-1?1:0));
-			formData.append('ext', ext);
-			formData.append('uid', cf.uid);
-			$.ajax({
-				url: 'framework/fileupload.php', method: 'POST', data: formData, processData: false, contentType: false,
-				success: function(response) {
-					log('Upload: '+response);
-					switch(cf.filetype)
-					{
-						case 'VIDEO':
-							getVideoThumbnail(cf.uid, getExtension(response), function(response){
-								cf.thumbnail = 'framework/thumbs/'+cf.uid+'.png';
-								cf.updateMediaElement();
-								updateMedia();
-							});
-							break;
-						case 'IMAGE':
-							cf.thumbnail = 'framework/uploads/'+cf.uid+'.'+ext;
-							cf.updateMediaElement();
-							updateMedia();
-							break;
-						case 'AUDIO':
-							cf.thumbnail = 'img/audioicon.png';
-							cf.updateMediaElement();
-							updateMedia();
-							break;
-						case 'TEXT':
-							cf.thumbnail = 'img/texticon.png';
-							cf.updateMediaElement();
-							updateMedia();
-							break;
-						case 'DOCUMENT':
-							cf.thumbnail = 'img/docicon.png';
-							cf.updateMediaElement();
-							updateMedia();
-							break;
-						default: break;
-					}
-					cf.postFile();
+				if(casefiles[i].uid == obj.uid)
+				{
+					log('File is already uploaded and open!');
+					$('#li_'+loadingPlace.queue).remove();
+					notify('File '+uploadedfile.name+' is already open.', WARN_NOTE);
+					return;
 				}
-			});
-			addMedia(cf);
+			}
+			//uid filepath uploaddate lastmodified nickname type user checksum
+			var cf = new Casefile(uploadedfile, obj.uid);
+			cf.filepath = obj.filepath;
+			cf.nickname = obj.nickname;
+			cf.officer = obj.user;
+			cf.uploaddate = obj.uploaddate;
+			cf.init();
+			$('#li_'+loadingPlace.queue).replaceWith(cf.mediaelement);
+			switch(cf.filetype)
+			{
+				case 'VIDEO':
+					getVideoThumbnail(cf, function(response){
+						log(response);
+						cf.thumbnail = 'framework/'+response;
+						cf.updateMediaElement();
+						updateMedia();
+					});
+					break;
+				case 'IMAGE':
+					cf.thumbnail = 'framework/'+cf.filepath;
+					cf.updateMediaElement();
+					updateMedia();
+					break;
+				case 'AUDIO':
+					cf.thumbnail = 'img/audioicon.png';
+					cf.updateMediaElement();
+					updateMedia();
+					break;
+				case 'TEXT':
+					cf.thumbnail = 'img/texticon.png';
+					cf.updateMediaElement();
+					updateMedia();
+					break;
+				case 'DOCUMENT':
+					cf.thumbnail = 'img/docicon.png';
+					cf.updateMediaElement();
+					updateMedia();
+					break;
+				default: break;
+			}
+			updateMedia();
 		}
 	});
+
 	popStack();
 }
 
@@ -558,9 +569,9 @@ Case.prototype.addFile = function(file) {
 Case.prototype.removeFile = function(file) {
 	pushStack('Case.removeFile');
 	var len = this.files.length;
-	for(var i=0; i<len; i++) {if(this.files[i]==file) {this.files.splice(i,1);}}
+	for(var i=0; i<len; i++) {if(this.files[i]==file) {this.files.splice(i--,1);}}
 	len = file.caseindex.length;
-	for(var i=0; i<len; i++) {if(file.caseindex[i]==this.uid) {file.caseindex.splice(i,1);i--;}}
+	for(var i=0; i<len; i++) {if(file.caseindex[i]==this.uid) {file.caseindex.splice(i--,1);}}
 	file.updateMediaElement();
 	this.updateElement();
 	updateFileList();
@@ -661,7 +672,7 @@ Casefile.prototype.newElement = function() {
 	this.element.append('<p class="left ten-padding bold">'+this.filetype+'</p>');
 	this.element.append('<div class="delete-icon link-button point-cursor '+this.uid+'_removebutton"><i class="fa fa-minus-circle" aria-hidden="true"></i></div>');
 	this.element.append('<div class="view-icon link-button point-cursor '+this.uid+'_view-button"><i class="fa fa-eye" aria-hidden="true"></i></div>');
-	this.element.append('<p class="right ten-padding">'+ new Date(this.uploaddate).toLocaleDateString() + '</p>');
+	this.element.append('<p class="right ten-padding">'+ new Date(this.filedate).toLocaleDateString() + '</p>');
 	this.element.append('<div class="clear"></div>');
 	this.element.id = this.uid+"_case";
 	popStack();
@@ -669,7 +680,7 @@ Casefile.prototype.newElement = function() {
 
 Casefile.prototype.newMediaElement = function() {
 	pushStack('Casefile.newMediaElement');
-	var d = new Date(this.uploaddate);
+	var d = new Date(this.filedate);
 	this.mediaelement = $('<li>');
 	var inner = $('<div id="'+this.uid+'_blockelement" class="block" style="'+this.checkState()+'">');
 	var e = [];
@@ -692,18 +703,18 @@ Casefile.prototype.newMediaElement = function() {
 Casefile.prototype.updateMediaElement = function(thumb) {
 	pushStack('Casefile.updateMediaElement');
 	
-	$(this.uid+"_name").html(this.truncName(15,12));
-	$(this.uid+"_addremove").html('<i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i>')
+	$('#'+this.uid+"_name").html(this.truncName(15,12));
+	$('#'+this.uid+"_addremove").html('<i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i>')
 	this.checkState();
-	$(this.uid+"_blockelement").css({
+	$('#'+this.uid+"_blockelement").css({
 		'border': 'none',
 		'display': 'block'
 	});
 	this.checkState();
-	if(this.state==UNUSED) $(this.uid+"_blockelement").css({'display':'none'});
-	else if(this.state==INUSE) $(this.uid+"_blockelement").css({'border':'5px solid rgb(100,255,100)'});
+	if(this.state==UNUSED) $('#'+this.uid+"_blockelement").css({'display':'none'});
+	else if(this.state==INUSE) $('#'+this.uid+"_blockelement").css({'border':'5px solid rgb(100,255,100)'});
 
-	$(this.uid+"_blockelement").css({'background-image': (this.thumbnail ? ('url('+address+this.thumbnail+')') : ('url("'+address+'/img/loading.gif")')),
+	$("#"+this.uid+"_blockelement").css({'background-image': (this.thumbnail ? ('url('+address+this.thumbnail+')') : ('url("'+address+'/img/loading.gif")')),
 		'background-repeat': 'no-repeat',
 		'background-size': (this.thumbnail?'cover':'50px 50px'),
 		'background-position': 'center'
@@ -781,10 +792,10 @@ Casefile.prototype.setButtonFunction = function() {
 	$(document).on('click', '.'+this.uid+"_removebutton", clickHandler(removeFileFromCase, this));
 	if(this.filetype == 'VIDEO')
 	{
-		$(document).on('mouseenter', '.'+this.uid+'_view-button', function(e){
+		$(document).on('mouseenter', '.'+ref.uid+'_view-button', function(e){
 			clearPreview();
 			$('.media-preview-overlay').append('<video id="overlay-video" style="position: absolute; top:0%; right:0%; max-width: 100%; max-height: 100%;" autoplay></video>');
-			$('#overlay-video').html('<source src="framework/uploads/'+ref.uid+'.mp4" type="video/mp4"/>');
+			$('#overlay-video').html('<source src="framework/'+ref.filepath+'" type="video/mp4"/>');
 			$('#overlay-video').get(0).oncanplay = function(){
 				var pos = getOverlayPosition(e);
 				$('.media-preview-overlay').css({top: pos.y, left: pos.x});

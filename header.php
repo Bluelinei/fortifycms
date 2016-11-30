@@ -51,10 +51,10 @@
 
       <nav>
         <ul>
-          <li id="search-button"><div>Search</div></li>
-          <li><div>Recent</div></li>
-          <li id="nav-casebuilder"><div>Builder</div></li>
-          <li id="nav-evidence"><div>Evidence</div></li>
+          <li id="search-button"><div>Search<i class="fa fa-search fa-lg right ten-margin-right"></i></div></li>
+          <li><div>Recent<i class="fa fa-reply fa-lg right ten-margin-right"></i></div></li>
+          <li id="nav-casebuilder"><div>Builder<i class="fa fa-pencil fa-lg right ten-margin-right"></i></div></li>
+          <li id="nav-evidence"><div>Evidence<i class="fa fa-folder-open fa-lg right ten-margin-right"></i></div></li>
         </ul>
       </nav>
 

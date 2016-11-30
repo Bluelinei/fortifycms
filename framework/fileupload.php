@@ -4,7 +4,7 @@ include 'dbconnect.php';
 
 function setDir($trdir) {if(!is_dir($trdir)) mkdir($trdir, 0777, true);}
 
-$ds = DIRECTORY_SEPARATOR;
+$ds = '/';
 if(!isset($_FILES['file']))
 {
 	return;
@@ -36,7 +36,7 @@ function generateObject()
 	}
 	//Save/Format File
 	$fn;
-	$targetDir = ".".$ds."uploads".$ds.$_SESSION['agency'].$ds.$_SESSION['user'];
+	$targetDir = "uploads".$ds.$_SESSION['agency'].$ds.$_SESSION['user'];
 	switch($_POST['filetype'])
 	{
 		case "VIDEO": {$targetDir .= $ds."video"; break;}
@@ -49,10 +49,12 @@ function generateObject()
 	setDir($targetDir);
 	$filename;
 	$finalPath;
-	if($_POST['filetype']=="VIDEO"&&pathinfo($file['name'], PATHINFO_EXTENSION)!="mp4")
+	$checksum = "";
+	if($_POST['filetype']=="VIDEO"&&pathinfo($file['name'], PATHINFO_EXTENSION)!="MP4")
 	{
-		$filename = $uid.".mp4";
+		$filename = $uid.".MP4";
 		$finalPath = $targetDir.$ds.$filename;
+		$checksum = sha1_file($file['tmp_name']);
 		$bitrate = shell_exec('.\\ffmpeg\\bin\\ffprobe -i '. $file['tmp_name'] .' -show_entries format=bit_rate -v quiet -of csv="p=0"');
 		$br = ($bitrate>4096000?4096:floor($bitrate/1000));
 		exec(".\\ffmpeg\\bin\\ffmpeg.exe -y -i ". $file['tmp_name'] ." -b:v ".$br."k -vcodec libx264 -acodec aac ". $finalPath, $out);
@@ -70,7 +72,7 @@ function generateObject()
 		return;
 	}
 	query(	"INSERT INTO evidence (uid, filepath, fortified, caseindex, uploaddate, lastmodified, nickname, type, user, checksum) VALUES (?,?,?,?,?,?,?,?,?,?)",
-			array($uid, $finalPath, "0", "", time(), $_POST['lastModified'], "", $_POST['filetype'], $_SESSION['user'], sha1_file($finalPath))	);
+			array($uid, $finalPath, "0", "", time(), $_POST['lastModified'], "", $_POST['filetype'], $_SESSION['user'], ($checksum?$checksum:sha1_file($finalPath)))	);
 	//Return json object
 	echo json_encode(getEvidenceByUID($uid));
 	return;

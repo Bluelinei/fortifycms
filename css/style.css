@@ -661,6 +661,7 @@ margin: 0px;
 }
 
 .media-block li{
+  position: relative;
   width: 25%;
   height: 140px;
   display: inline-block;
@@ -733,9 +734,10 @@ margin: 0px;
 }
 
 .loading-bar-wrapper {
-  position: relative;
+  position: absolute;
   width:100%;
   height: 10px;
+  top: 80%;
   border-radius: 5px;
   background: #555;
   overflow: hidden;
@@ -751,11 +753,19 @@ margin: 0px;
 .loading-bar {
   position: absolute;
   background: #4a4;
-  width: 25%;
+  width: 0%;
   height:100%;
+  transition: all 0.5s ease;
   animation-name: loading-pulse;
   animation-duration: 1s;
   animation-iteration-count: infinite;
+}
+
+.placeholder {
+  background-image: url("http://localhost/img/loading.gif");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 50px 50px;
 }
 
 
@@ -1135,6 +1145,7 @@ nav li:nth-child(even){
 nav li:hover{
   background: rgba(255,255,255,0.3);
   cursor: pointer;
+  text-shadow: 0px 2px 0px #333;
 }
 
 
@@ -1143,7 +1154,7 @@ nav li:hover{
 
 footer{
   background: #3f3f3f;
-//  border-top: 5px solid #333;
+/*border-top: 5px solid #333;*/
 	height: 8%;
 	width: 100%;
 }
