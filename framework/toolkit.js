@@ -3,6 +3,16 @@ const SHOW_CALLSTACK = false;
 const SHOW_LOGS = true;
 var callstack = [];
 
+function ajax(phpurl, f, func)
+{
+	$.ajax({
+		url: phpurl, data: f, method: 'POST', processData: false, contentType: false,
+		success: function(response) {
+			func(response);
+		}
+	});
+}
+
 function clearElement(node) {node.html('');} //Removes all HTML from a given element
 
 function clickHandler(func, arg) //Allowed the use of 'this' reference when using lambda functions

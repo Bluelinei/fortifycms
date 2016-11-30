@@ -81,7 +81,7 @@ function generateObject()
 //********** CHECK IF FILE ALREADY EXISTS ON SERVER **********
 
 try {
-	$response = query("SELECT * FROM evidence WHERE checksum=?", array(sha1_file($file['tmp_name'])), true);
+	$response = query("SELECT * FROM evidence WHERE checksum=? AND lastmodified=?", array(sha1_file($file['tmp_name']), $_POST['lastModified']), true);
 	if($response)
 	{
 		foreach($response as $reply) //Iterate through all replies, in case multiple files have the same checksum for whatever reason.

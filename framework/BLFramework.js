@@ -1,6 +1,6 @@
 //GLOBAL VARIABLES (MAINLY FOR DEBUGGING)
 
-const address = 'http://localhost/';
+const address = 'http://192.168.1.25/';
 
 var USER;
 $.ajax({
@@ -162,10 +162,8 @@ function getDatabase()
 	f.append('function', 'get');
 	loading(1);
 	var compiled = [];
-	$.ajax({
-		url: 'framework/functions.php', method: 'POST', data: f, processData: false, contentType: false,
-		success: function(response) {
-			log(response); 
+	ajax('framework/functions.php', f, function(response) {
+			log(response);
 			var o = JSON.parse(response);
 			if(o.length)
 			{
@@ -187,70 +185,70 @@ function getDatabase()
 					//FROM CASES COMPILE LIST OF ALL FILES THAT NEED TO BE LOADED
 					compiled = concatLists(compiled, evidence);
 				}
-				setAsActiveCase(cases[0]);
-				//GET FILES FROM DATABASE THAT ARE NOT FORTIFIED
-				//ONCE WE'RE DONE COMPILING THE EVIDENCE LIST, BEGIN LOADING ALL EVIDENCE
-				len = compiled.length;
-				for(var i=0; i<len; i++)
-				{
-					f = new FormData();
-					f.append('table', 'evidence');
-					f.append('function', 'get');
-					f.append('uid', compiled[i]);
-					loading(1);
-					$.ajax({
-						url: 'framework/functions.php', method: 'POST', data: f, processData: false, contentType: false,
-						success: function(response) {
-							var file;
-							try {
-								file = JSON.parse(response);
-							} catch(e) {
-								log(response+' failed to load.');
-								loading(-1);
-								return;
-							}
-							var cf = new Casefile(file.filepath, file.type, file.uid);
-							cf.caseindex = tokenizeUID(file.caseindex);
-							cf.uploaddate = Number(file.uploaddate);
-							cf.name = (file.nickname?file.filename:'');
-							cf.officer = file.officer;
-							switch(cf.filetype)
-							{
-								case 'VIDEO':
-									cf.thumbnail = 'framework/thumbs/'+cf.uid+'.png';
-									break;
-								case 'IMAGE':
-									cf.thumbnail = 'framework/uploads/'+cf.filepath;
-									break;
-								case 'DOCUMENT':
-									cf.thumbnail = 'img/docicon.png';
-									break;
-								case 'TEXT':
-									cf.thumbnail = 'img/texticon.png';
-									break;
-								case 'AUDIO':
-									cf.thumbnail = 'img/audioicon.png';
-									break;
-							}
-
-							var caselen = cf.caseindex.length;
-							for(var j=0; j<caselen; j++)
-							{
-								var indx = getCaseById(cf.caseindex[j]);
-								indx.addFile(cf);
-							}
-							updateCases();
-							updateCaseFiles();
-							updateReport();
-							loading(-1);
-						}
-					});
-				}
 			}
-			else {newCase();}
+			setAsActiveCase(cases[0]);
+			//GET FILES FROM DATABASE THAT ARE NOT FORTIFIED
+			f = new FormData();
+			f.append('function', 'unfort');
+			ajax('framework/functions.php', f, function(response){
+
+			});
+			//ONCE WE'RE DONE COMPILING THE EVIDENCE LIST, BEGIN LOADING ALL EVIDENCE
+			len = compiled.length;
+			for(var i=0; i<len; i++)
+			{
+				f = new FormData();
+				f.append('table', 'evidence');
+				f.append('function', 'get');
+				f.append('uid', compiled[i]);
+				loading(1);
+				ajax('framework/functions.php', f, function(response) {
+					var file;
+					try {
+						file = JSON.parse(response);
+					} catch(e) {
+						log(response+' failed to load.');
+						loading(-1);
+						return;
+					}
+					var cf = new Casefile(file, file.uid);
+					cf.caseindex = tokenizeUID(file.caseindex);
+					cf.uploaddate = Number(file.uploaddate);
+					cf.name = file.nickname;
+					cf.officer = file.officer;
+					switch(cf.filetype)
+					{
+						case 'VIDEO':
+							cf.thumbnail = 'framework/thumbs/'+cf.uid+'.png';
+							break;
+						case 'IMAGE':
+							cf.thumbnail = 'framework/uploads/'+cf.filepath;
+							break;
+						case 'DOCUMENT':
+							cf.thumbnail = 'img/docicon.png';
+							break;
+						case 'TEXT':
+							cf.thumbnail = 'img/texticon.png';
+							break;
+						case 'AUDIO':
+							cf.thumbnail = 'img/audioicon.png';
+							break;
+					}
+
+					var caselen = cf.caseindex.length;
+					for(var j=0; j<caselen; j++)
+					{
+						var indx = getCaseById(cf.caseindex[j]);
+						indx.addFile(cf);
+					}
+					updateCases();
+					updateCaseFiles();
+					updateReport();
+					loading(-1);
+				});
+			}
 			loading(-1);
-		}
-	});
+		});
 }
 
 function loadINI()

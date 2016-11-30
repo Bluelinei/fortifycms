@@ -556,6 +556,12 @@ h3.new-case:active{
   background: #243d5b;
 }
 
+#case-list li {
+  position: relative;
+  height: 40px;
+  background: #eee;
+}
+
 #case-list li:hover {
   background: #f8f8f8;
 }
@@ -581,17 +587,19 @@ h3.new-case:active{
 }
 
 #case-list .changed:hover {
-  background: #ffe9e9;
+  background: #ffe9e9;#
 }
 
 .manager-container .case-file-count{
   text-align: center;
-  background: rgba(000,000,000,0.1);
+  background: rgba(0,0,0,0.1);
+  height:100%;
 }
 
 .case-delete-button{
   transition: all 0.1s;
   cursor: pointer;
+  height:100%;
 }
 
 .case-delete-button:hover {
@@ -603,7 +611,14 @@ h3.new-case:active{
 }
 
 .case-ref-id{
-  text-align: center;
+  position: absolute;
+  height: 100%;
+  left:50%;
+  transform: translateX(-50%);
+}
+
+.case-ref-id-wrapper {
+  height: 100%;
 }
 
 /** 04.00 Evidence Slider **/

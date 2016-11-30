@@ -22,7 +22,7 @@ function query($sql, $exarray, $fetchall=false)
 	global $conn;
 	$stmt = $conn->prepare($sql);
 	$stmt->execute($exarray);
-	if(!$fetchall) return $stmt->fetch(PDO::FETCH_ASSOC);
+	if(!$fetchall) return $stmt->fetch(PDO::FETCH_ASSOC);  
 	else return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 

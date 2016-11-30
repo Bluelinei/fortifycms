@@ -66,8 +66,7 @@ function newCase()
 {
 	pushStack('newCase');
 	var f = new FormData();
-	f.append('function', 'set');
-	f.append('table', 'quickreport');
+	f.append('function', 'caseuid');
 	$.ajax({
 		url: 'framework/functions.php', method: 'POST', data: f, processData: false, contentType: false,
 		success: function(uid) {
@@ -140,7 +139,7 @@ function newCaseFile(uploadedfile)
 			cf.filepath = obj.filepath;
 			cf.nickname = obj.nickname;
 			cf.officer = obj.user;
-			cf.uploaddate = obj.uploaddate;
+			cf.uploaddate = Number(obj.uploaddate);
 			cf.init();
 			$('#li_'+loadingPlace.queue).replaceWith(cf.mediaelement);
 			switch(cf.filetype)
@@ -194,7 +193,6 @@ function setAsActiveCase(activecase)
 	if(workingcase == activecase || activecase.DELETED) {popStack(); return;}
 	if(workingcase)
 	{
-		if(!$('#report-number').val()) workingcase.casenum = "[No Report Number]";
 		var oldcase = workingcase;
 		workingcase = null;
 		oldcase.updateElement();
@@ -278,8 +276,8 @@ function updateFileList()
 function updateInfo()
 {
 	pushStack('Case.updateInfo');
-	if(!$('#report-number').val()) workingcase.casenum = "[No Report Number]";
-	else workingcase.casenum = $('#report-number').val();
+	if($('#report-number').val()) workingcase.casenum = $('#report-number').val();
+	else workingcase.casenum = '';
 	if($('#report-nickname').val()) workingcase.nickname = $('#report-nickname').val();
 	else workingcase.nickname = '';
 	if($('#report-location').val()) workingcase.location = $('#report-location').val();
@@ -463,7 +461,7 @@ function Case(uid)
 {
 	pushStack('Case');
 	this.uid = uid;
-	this.casenum = '[New Case]';
+	this.casenum;
 	this.nickname = '';
 	this.location;
 	this.files = [];
@@ -475,6 +473,7 @@ function Case(uid)
 	this.changed = false;
 	this.activetime = -1;
 	this.DELETED = false;
+	this.editnick = false;
 
 	cases.push(this);
 	this.newElement();
@@ -523,7 +522,7 @@ Case.prototype.newElement = function() {
 	pushStack('Case.newElement');
 	var src = this;
 	this.element = $('<li>');
-	this.element.append('<div class="case-ref-id seventy-per-wide ten-padding left point-cursor _case_text">'+ this.casenum + (this.nickname?' ('+truncateText(this.nickname, 13, '...', 0)+')':'')+'</div>');
+	this.element.append('<div class="case-ref-id-wrapper seventy-per-wide ten-padding left point-cursor"><div class="case-ref-id '+this.uid+'_case_text">[No Case ID]</div></div>');
 	this.element.append('<div class="case-file-count twenty-per-wide ten-padding left _case_filelen">'+ this.files.length +'</div>');
 	this.element.append('<div class="pointer-mouse ten-per-wide left red-light text-center link-button case-delete-button-reference-class case-delete-button '+this.uid+'" style="padding: 8px"><i class="fa fa-minus-circle case-delete-button-reference-class" style="font-size:19px; color:#fff;" aria-hidden="true"></i></div>');
 	this.element.append('<div class="clear"></div>');
@@ -535,20 +534,50 @@ Case.prototype.newElement = function() {
 		event.stopPropagation();
 		deleteCase(src);
 	});
+	this.element.find('.'+this.uid+'_case_text').on('click', function(e) {
+		log('Clicked on nickname');
+		c.editnick = true;
+		var ct = c.element.find('.'+this.uid+'_case_text');
+		if(workingcase == c)
+		{
+			log('Should have changed');
+			ct.html('<input id="'+this.uid+'_nickin" type="text" />');
+			ct.html('CHANGED!');
+		}
+	});
+	this.element.find('#'+this.uid+'_nickin').on('blur', function(e) {
+		c.nickname = $('#'+this.uid+'_nickin').val();
+		c.editnick = false;
+		updateCases();
+	});
 	popStack();
 };
 
 Case.prototype.updateElement = function() {
 	pushStack('Case.updateElement');
-	if(workingcase == this) this.element.addClass('active');
-	else this.element.removeClass('active');
+	var casetext = this.element.find('.'+this.uid+'_case_text');
+	if(workingcase == this)
+	{
+		this.element.addClass('active');
+		casetext.css({'cursor':'text'});
+	}
+	else
+	{
+		this.element.removeClass('active');
+		casetext.css({'cursor':'inherit'});
+	}
 	this.updateHTML();
 	popStack();
 };
 
 Case.prototype.updateHTML = function() {
 	pushStack('Case.updateHTML');
-	this.element.find('._case_text').html(this.casenum + (this.nickname?' ('+truncateText(this.nickname, 13, '...')+')':''));
+	if(!this.editnick)
+	{
+		if(this.nickname) this.element.find('.'+this.uid+'_case_text').html(this.nickname);
+		else if(this.casenum) this.element.find('.'+this.uid+'_case_text').html(this.casenum);
+		else this.element.find('.'+this.uid+'_case_text').html('[No Case ID]');
+	}
 	this.element.find('._case_filelen').html(this.files.length);
 	popStack();
 };
