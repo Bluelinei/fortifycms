@@ -70,7 +70,7 @@
                 <div class="left evidence-inventory-block">
                   <div class="fifteen-padding text-center">
                     <h3>Evidence Inventory</h3>
-                    <div id="add-evidence" class="link-button point-cursor"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add Evidence</div>
+                    <div id="add-evidence" class="link-button point-cursor no-select"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add Evidence</div>
                   </div>
       <!--INVENTORY LIST-->
                   <ul id="evidence-inventory" class="evidence-inventory-list">
@@ -98,7 +98,7 @@
                       </ul>
                     </div>
                   </div>
-                  <div id="fortify-notification" class="hidden">Cases Saved</div>
+                  <div id="fortify-notification" class="hidden"></div>
                 </div><!--END tag-column-->
                 </div><!--END further admin block // this is the 100% block that contains the tag list and the button, it's how we get the 5px spacing between the evidence inventory block and then the 5px spacing between the fortify case button and the tag list-->
               </div><!--END INVENTORY/follow up CONTAINER-->
@@ -106,44 +106,44 @@
     <!--START date/ time selector for pre-linking -->
             <div class="prelink-wrapper">
 
-              <div class="timeset-wrapper">
-                <div class="one-wide" style="display: block;background: rgba(255,187,187,0.8);color:#fff;height: 100%;font-size: 11px;text-align: center;">
+              <div class="timeset-wrapper hidden">
+                <div class="one-wide" style="position: relative; display: block;background: rgba(255,187,187,0.8);color:#fff;height: 100%;font-size: 12px;text-align: center;">
                   <div class="clock-container">
-                    <div class="increment"><p class="vertical-middle">+</p></div>
-                    <div class="time"><p class="vertical-middle">11</p></div>
-                    <div class="increment"><p class="vertical-middle">-</p></div>
+                    <div class="time"><input class="vertical-middle time-input hour-num" type="number" value="12" min="0" max="13"/></div>
                   </div>
                   <div class="clock-container">
-                    <div class="increment"><p class="vertical-middle">+</p></div>
-                    <div class="time"><p class="vertical-middle">23</p></div>
-                    <div class="increment"><p class="vertical-middle">-</p></div>
+                    <div class="time"><input class="vertical-middle time-input minute-num" type="number" value="23" min="-1" max="60"/></div>
                   </div>
                   <div class="clock-container">
-                    <div class="increment"><p class="vertical-middle">+</p></div>
-                    <div class="time"><p class="vertical-middle">pm</p></div>
-                    <div class="increment"><p class="vertical-middle">-</p></div>
+                    <div class="time"><div class="vertical-middle meridiem no-select">AM</div></div>
                   </div>
-                  <div class="clock-container" style="background: #550000;">
-                    <div class="clock-month"><p style="position: absolute; bottom: 0;width: 100%; text-align: center;">Nov</p></div>
-                    <div class="clock-day">16</div>
+                  <div class="clock-container">
+                    <div class="set-calendar" style="position:relative;height:100%;width:100%; top:50%; transform: translateY(-50%);">
+                      <i class="fa fa-calendar fa-lg" style=";display: inline-block; font-size: 30px; bottom:10%; margin-right: 10px;"></i>
+                      <div style="display: inline-block; width:30%; top:50%; transform:translateY(-50%);">
+                        <div class="clock-month" style="text-align: center;">Nov</div>
+                        <div class="clock-day">16</div>
+                        <div class="clock-year">2016</div>
+                      </div>
+                    </div>
                   </div>
-                  <div class="clock-container" style="background: rgba(000,255,000,0.3);">
-                    <div class="vertical-middle" style="font-size: 35px;"><i class="fa fa-check-circle-o" aria-hidden="true"></i>
+                  <div class="clock-container" style="background: rgba(0,255,0,0.3);">
+                    <div class="vertical-middle timeset-confirm" style="font-size: 35px;"><i class="fa fa-check-circle-o" aria-hidden="true"></i>
                   </div>
                       </div>
                     <div class="clear"></div>
-                  </div>
+                </div>
               </div>
 
-              <div class="prelink-block">
-                <div class="three-wide" style="height: 100%;background: #ff8888;">
-                  <div class="vertical-middle">Start<br>11:52am</div>
+              <div class="prelink-block" style="z-index: 51;">
+                <div class="three-wide timeset-button prelink-start">
+                  <div class="vertical-middle no-select"><p>Start<br>11:52am</p></div>
                 </div>
-                <div class="three-wide" style="height: 100%; background: #ff8888;">
-                  <div class="vertical-middle">End<br>12:25pm</div>
+                <div class="three-wide timeset-button prelink-end">
+                  <div class="vertical-middle no-select"><p>End<br>[Click to Set]</p></div>
                 </div>
-                <div class="three-wide" style="height: 100%; background: #55ff55;">
-                  <div class="vertical-middle">pre-linking on</div>
+                <div class="three-wide prelink-toggle">
+                  <div class="vertical-middle no-select">Enable Pre-Link</div>
                 </div>
               </div>
             </div>
@@ -173,7 +173,7 @@
 <!--CASE LIST-->
         <ul id="case-list">
         </ul>
-        <div id="fortify-button" class="fortify-case-button" style="height:auto;padding: 15px;margin-top:5px;border: 1px solid #440000;"><p class="no-event"><span class="fa-stack"><i class="fa fa-shield fa-stack-2x"></i><i class="fa fa-unlock-alt fa-stack-1x fa-inverse"></i></span>  Fortify Cases</p></div>
+        <div id="fortify-button" class="fortify-case-button no-select" style="height:auto;padding: 15px;margin-top:5px;border: 1px solid #440000;"><p class="no-event"><span class="fa-stack"><i class="fa fa-shield fa-stack-2x"></i><i class="fa fa-unlock-alt fa-stack-1x fa-inverse"></i></span> Fortify Cases</p></div>
       </div><!--END builder wrapper-->
 
     </div><!--END Content Pane-->

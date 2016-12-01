@@ -52,15 +52,6 @@ function updateCases()
 	popStack();
 }
 
-function updateCaseFiles()
-{
-	pushStack('updateCaseFiles');
-	var len = casefiles.length;
-	for(var i=0; i<len; i++) {casefiles[i].checkState(); casefiles[i].updateMediaElement();}
-	updateMedia();
-	popStack();
-}
-
 function display(node, element) {node.append(element);}
 
 function newCase()
@@ -68,12 +59,9 @@ function newCase()
 	pushStack('newCase');
 	var f = new FormData();
 	f.append('function', 'caseuid');
-	$.ajax({
-		url: 'framework/functions.php', method: 'POST', data: f, processData: false, contentType: false,
-		success: function(uid) {
-			var c = new Case(uid);
-			setAsActiveCase(c);
-		}
+	ajax('framework/functions.php', f, function(uid) {
+		var c = new Case(uid);
+		setAsActiveCase(c);
 	});
 	popStack();
 }
@@ -123,6 +111,7 @@ function newCaseFile(uploadedfile)
 		},
 		url: 'framework/fileupload.php', method: 'POST', data: f, processData: false, contentType: false,
 		success: function(response){
+			//log('New Upload: '+response);
 			var obj = JSON.parse(response);
 			for(var i=0; i<casefiles.length; i++)
 			{
@@ -136,7 +125,7 @@ function newCaseFile(uploadedfile)
 			//uid filepath uploaddate lastmodified nickname type user checksum
 			var cf = new Casefile(uploadedfile, obj.uid);
 			cf.filepath = obj.filepath;
-			cf.nickname = obj.nickname;
+			cf.nickname = uploadedfile.name;
 			cf.officer = obj.user;
 			cf.uploaddate = Number(obj.uploaddate);
 			cf.init();
@@ -153,27 +142,21 @@ function newCaseFile(uploadedfile)
 					break;
 				case 'IMAGE':
 					cf.thumbnail = 'framework/'+cf.filepath;
-					cf.updateMediaElement();
-					updateMedia();
 					break;
 				case 'AUDIO':
 					cf.thumbnail = 'img/audioicon.png';
-					cf.updateMediaElement();
-					updateMedia();
 					break;
 				case 'TEXT':
 					cf.thumbnail = 'img/texticon.png';
-					cf.updateMediaElement();
-					updateMedia();
 					break;
 				case 'DOCUMENT':
 					cf.thumbnail = 'img/docicon.png';
-					cf.updateMediaElement();
-					updateMedia();
 					break;
 				default: break;
 			}
+			cf.updateMediaElement();
 			updateMedia();
+			cf.postFile();
 		}
 	});
 
@@ -183,7 +166,7 @@ function newCaseFile(uploadedfile)
 function setAsActiveCase(activecase)
 {
 	pushStack('setAsActiveCase');
-	if(!activecase)
+	if(!activecase||activecase==undefined)
 	{
 		newCase();
 		popStack();
@@ -199,7 +182,7 @@ function setAsActiveCase(activecase)
 	workingcase = activecase;
 	workingcase.updateElement();
 	updateCases();
-	updateCaseFiles();
+	updateMedia();
 	updateReport();
 	popStack();
 }
@@ -210,7 +193,7 @@ function addFileToCase(file)
 	if(file.state == INUSE) workingcase.removeFile(file)
 	else workingcase.addFile(file);
 	updateCases();
-	updateCaseFiles();
+	updateMedia();
 	updateReport();
 	popStack();
 }
@@ -230,7 +213,7 @@ function deleteCase(c)
 	}
 	if(c.uid==workingcase.uid) {setAsActiveCase(cases[0]);}
 	updateCases();
-	updateCaseFiles();
+	updateMedia();
 	updateReport();
 	popStack();
 }
@@ -401,7 +384,7 @@ function removeFileFromCase(file)
 	pushStack('removeFileFromCase');
 	workingcase.removeFile(file);
 	updateCases();
-	updateCaseFiles();
+	updateMedia();
 	updateReport();
 	popStack();
 }
@@ -421,9 +404,10 @@ function updateMedia()
 	clearElement($('#mediabrowser'));
 	for(var i=0; i<len; i++)
 	{
+		casefiles[i].checkState();
 		if(casefiles[i].state == UNUSED) continue;
 		$('#mediabrowser').append(casefiles[i].mediaelement);
-		log(casefiles[i]);
+		casefiles[i].updateMediaElement();
 	}
 	popStack();
 }
@@ -485,7 +469,7 @@ Case.prototype.changeCase = function(x) {
 
 Case.prototype.postCase = function() {
 	pushStack('Case.postCase');
-	if(this.casenum=='[No Report Number]'||this.casenum=='[New Case]'||!this.location||!this.type) {popStack(); return false;}
+	if(this.casenum==''||!this.type) {popStack(); return false;}
 	var f = new FormData();
 	f.append('uid',this.uid);
 	f.append('nickname',this.nickname);
@@ -495,7 +479,7 @@ Case.prototype.postCase = function() {
 	f.append('reporttags',this.tags.join('<#>'));
 	var filelist = []
 	var len = this.files.length;
-	for(var i=0; i<len; i++) {log(this.files[i]); filelist.push(this.files[i].uid);}
+	for(var i=0; i<len; i++) {filelist.push(this.files[i].uid);}
 	for(var i=0; i<len; i++) {this.files[i].postFile();}
 	f.append('evidence',filelist.join(''));
 	f.append('admin',(this.admin?1:0));
@@ -588,9 +572,9 @@ Case.prototype.addFile = function(file) {
 Case.prototype.removeFile = function(file) {
 	pushStack('Case.removeFile');
 	var len = this.files.length;
-	for(var i=0; i<len; i++) {if(this.files[i]==file) {this.files.splice(i--,1);}}
+	for(var i=0; i<len; i++) {if(this.files[i]==file) {this.files.splice(i,1); i--;}}
 	len = file.caseindex.length;
-	for(var i=0; i<len; i++) {if(file.caseindex[i]==this.uid) {file.caseindex.splice(i--,1);}}
+	for(var i=0; i<len; i++) {if(file.caseindex[i]==this.uid) {file.caseindex.splice(i,1); i--;}}
 	file.updateMediaElement();
 	this.updateElement();
 	updateFileList();
@@ -668,8 +652,8 @@ Casefile.prototype.postFile = function() {
 	fdata.append('file_type', this.filetype);
 	fdata.append('upload_date', this.uploaddate);
 	fdata.append('lastmodified', this.filedate);
-	fdata.append('case_index', this.caseindex.join(''));
-	fdata.append('fortified', (this.state==UNFORT?0:1));
+	fdata.append('case_index', removeDuplicates(this.caseindex).join(''));
+	fdata.append('fortified', (this.caseindex?1:0));
 
 	ajax('framework/filepost.php', fdata, function(response) {
 			//log(response);
@@ -689,7 +673,7 @@ Casefile.prototype.newElement = function() {
 	this.element.append('<p class="left ten-padding bold">'+this.filetype+'</p>');
 	this.element.append('<div class="delete-icon link-button point-cursor '+this.uid+'_removebutton"><i class="fa fa-minus-circle" aria-hidden="true"></i></div>');
 	this.element.append('<div class="view-icon link-button point-cursor '+this.uid+'_view-button"><i class="fa fa-eye" aria-hidden="true"></i></div>');
-	this.element.append('<p class="right ten-padding">'+ new Date(this.filedate).toLocaleDateString() + '</p>');
+	this.element.append('<p class="right ten-padding">'+ new Date(this.filedate*1000).toLocaleDateString() + '</p>');
 	this.element.append('<div class="clear"></div>');
 	this.element.id = this.uid+"_case";
 	popStack();
@@ -697,9 +681,10 @@ Casefile.prototype.newElement = function() {
 
 Casefile.prototype.newMediaElement = function() {
 	pushStack('Casefile.newMediaElement');
-	var d = new Date(this.filedate);
+	var d = new Date(this.filedate*1000);
 	this.mediaelement = $('<li>');
-	var inner = $('<div id="'+this.uid+'_blockelement" class="block" style="'+this.checkState()+'">');
+	var inner = $('<div id="'+this.uid+'_blockelement" class="block">');
+	this.checkState();
 	var e = [];
 	e.push('<div class="ev-curtain"><div class="vertical-middle">');
 	e.push('<h3 id="'+this.uid+'_name">'+this.truncName(15, 12)+'</h3>');
@@ -719,23 +704,12 @@ Casefile.prototype.newMediaElement = function() {
 
 Casefile.prototype.updateMediaElement = function(thumb) {
 	pushStack('Casefile.updateMediaElement');
-	
+	this.checkState();
 	$('#'+this.uid+"_name").html(this.truncName(15,12));
-	$('#'+this.uid+"_addremove").html('<i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i>')
-	this.checkState();
-	$('#'+this.uid+"_blockelement").css({
-		'border': 'none',
-		'display': 'block'
-	});
-	this.checkState();
-	if(this.state==UNUSED) $('#'+this.uid+"_blockelement").css({'display':'none'});
-	else if(this.state==INUSE) $('#'+this.uid+"_blockelement").css({'border':'5px solid rgb(100,255,100)'});
-
-	$("#"+this.uid+"_blockelement").css({'background-image': (this.thumbnail ? ('url('+address+this.thumbnail+')') : ('url("'+address+'/img/loading.gif")')),
-		'background-repeat': 'no-repeat',
-		'background-size': (this.thumbnail?'cover':'50px 50px'),
-		'background-position': 'center'
-	});
+	$('#'+this.uid+"_addremove").html('<i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i>');
+	$('#'+this.uid+"_blockelement").removeClass('green-border');
+	if(this.state==INUSE) $('#'+this.uid+"_blockelement").addClass('green-border');
+	this.updateThumb();
 	popStack();
 }
 
@@ -772,30 +746,8 @@ Casefile.prototype.checkState = function() {
 		}
 		if(this.state != INUSE) this.state = UNUSED;
 	};
-	var update = this.updateElement();
 	popStack();
-	return update;
-};
-
-Casefile.prototype.updateElement = function() {
-	pushStack('CaseFile.updateElement');
-	switch(this.state)
-	{
-		case UNFORT:
-			popStack();
-			return '';
-			break;
-		case UNUSED:
-			popStack();
-			return 'display: none;';
-			break;
-		case INUSE:
-			popStack();
-			return 'border: 5px solid rgb(100,255,100);';
-			break;
-		default: break;
-	}
-	popStack();
+	return;
 };
 
 Casefile.prototype.doHide = function() {
@@ -834,6 +786,14 @@ Casefile.prototype.setButtonFunction = function() {
 	$(document).on('mousemove', '.'+this.uid+'_view-button', function(e){
 		var pos = getOverlayPosition(e);
 		$('.media-preview-overlay').css({top: pos.y, left: pos.x});
+	});
+}
+
+Casefile.prototype.updateThumb = function() {
+	$("#"+this.uid+"_blockelement").css({'background-image': (this.thumbnail ? ('url('+address+this.thumbnail+')') : ('url("'+address+'/img/loading.gif")')),
+		'background-repeat': 'no-repeat',
+		'background-size': (this.thumbnail?'cover':'50px 50px'),
+		'background-position': 'center'
 	});
 }
 
@@ -893,4 +853,35 @@ ReportTag.prototype.newButton = function() {
 	button.on('click', clickHandler(removeTag, this));
 	popStack();
 	return button;
+}
+
+
+
+
+
+
+
+//*********************************************************************************************************************************
+//** PRELINK OBJECT ***************************************************************************************************************
+//*********************************************************************************************************************************
+
+function Prelink()
+{
+	this.start;
+	this.end;
+	this.editing;
+	this.year;
+	this.month;
+	this.day;
+	this.hour;
+	this.minute;
+	this.meridien;
+}
+
+Prelink.prototype.setTime = function() {
+
+}
+
+Prelink.prototype.edit = function(time) {
+	this.editing = time;
 }

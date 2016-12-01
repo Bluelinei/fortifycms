@@ -55,6 +55,13 @@ body{
   pointer-events: none;
 }
 
+.no-select {
+  user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+
 .exit-overlay{
   color: #000;
   position: absolute;
@@ -247,6 +254,7 @@ body{
 }
 
 .prelink-wrapper{
+  position: relative;
   height: 10%;
   padding-top:5px;
   width: 100%;
@@ -402,19 +410,38 @@ body{
 }
 
 .timeset-wrapper{
-  display: none;
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: 60px;
+  top:-60px;
   background: rgba(000,000,000,0.6);
-  z-index: 2000;
+  z-index: 50;
+  transition: all 0.2s ease;
+}
+
+.timeset-wrapper.hidden{
+  opacity: 0;
+  top:0%;
+  pointer-events: none;
 }
 
 
 .clock-container{
+  position: relative;
   float: left;
   height: 100%;
   width: 20%;
+}
+
+.set-calendar {
+  background: #500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.set-calendar:hover {
+  background: #944;
+  text-shadow: 0 2px 0 #333;
 }
 
 .increment{
@@ -427,19 +454,116 @@ body{
 
 .clock-month{
   color: #fff;
-  font-size: 13px;
-  height: 50%;
+  font-size: 11px;
+}
+
+.clock-year{
+  color: #fff;
+  font-size: 11px;
 }
 
 .clock-day{
-  color: #fff;
-  font-size: 20px;
-  height: 50%;
+  color: #333;
+  font-size: 24px;
+  background: #fff;
+  width:auto;
+  margin-top:1px;
+  margin-bottom:1px;
+  text-shadow:none !important;
 }
 
 .time{
-  height: 40%;
+  height: 100%;
   width: 100%;
+}
+
+.time-input {
+  text-align: center;
+  width:60%;
+  font-size: 30px;
+  background: none;
+  border: none;
+  color: #fff;
+}
+
+.timeset-button {
+  height: 100%;
+  background: #f88;
+  color:#fff;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.timeset-button:hover {
+  text-shadow: 0px 1px 0px #333;
+  background: #f99;
+}
+
+.timeset-button:active {
+  transition: all 0s;
+  text-shadow: 0px -1px 0px #333;
+  background: #f77;
+}
+
+.meridiem {
+  font-size: 30px;
+  color:#fff;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.meridiem:hover {
+  text-shadow: 0px 1px 0px #333;
+}
+
+.meridiem:active {
+  transition: all 0s;
+  text-shadow: 0px 1px 0px #fff;
+  color: #333;
+}
+
+.prelink-toggle {
+  height:100%;
+  background: #385477;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.prelink-toggle:hover {
+  background: #648bba;
+  text-shadow: 0px 1px 0px #333;
+}
+
+.prelink-toggle:active {
+  transition: all 0s;
+  background: #243d5b;
+  text-shadow: none;
+  transition: all 0.2s ease;
+}
+
+.timeset-confirm {
+  position: absolute;
+  width:100%;
+  height:100%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.timeset-confirm>i {
+  top:50%;
+  transform: translateY(-50%);
+}
+
+.timeset-confirm:hover {
+  background: rgba(255,255,255,0.2);
+  text-shadow: 0 2px 0 #333;
+}
+
+.timeset-confirm:active {
+  transition: all 0s;
+  background: rgba(0,0,0,0.1);
+  text-shadow: none;
 }
 
 .report-question  select:hover {
@@ -587,7 +711,7 @@ h3.new-case:active{
 }
 
 #case-list .changed:hover {
-  background: #ffe9e9;#
+  background: #ffe9e9;
 }
 
 .manager-container .case-file-count{
@@ -714,7 +838,10 @@ h3.new-case:active{
 }
 
 .green-border{
-  border: 10px solid #00ff00;
+  border: 5px solid #9f9;
+  box-shadow: inset 0 0 25px #9f9;
+  -moz-box-shadow: inset 0 0 25px #9f9;
+  -webkit-box-shadow: inset 0 0 25px #9f9;
 }
 
 .red-border{

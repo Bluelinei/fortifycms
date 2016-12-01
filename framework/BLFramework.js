@@ -16,13 +16,12 @@ var databaseload = 0;
 function loading(v)
 {
 	databaseload+=v;
-	if(!databaseload) {$('#pageload-overlay').addClass('hidden'); log('Page Finished Loading'); updateReport();}
+	if(!databaseload) {$('#pageload-overlay').addClass('hidden'); log('Page Finished Loading');}
 }
 
 var workingcase;
 
-var drag_enter_target;
-var drag_leave_target;
+var prelink = new Prelink();
 
 const caselistElementID = '#case-list';
 const filelistElementID = '#evidence-inventory';
@@ -152,8 +151,39 @@ function setEventListeners()
 	$('#report-type').on('change', changeCase);
 	$('#myonoffswitch').on('click', changeCase);
 
+	//Timeset
+	$('.timeset-button').on('click', function(e) {
+		$('.timeset-wrapper').removeClass('hidden');
+	});
+	$('.timeset-confirm').on('click', function(e) {
+		$('.timeset-wrapper').addClass('hidden');
+	});
+	$('.meridiem').on('click', function(e) {
+		var src = $(e.target);
+		if(src.html()=='AM') src.html('PM');
+		else src.html('AM');
+	});
+
+	$('.time-input').on('change', function(e) {
+		var src = $(e.target);
+		if(src.hasClass('hour-num'))
+		{
+			if(src.val()>12) src.val(1);
+			else if(src.val()<1) src.val(12);
+		}
+		else if(src.hasClass('minute-num'))
+		{
+			if(src.val()>59) src.val(0);
+			else if(src.val()<0) src.val(59);
+		}
+	});
+	$('.time-input').on('focus', function(e) {
+		$(e.target).select();
+	});
+
 	//KEYBOARD SHORTCUTS
 	$(document).on('keydown', function(e) {
+		//log(e.keyCode);
 		if(e.keyCode==13||e.which==13) {$(':focus').blur();}
 	});
 }
@@ -166,7 +196,7 @@ function getDatabase()
 	loading(1);
 	var compiled = [];
 	ajax('framework/functions.php', f, function(response) {
-			log(response);
+			//log(response);
 			var o = JSON.parse(response);
 			if(o.length)
 			{
@@ -195,7 +225,6 @@ function getDatabase()
 			f.append('function', 'unfort');
 			ajax('framework/functions.php', f, function(response){
 				if(!response) return;
-				log('Unfortified: '+response);
 				var files = JSON.parse(response);
 				for(var i=0; i<files.length; i++)
 				{
@@ -205,39 +234,37 @@ function getDatabase()
 					cf.filetype = obj.type;
 					cf.name = obj.nickname;
 					cf.officer = obj.user;
-					cf.uploaddate = Number(obj.uploaddate*1000);
-					cf.filedate = Number(obj.lastmodified*1000);
+					cf.uploaddate = Number(obj.uploaddate);
+					cf.filedate = Number(obj.lastmodified);
 					cf.caseindex = tokenizeUID(obj.caseindex);
 					cf.init();
 					switch(cf.filetype)
 					{
 						case 'VIDEO':
-							cf.thumbnail = 'framework/uploads/blueline_TN/dev/thumbs/'+cf.uid+'.png';
-							cf.updateMediaElement();
-							updateMedia();
+							var src = cf;
+							ajax('framework/getsession.php', null, function(response) {
+								var session = JSON.parse(response);
+								src.thumbnail = 'framework/uploads/'+session.agency+'/'+session.user+'/thumbs/'+src.uid+'.png';
+								cf.updateMediaElement();
+								updateMedia();
+							});
 							break;
 						case 'IMAGE':
 							cf.thumbnail = 'framework/'+cf.filepath;
-							cf.updateMediaElement();
-							updateMedia();
 							break;
 						case 'AUDIO':
 							cf.thumbnail = 'img/audioicon.png';
-							cf.updateMediaElement();
-							updateMedia();
 							break;
 						case 'TEXT':
 							cf.thumbnail = 'img/texticon.png';
-							cf.updateMediaElement();
-							updateMedia();
 							break;
 						case 'DOCUMENT':
 							cf.thumbnail = 'img/docicon.png';
-							cf.updateMediaElement();
-							updateMedia();
 							break;
 						default: break;
 					}
+					cf.updateMediaElement();
+					updateMedia();
 				}
 			});
 			//ONCE WE'RE DONE COMPILING THE EVIDENCE LIST, BEGIN LOADING ALL EVIDENCE
@@ -250,7 +277,6 @@ function getDatabase()
 				f.append('function', 'get');
 				f.append('uid', compiled[i]);
 				ajax('framework/functions.php', f, function(response) {
-					log(response);
 					var obj;
 					try {
 						obj = JSON.parse(response);
@@ -264,36 +290,31 @@ function getDatabase()
 					cf.filetype = obj.type;
 					cf.name = obj.nickname;
 					cf.officer = obj.user;
-					cf.uploaddate = Number(obj.uploaddate*1000);
-					cf.filedate = Number(obj.lastmodified*1000);
+					cf.uploaddate = Number(obj.uploaddate);
+					cf.filedate = Number(obj.lastmodified);
 					cf.caseindex = tokenizeUID(obj.caseindex);
 					cf.init();
 					switch(cf.filetype)
 					{
 						case 'VIDEO':
-							cf.thumbnail = 'framework/uploads/blueline_TN/dev/thumbs/'+cf.uid+'.png';
-							cf.updateMediaElement();
-							updateMedia();
+							var src = cf;
+							ajax('framework/getsession.php', null, function(response) {
+								var session = JSON.parse(response);
+								src.thumbnail = 'framework/uploads/'+session.agency+'/'+session.user+'/thumbs/'+src.uid+'.png';
+								updateMedia();
+							});
 							break;
 						case 'IMAGE':
 							cf.thumbnail = 'framework/'+cf.filepath;
-							cf.updateMediaElement();
-							updateMedia();
 							break;
 						case 'AUDIO':
 							cf.thumbnail = 'img/audioicon.png';
-							cf.updateMediaElement();
-							updateMedia();
 							break;
 						case 'TEXT':
 							cf.thumbnail = 'img/texticon.png';
-							cf.updateMediaElement();
-							updateMedia();
 							break;
 						case 'DOCUMENT':
 							cf.thumbnail = 'img/docicon.png';
-							cf.updateMediaElement();
-							updateMedia();
 							break;
 						default: break;
 					}
@@ -310,7 +331,7 @@ function getDatabase()
 						indx.addFile(cf);
 					}
 					updateCases();
-					updateCaseFiles();
+					updateMedia();
 					updateReport();
 					loading(-1);
 				});

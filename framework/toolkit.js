@@ -186,7 +186,23 @@ function rand(n, add=1) {return Math.floor((Math.random()*n)+add);}
 
 function redirect(url) {window.location.replace(url);}
 
-function removeFromList(list, item) {for(var i=0; i<list.length; i++) {if(list[i] == item) {list.splice(i--,1);}}}
+function removeDuplicates(list)
+{
+	for(var i=0; i<list.length; i++)
+	{
+		for(var j=i+1; j<list.length; j++)
+		{
+			if(list[i]==list[j])
+			{
+				list.splice(j,1);
+				j--;
+			}
+		}
+	}
+	return list;
+}
+
+function removeFromList(list, item) {for(var i=0; i<list.length; i++) {if(list[i] == item) {list.splice(i,1); i--;}}}
 
 function tokenize(string, delim)
 {

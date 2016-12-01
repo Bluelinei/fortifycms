@@ -35,7 +35,7 @@
 <!--START quick-notify-->
   <div class="quick-notify hidden">
     <div class="left quick-notify-close point-cursor"><i class="fa fa-times-circle vertical-middle" aria-hidden="true"></i></div>
-    <div class="left quick-notify-content no-event"><p class="vertical-middle">Your files have been uploaded</p></div>
+    <div class="left quick-notify-content no-event"><p class="vertical-middle"></p></div>
   </div>
 <!--END quick-notify-->
 
@@ -50,7 +50,7 @@
       <img src="img/logo.png" class="logo"/>
 
       <nav>
-        <ul>
+        <ul class="no-select">
           <li id="search-button"><div>Search<i class="fa fa-search fa-lg right ten-margin-right"></i></div></li>
           <li><div>Recent<i class="fa fa-reply fa-lg right ten-margin-right"></i></div></li>
           <li id="nav-casebuilder"><div>Builder<i class="fa fa-pencil fa-lg right ten-margin-right"></i></div></li>
