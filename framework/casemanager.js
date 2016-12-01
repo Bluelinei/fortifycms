@@ -57,6 +57,7 @@ function updateCaseFiles()
 	pushStack('updateCaseFiles');
 	var len = casefiles.length;
 	for(var i=0; i<len; i++) {casefiles[i].checkState(); casefiles[i].updateMediaElement();}
+	updateMedia();
 	popStack();
 }
 
@@ -122,13 +123,11 @@ function newCaseFile(uploadedfile)
 		},
 		url: 'framework/fileupload.php', method: 'POST', data: f, processData: false, contentType: false,
 		success: function(response){
-			log('GET OBJECT: '+response);
 			var obj = JSON.parse(response);
 			for(var i=0; i<casefiles.length; i++)
 			{
 				if(casefiles[i].uid == obj.uid)
 				{
-					log('File is already uploaded and open!');
 					$('#li_'+loadingPlace.queue).remove();
 					notify('File '+uploadedfile.name+' is already open.', WARN_NOTE);
 					return;
@@ -142,11 +141,11 @@ function newCaseFile(uploadedfile)
 			cf.uploaddate = Number(obj.uploaddate);
 			cf.init();
 			$('#li_'+loadingPlace.queue).replaceWith(cf.mediaelement);
+			$('#li_'+loadingPlace.queue).remove();
 			switch(cf.filetype)
 			{
 				case 'VIDEO':
 					getVideoThumbnail(cf, function(response){
-						log(response);
 						cf.thumbnail = 'framework/'+response;
 						cf.updateMediaElement();
 						updateMedia();
@@ -247,13 +246,10 @@ function fortifyActiveCase()
 function updateReport()
 {
 	pushStack('updateReport');
-	$('#report-number').val('');
-	$('#report-nickname').val('');
-	$('#report-location').val('');
-	if(workingcase.casenum == '[New Case]' || workingcase.casenum == '[No Report Number]') $('#report-number').val('');
-	else $('#report-number').val(workingcase.casenum);
-	if(workingcase.nickname) $('#report-nickname').val(workingcase.nickname);
+	if(workingcase.casenum) $('#report-number').val(workingcase.casenum);
+	else $('#report-number').val('');
 	if(workingcase.location) $('#report-location').val(workingcase.location);
+	else $('#report-location').val('');
 	document.getElementById('myonoffswitch').checked = workingcase.admin;
 	$('#report-type').val(workingcase.type);
 	updateFileList();
@@ -278,8 +274,6 @@ function updateInfo()
 	pushStack('Case.updateInfo');
 	if($('#report-number').val()) workingcase.casenum = $('#report-number').val();
 	else workingcase.casenum = '';
-	if($('#report-nickname').val()) workingcase.nickname = $('#report-nickname').val();
-	else workingcase.nickname = '';
 	if($('#report-location').val()) workingcase.location = $('#report-location').val();
 	else workingcase.location = '';
 	workingcase.updateElement();
@@ -415,7 +409,7 @@ function removeFileFromCase(file)
 function addMedia(file)
 {
 	pushStack('addMedia');
-	$('#mediabrowser').append(file.mediaelement);
+	if(file.state != UNUSED) $('#mediabrowser').append(file.mediaelement);
 	updateMedia();
 	popStack();
 }
@@ -427,7 +421,9 @@ function updateMedia()
 	clearElement($('#mediabrowser'));
 	for(var i=0; i<len; i++)
 	{
+		if(casefiles[i].state == UNUSED) continue;
 		$('#mediabrowser').append(casefiles[i].mediaelement);
+		log(casefiles[i]);
 	}
 	popStack();
 }
@@ -461,9 +457,9 @@ function Case(uid)
 {
 	pushStack('Case');
 	this.uid = uid;
-	this.casenum;
+	this.casenum = '';
 	this.nickname = '';
-	this.location;
+	this.location = '';
 	this.files = [];
 	this.tags = [];
 	this.element;
@@ -493,8 +489,8 @@ Case.prototype.postCase = function() {
 	var f = new FormData();
 	f.append('uid',this.uid);
 	f.append('nickname',this.nickname);
-	f.append('reportnum',(this.casenum=='[No Report Number]'||this.casenum=='[New Case]'?'':this.casenum));
-	f.append('reportloc', (this.location==''?'':this.location));
+	f.append('reportnum',this.casenum);
+	f.append('reportloc', this.location);
 	f.append('reporttype',this.type);
 	f.append('reporttags',this.tags.join('<#>'));
 	var filelist = []
@@ -503,15 +499,8 @@ Case.prototype.postCase = function() {
 	for(var i=0; i<len; i++) {this.files[i].postFile();}
 	f.append('evidence',filelist.join(''));
 	f.append('admin',(this.admin?1:0));
-	$.ajax({
-		url:'framework/casepost.php',
-		method: 'POST',
-		data: f,
-		processData: false,
-		contentType: false,
-		success: function(response) {
+	ajax('framework/casepost.php', f, function(response) {
 			//log(response);
-		}
 	});
 	this.changeCase(false);
 	popStack();
@@ -522,7 +511,7 @@ Case.prototype.newElement = function() {
 	pushStack('Case.newElement');
 	var src = this;
 	this.element = $('<li>');
-	this.element.append('<div class="case-ref-id-wrapper seventy-per-wide ten-padding left point-cursor"><div class="case-ref-id '+this.uid+'_case_text">[No Case ID]</div></div>');
+	this.element.append('<div class="case-ref-id-wrapper seventy-per-wide ten-padding left point-cursor '+this.uid+'_case_text"><div class="case-ref-id">[No Case ID]</div></div>');
 	this.element.append('<div class="case-file-count twenty-per-wide ten-padding left _case_filelen">'+ this.files.length +'</div>');
 	this.element.append('<div class="pointer-mouse ten-per-wide left red-light text-center link-button case-delete-button-reference-class case-delete-button '+this.uid+'" style="padding: 8px"><i class="fa fa-minus-circle case-delete-button-reference-class" style="font-size:19px; color:#fff;" aria-hidden="true"></i></div>');
 	this.element.append('<div class="clear"></div>');
@@ -530,25 +519,26 @@ Case.prototype.newElement = function() {
 	this.element.on('click', function(event) {
 		if(event.target.className.indexOf('case-delete-button-reference-class')==-1) setAsActiveCase(c);
 	});
-	$(document).on('click', ('.'+this.uid), function(event) {
+	$(document).on('click', ('.'+c.uid), function(event) {
 		event.stopPropagation();
 		deleteCase(src);
 	});
-	this.element.find('.'+this.uid+'_case_text').on('click', function(e) {
-		log('Clicked on nickname');
-		c.editnick = true;
-		var ct = c.element.find('.'+this.uid+'_case_text');
+	this.element.find('.'+c.uid+'_case_text').on('click', function(e) {
+		if(c.editnick) return;
 		if(workingcase == c)
 		{
-			log('Should have changed');
-			ct.html('<input id="'+this.uid+'_nickin" type="text" />');
-			ct.html('CHANGED!');
+			e.stopPropagation();
+			c.editnick = true;
+			var ct = c.element.find('.'+c.uid+'_case_text');
+			ct.html('<input id="'+c.uid+'_nickin" type="text" class="case-nickname-input" value="'+c.nickname+'"/>');
+			$('#'+c.uid+'_nickin').focus();
+			$('#'+c.uid+'_nickin').select();
+			$('#'+c.uid+'_nickin').on('blur', function(e) {
+				c.nickname = $('#'+c.uid+'_nickin').val();
+				c.editnick = false;
+				updateCases();
+			});
 		}
-	});
-	this.element.find('#'+this.uid+'_nickin').on('blur', function(e) {
-		c.nickname = $('#'+this.uid+'_nickin').val();
-		c.editnick = false;
-		updateCases();
 	});
 	popStack();
 };
@@ -574,9 +564,9 @@ Case.prototype.updateHTML = function() {
 	pushStack('Case.updateHTML');
 	if(!this.editnick)
 	{
-		if(this.nickname) this.element.find('.'+this.uid+'_case_text').html(this.nickname);
-		else if(this.casenum) this.element.find('.'+this.uid+'_case_text').html(this.casenum);
-		else this.element.find('.'+this.uid+'_case_text').html('[No Case ID]');
+		if(this.nickname) this.element.find('.'+this.uid+'_case_text').html('<div class="case-ref-id">'+this.nickname+'</div>');
+		else if(this.casenum) this.element.find('.'+this.uid+'_case_text').html('<div class="case-ref-id">'+this.casenum+'</div>');
+		else this.element.find('.'+this.uid+'_case_text').html('<div class="case-ref-id">[No Case ID]</div>');
 	}
 	this.element.find('._case_filelen').html(this.files.length);
 	popStack();
@@ -639,11 +629,11 @@ function Casefile(file, uid)
 {
 	pushStack('CaseFile');
 	this.uid = uid;
-	this.name = file.name;
-	this.filetype = getFileType(file.type);
-	this.filepath;
-	this.filedate = file.lastModified;
-	this.uploaddate;
+	this.name = (file?file.name:'');
+	this.filetype = (file?getFileType(file.type):'');
+	this.filepath = '';
+	this.filedate = (file?file.lastModified:'');
+	this.uploaddate = 0;
 	this.element;
 	this.mediaelement;
 	this.thumbnail;
@@ -677,14 +667,12 @@ Casefile.prototype.postFile = function() {
 	fdata.append('file_path', this.filepath);
 	fdata.append('file_type', this.filetype);
 	fdata.append('upload_date', this.uploaddate);
+	fdata.append('lastmodified', this.filedate);
 	fdata.append('case_index', this.caseindex.join(''));
-	fdata.append('state', (this.state==UNFORT?0:1));
+	fdata.append('fortified', (this.state==UNFORT?0:1));
 
-	$.ajax({
-		url: 'framework/filepost.php', method: 'POST', data: fdata, processData: false, contentType: false,
-		success: function(response) {
-			log(response);
-		}
+	ajax('framework/filepost.php', fdata, function(response) {
+			//log(response);
 	});
 	popStack()
 }

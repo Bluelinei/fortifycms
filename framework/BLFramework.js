@@ -1,6 +1,6 @@
 //GLOBAL VARIABLES (MAINLY FOR DEBUGGING)
 
-const address = 'http://192.168.1.25/';
+const address = 'http://localhost/';
 
 var USER;
 $.ajax({
@@ -16,7 +16,7 @@ var databaseload = 0;
 function loading(v)
 {
 	databaseload+=v;
-	if(!databaseload) {$('#pageload-overlay').addClass('hidden'); log('Page Finished Loading')}
+	if(!databaseload) {$('#pageload-overlay').addClass('hidden'); log('Page Finished Loading'); updateReport();}
 }
 
 var workingcase;
@@ -130,7 +130,6 @@ function setEventListeners()
 	$('#fortify-button').on('click', fortifyActiveCase);
 	$('#new-case').on('click', newCase);
 	$('#report-number').on('input', updateInfo);
-	$('#report-nickname').on('input', updateInfo);
 	$('#report-location').on('input', updateInfo);
 	$('#report-tag').on('change', setTag);
 	$('#report-tag').val('SELECT TAG');
@@ -148,11 +147,15 @@ function setEventListeners()
 
 	//On Case change
 	$('#report-number').on('input', changeCase);
-	$('#report-nickname').on('input', changeCase);
 	$('#report-location').on('input', changeCase);
 	$('#report-tag').on('change', changeCase);
 	$('#report-type').on('change', changeCase);
 	$('#myonoffswitch').on('click', changeCase);
+
+	//KEYBOARD SHORTCUTS
+	$(document).on('keydown', function(e) {
+		if(e.keyCode==13||e.which==13) {$(':focus').blur();}
+	});
 }
 
 function getDatabase()
@@ -191,54 +194,119 @@ function getDatabase()
 			f = new FormData();
 			f.append('function', 'unfort');
 			ajax('framework/functions.php', f, function(response){
-
+				if(!response) return;
+				log('Unfortified: '+response);
+				var files = JSON.parse(response);
+				for(var i=0; i<files.length; i++)
+				{
+					var obj = files[i];
+					var cf = new Casefile(null, obj.uid);
+					cf.filepath = obj.filepath;
+					cf.filetype = obj.type;
+					cf.name = obj.nickname;
+					cf.officer = obj.user;
+					cf.uploaddate = Number(obj.uploaddate*1000);
+					cf.filedate = Number(obj.lastmodified*1000);
+					cf.caseindex = tokenizeUID(obj.caseindex);
+					cf.init();
+					switch(cf.filetype)
+					{
+						case 'VIDEO':
+							cf.thumbnail = 'framework/uploads/blueline_TN/dev/thumbs/'+cf.uid+'.png';
+							cf.updateMediaElement();
+							updateMedia();
+							break;
+						case 'IMAGE':
+							cf.thumbnail = 'framework/'+cf.filepath;
+							cf.updateMediaElement();
+							updateMedia();
+							break;
+						case 'AUDIO':
+							cf.thumbnail = 'img/audioicon.png';
+							cf.updateMediaElement();
+							updateMedia();
+							break;
+						case 'TEXT':
+							cf.thumbnail = 'img/texticon.png';
+							cf.updateMediaElement();
+							updateMedia();
+							break;
+						case 'DOCUMENT':
+							cf.thumbnail = 'img/docicon.png';
+							cf.updateMediaElement();
+							updateMedia();
+							break;
+						default: break;
+					}
+				}
 			});
 			//ONCE WE'RE DONE COMPILING THE EVIDENCE LIST, BEGIN LOADING ALL EVIDENCE
 			len = compiled.length;
 			for(var i=0; i<len; i++)
 			{
+				loading(1);
 				f = new FormData();
 				f.append('table', 'evidence');
 				f.append('function', 'get');
 				f.append('uid', compiled[i]);
-				loading(1);
 				ajax('framework/functions.php', f, function(response) {
-					var file;
+					log(response);
+					var obj;
 					try {
-						file = JSON.parse(response);
+						obj = JSON.parse(response);
 					} catch(e) {
-						log(response+' failed to load.');
+						log('Could not retrieve Casefile data from server: '+response);
 						loading(-1);
 						return;
 					}
-					var cf = new Casefile(file, file.uid);
-					cf.caseindex = tokenizeUID(file.caseindex);
-					cf.uploaddate = Number(file.uploaddate);
-					cf.name = file.nickname;
-					cf.officer = file.officer;
+					var cf = new Casefile(null, obj.uid);
+					cf.filepath = obj.filepath;
+					cf.filetype = obj.type;
+					cf.name = obj.nickname;
+					cf.officer = obj.user;
+					cf.uploaddate = Number(obj.uploaddate*1000);
+					cf.filedate = Number(obj.lastmodified*1000);
+					cf.caseindex = tokenizeUID(obj.caseindex);
+					cf.init();
 					switch(cf.filetype)
 					{
 						case 'VIDEO':
-							cf.thumbnail = 'framework/thumbs/'+cf.uid+'.png';
+							cf.thumbnail = 'framework/uploads/blueline_TN/dev/thumbs/'+cf.uid+'.png';
+							cf.updateMediaElement();
+							updateMedia();
 							break;
 						case 'IMAGE':
-							cf.thumbnail = 'framework/uploads/'+cf.filepath;
-							break;
-						case 'DOCUMENT':
-							cf.thumbnail = 'img/docicon.png';
-							break;
-						case 'TEXT':
-							cf.thumbnail = 'img/texticon.png';
+							cf.thumbnail = 'framework/'+cf.filepath;
+							cf.updateMediaElement();
+							updateMedia();
 							break;
 						case 'AUDIO':
 							cf.thumbnail = 'img/audioicon.png';
+							cf.updateMediaElement();
+							updateMedia();
 							break;
+						case 'TEXT':
+							cf.thumbnail = 'img/texticon.png';
+							cf.updateMediaElement();
+							updateMedia();
+							break;
+						case 'DOCUMENT':
+							cf.thumbnail = 'img/docicon.png';
+							cf.updateMediaElement();
+							updateMedia();
+							break;
+						default: break;
 					}
 
 					var caselen = cf.caseindex.length;
 					for(var j=0; j<caselen; j++)
 					{
 						var indx = getCaseById(cf.caseindex[j]);
+						if(!indx)
+						{
+							log('Indx returned null: '+cf.caseindex[j]);
+							continue;
+						}
 						indx.addFile(cf);
 					}
 					updateCases();
@@ -302,8 +370,8 @@ window.onload = function()
 {
 	loading(1);
 	getAPISupport();
+	loadINI();
 	getDatabase();
 	setEventListeners();
-	loadINI();
 	loading(-1);
 }
