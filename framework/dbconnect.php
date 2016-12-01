@@ -17,13 +17,29 @@ try{
 	$conn = new PDO("mysql:host=$hostname; port=$port; dbname=$database; charset=UTF8;", $username, $pass);
 } catch(PDOException $e) {getError($e);}
 
-function query($sql, $exarray, $fetchall=false)
+function query($sql, $exarray, $fetchall=false, $fetchassoc=true)
 {
 	global $conn;
-	$stmt = $conn->prepare($sql);
-	$stmt->execute($exarray);
-	if(!$fetchall) return $stmt->fetch(PDO::FETCH_ASSOC);  
-	else return $stmt->fetchAll(PDO::FETCH_ASSOC);
+	try {
+		$stmt = $conn->prepare($sql);
+		$stmt->execute($exarray);
+		if(!$fetchall)
+		{
+			if($fetchassoc) return $stmt->fetch(PDO::FETCH_ASSOC);
+			else return $stmt->fetch();
+		}
+		else return $stmt->fetchAll(PDO::FETCH_ASSOC);
+	} catch(PDOException $e) {getError($e);}
+}
+
+function update($sql, $exarray)
+{
+	global $conn;
+	try {
+		$stmt = $conn->prepare($sql);
+		$stmt->execute($exarray);
+		return;
+	} catch(PDOException $e) {getError($e);}
 }
 
 function getEvidenceByUID($uid) {return query("SELECT * FROM evidence WHERE uid=?",array($uid));}

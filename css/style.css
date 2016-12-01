@@ -612,13 +612,28 @@ h3.new-case:active{
 
 .case-ref-id{
   position: absolute;
-  height: 100%;
+  width:90%;
+  top:50%;
   left:50%;
-  transform: translateX(-50%);
+  transform: translate(-50%,-50%);
+  text-align:center;
 }
 
 .case-ref-id-wrapper {
   height: 100%;
+  margin: 0px;
+  overflow:hidden;
+}
+
+.case-nickname-input {
+  position: absolute;
+  width:90%;
+  left:50%;
+  transform: translateX(-50%);
+  background: none;
+  text-align: center;
+  border: none;
+  font-family: 'Aveni';
 }
 
 /** 04.00 Evidence Slider **/
@@ -670,9 +685,16 @@ h3.new-case:active{
   background: #648bba;
 }
 
+.media-block-wrapper {
+  margin: 40px;
+  padding: 0px;
+  max-height:80%;
+  overflow-y:auto;
+}
+
 .media-block{
-padding: 40px;
-margin: 0px;
+  height:100%;
+  width:100%;
 }
 
 .media-block li{
@@ -689,21 +711,6 @@ margin: 0px;
 .media-block li .block{
   height: 100%;
   width: 100%;
-}
-
-.media-block li .one{
-  background: url("../img/ev-1.png");
-  background-size: cover;
-}
-
-.media-block li .two{
-  background: url("../img/ev-2.png");
-  background-size: cover;
-}
-
-.media-block li .three{
-  background: url("../img/ev-3.png");
-  background-size: cover;
 }
 
 .green-border{
@@ -745,6 +752,7 @@ margin: 0px;
 }
 
 .media-block li .hidden{
+  position:absolute;
   display: none;
 }
 

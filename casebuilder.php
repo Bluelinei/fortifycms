@@ -30,17 +30,9 @@
 
     <!--REPORT QUESTION-->
                 <div class="report-question twenty-margin-bottom">
-                  <p class="one-wide report-question-header">What is the report number?</p>
-                  <input id="report-number" type="text" placeholder="Report Number" class="one-wide"/>
+                  <p class="one-wide report-question-header">What is the Report ID?</p>
+                  <input id="report-number" type="text" placeholder="Report ID" class="one-wide"/>
                 </div><!--END QUESTION-->
-
-<!--REPORT QUESTION-->
-            <div class="report-question twenty-margin-bottom">
-              <p class="one-wide report-question-header"> What is the report nickname?</i>
-</p>
-              <input id="report-nickname" type="text" placeholder="Report Nickname" class="one-wide">
-            </div><!--END QUESTION-->
-
 
   <!--REPORT QUESTION-->
               <div class="report-question twenty-margin-bottom">
@@ -174,7 +166,7 @@
       <div class="manager-container">
         <h2><p class="vertical-middle"><i class="fa fa-archive ten-margin-right" aria-hidden="true"></i>Case Manager</p></h2>
         <div style="height: 5px; background: #fff; width: 100%;"></div>
-        <h3 class="seventy-per-wide left ten-padding">Reference ID</h3>
+        <h3 class="seventy-per-wide left ten-padding">Case</h3>
         <h3 class="twenty-per-wide left ten-padding">Files</h3>
         <h3 class="ten-per-wide left new-case" style="padding: 8px" id="new-case"><i class="fa fa-plus-circle" style="font-size: 19px; color: #fff" aria-hidden="true"></i></h3>
         <div class="clear"></div>

@@ -3,12 +3,15 @@ const SHOW_CALLSTACK = false;
 const SHOW_LOGS = true;
 var callstack = [];
 
-function ajax(phpurl, f, func)
+function ajax(phpurl, f, func, errfunc=null)
 {
 	$.ajax({
 		url: phpurl, data: f, method: 'POST', processData: false, contentType: false,
 		success: function(response) {
 			func(response);
+		},
+		error: function(response) {
+			if(errfunc) errfunc(response);
 		}
 	});
 }
@@ -138,7 +141,7 @@ function login(user, pass)
 				loginNotify('Invalid login credentials');
 				document.getElementById('pass').value = '';
 			}
-		}
+		},
 	});
 }
 

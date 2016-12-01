@@ -8,7 +8,8 @@
       <div class="clear"></div>
     </div>
 
-
-    <ul id="mediabrowser" class="media-block">
-    </ul>
+    <div class="media-block-wrapper">
+      <ul id="mediabrowser" class="media-block">
+      </ul>
+    </div>
   </div><!--END Evidence Manager Overlay-->
