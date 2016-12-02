@@ -158,12 +158,8 @@ function newCaseFile(uploadedfile)
 			for(var i=0; i<cases.length; i++)
 			{
 				if(!cases[i].prelinkenable) continue;
-				if(cf.filedate>cases[i].prelinkstart&&cf.filedate<cases[i].prelinkend)
-				{
-					cases[i].addFile(cf);
-				}
+				if(cf.filedate>cases[i].prelinkstart&&cf.filedate<cases[i].prelinkend) cases[i].addFile(cf);
 			}
-			cf.updateMediaElement();
 			updateMedia();
 			cf.postFile();
 		}
@@ -629,7 +625,7 @@ function Casefile(file, uid)
 	this.name = (file?file.name:'');
 	this.filetype = (file?getFileType(file.type):'');
 	this.filepath = '';
-	this.filedate = getUnixTime((file?file.lastModified:''));
+	this.filedate = getUnixTime((file?file.lastModified:0));
 	this.uploaddate = 0;
 	this.lastmodified = 0;
 	this.element;
@@ -660,7 +656,6 @@ Casefile.prototype.postFile = function() {
 	fdata.append('lastmodified', this.filedate);
 	fdata.append('case_index', removeDuplicates(this.caseindex).join(''));
 	fdata.append('fortified', (this.caseindex.length?1:0));
-	log(this.name+' | '+this.caseindex.length);
 
 	ajax('framework/filepost.php', fdata, function(response) {
 			//log(response);
@@ -699,7 +694,7 @@ Casefile.prototype.newMediaElement = function() {
 	e.push('<div id="'+this.uid+'_addremove" style="display: inline;"><i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i></div>');
 	e.push('</div></div>');
 	inner.append(e.join(''));
-	inner.css({'background-image': 'url("'+address+'/img/loading.gif")',
+	inner.css({'background-image': 'url("'+address+'img/loading.gif")',
 		'background-repeat': 'no-repeat',
 		'background-size': '50px 50px',
 		'background-position': 'center'
@@ -796,9 +791,10 @@ Casefile.prototype.setButtonFunction = function() {
 }
 
 Casefile.prototype.updateThumb = function() {
-	$("#"+this.uid+"_blockelement").css({'background-image': (this.thumbnail ? ('url('+address+this.thumbnail+')') : ('url("'+address+'/img/loading.gif")')),
+	if(!this.thumbnail) return;
+	$("#"+this.uid+"_blockelement").css({'background-image': 'url('+address+this.thumbnail+')',
 		'background-repeat': 'no-repeat',
-		'background-size': (this.thumbnail?'cover':'50px 50px'),
+		'background-size': 'cover',
 		'background-position': 'center'
 	});
 }

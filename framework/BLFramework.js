@@ -27,6 +27,8 @@ const caselistElementID = '#case-list';
 const filelistElementID = '#evidence-inventory';
 const fileuploadElementID = '#fileupload';
 
+var session;
+
 
 //MISC Functions
 
@@ -156,13 +158,11 @@ function setEventListeners()
 		if(prelink.editing) return;
 		$('.timeset-wrapper').removeClass('hidden');
 		prelink.edit('start');
-		log(prelink.editing);
 	});
 	$('.time-end-button').on('click', function(e) {
 		if(prelink.editing) return;
 		$('.timeset-wrapper').removeClass('hidden');
 		prelink.edit('end');
-		log(prelink.editing);
 	});
 	$('.prelink-toggle').on('click', function(e) {
 		prelink.enable();
@@ -207,6 +207,18 @@ function setEventListeners()
 	$('.clock-year').html(d.getFullYear());
 	$('.clock-month').html(d.getMonth());
 	$('.clock-day').html(d.getDate());
+	$('.minute-num').val(d.getMinutes());
+	var hour = d.getHours();
+	if(hour>12)
+	{
+		$('.hour-num').val(hour-12);
+		$('.meridiem').html('PM');
+	}
+	else
+	{
+		$('.hour-num').val(hour);
+		$('.meridiem').html('AM');
+	}
 	switch(d.getMonth())
 	{
 		case 0:
@@ -289,6 +301,7 @@ function getDatabase()
 				for(var i=0; i<files.length; i++)
 				{
 					var obj = files[i];
+					log('Working on '+obj.nickname);
 					var cf = new Casefile(null, obj.uid);
 					cf.filepath = obj.filepath;
 					cf.filetype = obj.type;
@@ -301,13 +314,8 @@ function getDatabase()
 					switch(cf.filetype)
 					{
 						case 'VIDEO':
-							var src = cf;
-							ajax('framework/getsession.php', null, function(response) {
-								var session = JSON.parse(response);
-								src.thumbnail = 'framework/uploads/'+session.agency+'/'+session.user+'/thumbs/'+src.uid+'.png';
-								cf.updateMediaElement();
-								updateMedia();
-							});
+							cf.thumbnail = 'framework/uploads/'+session.agency+'/'+session.user+'/thumbs/'+cf.uid+'.png';
+							updateMedia();
 							break;
 						case 'IMAGE':
 							cf.thumbnail = 'framework/'+cf.filepath;
@@ -323,7 +331,6 @@ function getDatabase()
 							break;
 						default: break;
 					}
-					cf.updateMediaElement();
 					updateMedia();
 				}
 			});
@@ -357,12 +364,8 @@ function getDatabase()
 					switch(cf.filetype)
 					{
 						case 'VIDEO':
-							var src = cf;
-							ajax('framework/getsession.php', null, function(response) {
-								var session = JSON.parse(response);
-								src.thumbnail = 'framework/uploads/'+session.agency+'/'+session.user+'/thumbs/'+src.uid+'.png';
-								updateMedia();
-							});
+							cf.thumbnail = 'framework/uploads/'+session.agency+'/'+session.user+'/thumbs/'+cf.uid+'.png';
+							updateMedia();
 							break;
 						case 'IMAGE':
 							cf.thumbnail = 'framework/'+cf.filepath;
@@ -450,9 +453,12 @@ function loadINI()
 window.onload = function()
 {
 	loading(1);
-	getAPISupport();
-	loadINI();
-	getDatabase();
-	setEventListeners();
-	loading(-1);
+	ajax('framework/getsession.php', null, function(response) {
+		session = JSON.parse(response);
+		getAPISupport();
+		loadINI();
+		getDatabase();
+		setEventListeners();
+		loading(-1);
+	});
 }

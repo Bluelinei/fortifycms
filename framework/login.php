@@ -14,6 +14,7 @@ function login($conn)
 		$_SESSION['user'] = $_POST['user'];
 		$_SESSION['name'] = $return['name'];
 		$_SESSION['agency'] = $return['agency'];
+		session_write_close();
 		echo true;
 	}
 	else echo false;

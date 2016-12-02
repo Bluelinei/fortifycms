@@ -1,6 +1,6 @@
 <?php
 
-if(!isset($_SESSION)) session_start();
+include 'session.php';
 
 echo json_encode($_SESSION);
 
