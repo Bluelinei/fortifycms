@@ -268,139 +268,139 @@ function getDatabase()
 	loading(1);
 	var compiled = [];
 	ajax('framework/functions.php', f, function(response) {
-			//log(response);
-			var o = JSON.parse(response);
-			if(o.length)
-			{
-				//LOAD CASES
-				var len = o.length;
-				for(var i=0; i<len; i++)
-				{
-					var x = o[i];
-					var c = new Case(x.uid);
-					c.nickname = x.nickname;
-					c.casenum = (x.casenum?x.casenum:'[No Report Number]');
-					c.location = x.location;
-					c.type = (x.type=='undefined'?'':x.type);
-					c.tags = tokenize(x.tags, '<#>');
-					c.admin = (x.admin=="1"?true:false);
-					c.officer = x.officer;
-					var evidence = tokenizeUID(x.evidence);
-
-					//FROM CASES COMPILE LIST OF ALL FILES THAT NEED TO BE LOADED
-					compiled = concatLists(compiled, evidence);
-				}
-			}
-			setAsActiveCase(cases[0]);
-			//GET FILES FROM DATABASE THAT ARE NOT FORTIFIED
-			f = new FormData();
-			f.append('function', 'unfort');
-			ajax('framework/functions.php', f, function(response){
-				if(!response) return;
-				var files = JSON.parse(response);
-				for(var i=0; i<files.length; i++)
-				{
-					var obj = files[i];
-					log('Working on '+obj.nickname);
-					var cf = new Casefile(null, obj.uid);
-					cf.filepath = obj.filepath;
-					cf.filetype = obj.type;
-					cf.name = obj.nickname;
-					cf.officer = obj.user;
-					cf.uploaddate = Number(obj.uploaddate);
-					cf.filedate = Number(obj.lastmodified);
-					cf.caseindex = tokenizeUID(obj.caseindex);
-					cf.init();
-					switch(cf.filetype)
-					{
-						case 'VIDEO':
-							cf.thumbnail = 'framework/uploads/'+session.agency+'/'+session.user+'/thumbs/'+cf.uid+'.png';
-							updateMedia();
-							break;
-						case 'IMAGE':
-							cf.thumbnail = 'framework/'+cf.filepath;
-							break;
-						case 'AUDIO':
-							cf.thumbnail = 'img/audioicon.png';
-							break;
-						case 'TEXT':
-							cf.thumbnail = 'img/texticon.png';
-							break;
-						case 'DOCUMENT':
-							cf.thumbnail = 'img/docicon.png';
-							break;
-						default: break;
-					}
-					updateMedia();
-				}
-			});
-			//ONCE WE'RE DONE COMPILING THE EVIDENCE LIST, BEGIN LOADING ALL EVIDENCE
-			len = compiled.length;
+		log(response);
+		var o = JSON.parse(response);
+		if(o.length)
+		{
+			//LOAD CASES
+			var len = o.length;
 			for(var i=0; i<len; i++)
 			{
-				loading(1);
-				f = new FormData();
-				f.append('table', 'evidence');
-				f.append('function', 'get');
-				f.append('uid', compiled[i]);
-				ajax('framework/functions.php', f, function(response) {
-					var obj;
-					try {
-						obj = JSON.parse(response);
-					} catch(e) {
-						log('Could not retrieve Casefile data from server: '+response);
-						loading(-1);
-						return;
-					}
-					var cf = new Casefile(null, obj.uid);
-					cf.filepath = obj.filepath;
-					cf.filetype = obj.type;
-					cf.name = obj.nickname;
-					cf.officer = obj.user;
-					cf.uploaddate = Number(obj.uploaddate);
-					cf.filedate = Number(obj.lastmodified);
-					cf.caseindex = tokenizeUID(obj.caseindex);
-					cf.init();
-					switch(cf.filetype)
-					{
-						case 'VIDEO':
-							cf.thumbnail = 'framework/uploads/'+session.agency+'/'+session.user+'/thumbs/'+cf.uid+'.png';
-							updateMedia();
-							break;
-						case 'IMAGE':
-							cf.thumbnail = 'framework/'+cf.filepath;
-							break;
-						case 'AUDIO':
-							cf.thumbnail = 'img/audioicon.png';
-							break;
-						case 'TEXT':
-							cf.thumbnail = 'img/texticon.png';
-							break;
-						case 'DOCUMENT':
-							cf.thumbnail = 'img/docicon.png';
-							break;
-						default: break;
-					}
+				var x = o[i];
+				var c = new Case(x.uid);
+				c.nickname = x.nickname;
+				c.casenum = (x.casenum?x.casenum:'[No Report Number]');
+				c.location = x.location;
+				c.type = (x.type=='undefined'?'':x.type);
+				c.tags = tokenize(x.tags, '<#>');
+				c.admin = (x.admin=="1"?true:false);
+				c.officer = x.officer;
+				var evidence = tokenizeUID(x.evidence);
 
-					var caselen = cf.caseindex.length;
-					for(var j=0; j<caselen; j++)
-					{
-						var indx = getCaseById(cf.caseindex[j]);
-						if(!indx)
-						{
-							log('Indx returned null: '+cf.caseindex[j]);
-							continue;
-						}
-						indx.addFile(cf);
-					}
-					updateCases();
-					updateMedia();
-					updateReport();
-					loading(-1);
-				});
+				//FROM CASES COMPILE LIST OF ALL FILES THAT NEED TO BE LOADED
+				compiled = concatLists(compiled, evidence);
 			}
-			loading(-1);
+		}
+		setAsActiveCase(cases[0]);
+		//GET FILES FROM DATABASE THAT ARE NOT FORTIFIED
+		f = new FormData();
+		f.append('function', 'unfort');
+		ajax('framework/functions.php', f, function(response){
+			if(!response) return;
+			var files = JSON.parse(response);
+			for(var i=0; i<files.length; i++)
+			{
+				var obj = files[i];
+				log('Working on '+obj.nickname);
+				var cf = new Casefile(null, obj.uid);
+				cf.filepath = obj.filepath;
+				cf.filetype = obj.type;
+				cf.name = obj.nickname;
+				cf.officer = obj.user;
+				cf.uploaddate = Number(obj.uploaddate);
+				cf.filedate = Number(obj.lastmodified);
+				cf.caseindex = tokenizeUID(obj.caseindex);
+				cf.init();
+				switch(cf.filetype)
+				{
+					case 'VIDEO':
+						cf.thumbnail = 'framework/uploads/'+session.agency+'/'+session.user+'/thumbs/'+cf.uid+'.png';
+						updateMedia();
+						break;
+					case 'IMAGE':
+						cf.thumbnail = 'framework/'+cf.filepath;
+						break;
+					case 'AUDIO':
+						cf.thumbnail = 'img/audioicon.png';
+						break;
+					case 'TEXT':
+						cf.thumbnail = 'img/texticon.png';
+						break;
+					case 'DOCUMENT':
+						cf.thumbnail = 'img/docicon.png';
+						break;
+					default: break;
+				}
+				updateMedia();
+			}
 		});
+		//ONCE WE'RE DONE COMPILING THE EVIDENCE LIST, BEGIN LOADING ALL EVIDENCE
+		len = compiled.length;
+		for(var i=0; i<len; i++)
+		{
+			loading(1);
+			f = new FormData();
+			f.append('table', 'evidence');
+			f.append('function', 'get');
+			f.append('uid', compiled[i]);
+			ajax('framework/functions.php', f, function(response) {
+				var obj;
+				try {
+					obj = JSON.parse(response);
+				} catch(e) {
+					log('Could not retrieve Casefile data from server: '+response);
+					loading(-1);
+					return;
+				}
+				var cf = new Casefile(null, obj.uid);
+				cf.filepath = obj.filepath;
+				cf.filetype = obj.type;
+				cf.name = obj.nickname;
+				cf.officer = obj.user;
+				cf.uploaddate = Number(obj.uploaddate);
+				cf.filedate = Number(obj.lastmodified);
+				cf.caseindex = tokenizeUID(obj.caseindex);
+				cf.init();
+				switch(cf.filetype)
+				{
+					case 'VIDEO':
+						cf.thumbnail = 'framework/uploads/'+session.agency+'/'+session.user+'/thumbs/'+cf.uid+'.png';
+						updateMedia();
+						break;
+					case 'IMAGE':
+						cf.thumbnail = 'framework/'+cf.filepath;
+						break;
+					case 'AUDIO':
+						cf.thumbnail = 'img/audioicon.png';
+						break;
+					case 'TEXT':
+						cf.thumbnail = 'img/texticon.png';
+						break;
+					case 'DOCUMENT':
+						cf.thumbnail = 'img/docicon.png';
+						break;
+					default: break;
+				}
+
+				var caselen = cf.caseindex.length;
+				for(var j=0; j<caselen; j++)
+				{
+					var indx = getCaseById(cf.caseindex[j]);
+					if(!indx)
+					{
+						log('Indx returned null: '+cf.caseindex[j]);
+						continue;
+					}
+					indx.addFile(cf);
+				}
+				updateCases();
+				updateMedia();
+				updateReport();
+				loading(-1);
+			});
+		}
+		loading(-1);
+	});
 }
 
 function loadINI()
