@@ -897,12 +897,14 @@ Prelink.prototype.setTime = function() {
 	if(this.editing=='start')
 	{
 		workingcase.prelinkstart = getUnixTime(time.valueOf());
-		$('.prelink-start').html('<p>Start Time<br>'+time.toLocaleString()+'</p>');
+		var h = time.getHours();
+		$('.prelink-start').html('<p>Start Time<br>'+time.toLocaleDateString()+', '+(h>12?h-12:h)+':'+(time.getMinutes()>10?time.getMinutes():'0'+time.getMinutes())+' '+this.meridiem+'</p>');
 	}
 	else if(this.editing=='end')
 	{
 		workingcase.prelinkend = getUnixTime(time.valueOf());
-		$('.prelink-end').html('<p>End Time<br>'+time.toLocaleString()+'</p>');
+		var h = time.getHours();
+		$('.prelink-end').html('<p>End Time<br>'+time.toLocaleDateString()+', '+(h>12?h-12:h)+':'+(time.getMinutes()>10?time.getMinutes():'0'+time.getMinutes())+' '+this.meridiem+'</p>');
 	}
 }
 
