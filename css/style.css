@@ -430,7 +430,7 @@ body{
   position: relative;
   float: left;
   height: 100%;
-  width: 20%;
+  width: calc(20% - 4px);
 }
 
 .set-calendar {
@@ -483,8 +483,14 @@ body{
   font-size: 30px;
   background: none;
   border: none;
-  color: #fff;
 }
+
+.time-input[type=number] {
+  -moz-appearance: textfield;
+  color:#fff;
+}
+.time-input -webkit-inner-spin-button { -webkit-appearance: none;}
+.time-input -webkit-outer-spin-button { -webkit-appearance: none;}
 
 .timeset-button {
   height: 100%;

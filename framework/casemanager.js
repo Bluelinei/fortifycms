@@ -154,6 +154,15 @@ function newCaseFile(uploadedfile)
 					break;
 				default: break;
 			}
+			//Check for prelinks
+			for(var i=0; i<cases.length; i++)
+			{
+				if(!cases[i].prelinkenable) continue;
+				if(cf.filedate>cases[i].prelinkstart&&cf.filedate<cases[i].prelinkend)
+				{
+					cases[i].addFile(cf);
+				}
+			}
 			cf.updateMediaElement();
 			updateMedia();
 			cf.postFile();
@@ -235,6 +244,8 @@ function updateReport()
 	else $('#report-location').val('');
 	document.getElementById('myonoffswitch').checked = workingcase.admin;
 	$('#report-type').val(workingcase.type);
+	if(workingcase.prelinkenable) $('.prelink-toggle-text').html('Disable Pre-Link');
+	else $('.prelink-toggle-text').html('Enable Pre-Link');
 	updateFileList();
 	updateTags();
 	updateMedia();
@@ -451,9 +462,11 @@ function Case(uid)
 	this.type = 'No Report';
 	this.officer;
 	this.changed = false;
-	this.activetime = -1;
 	this.DELETED = false;
 	this.editnick = false;
+	this.prelinkstart;
+	this.prelinkend;
+	this.prelinkenable = false;
 
 	cases.push(this);
 	this.newElement();
@@ -616,8 +629,9 @@ function Casefile(file, uid)
 	this.name = (file?file.name:'');
 	this.filetype = (file?getFileType(file.type):'');
 	this.filepath = '';
-	this.filedate = (file?file.lastModified:'');
+	this.filedate = getUnixTime((file?file.lastModified:''));
 	this.uploaddate = 0;
+	this.lastmodified = 0;
 	this.element;
 	this.mediaelement;
 	this.thumbnail;
@@ -633,14 +647,6 @@ Casefile.prototype.init = function()
 	this.newMediaElement();
 	this.newElement();
 	this.setButtonFunction();
-
-	var send;
-	for(var i=0; i<cases.length; i++)
-	{
-		if(cases[i].activetime==-1||cases[i].activetime>this.filedate) continue;
-		if(!send||cases[i].activetime>send.activetime) send=cases[i];
-	}
-	if(send) send.addFile(this);
 }
 
 Casefile.prototype.postFile = function() {
@@ -653,7 +659,8 @@ Casefile.prototype.postFile = function() {
 	fdata.append('upload_date', this.uploaddate);
 	fdata.append('lastmodified', this.filedate);
 	fdata.append('case_index', removeDuplicates(this.caseindex).join(''));
-	fdata.append('fortified', (this.caseindex?1:0));
+	fdata.append('fortified', (this.caseindex.length?1:0));
+	log(this.name+' | '+this.caseindex.length);
 
 	ajax('framework/filepost.php', fdata, function(response) {
 			//log(response);
@@ -667,7 +674,6 @@ Casefile.prototype.truncName = function(y, n){
 
 Casefile.prototype.newElement = function() {
 	pushStack('CaseFile.newElement');
-	//var d = new Date(this.uploaddate);
 	this.element = $('<li>');
 	this.element.addClass('casefile-element');
 	this.element.append('<p class="left ten-padding bold">'+this.filetype+'</p>');
@@ -867,21 +873,55 @@ ReportTag.prototype.newButton = function() {
 
 function Prelink()
 {
-	this.start;
-	this.end;
 	this.editing;
 	this.year;
 	this.month;
 	this.day;
 	this.hour;
 	this.minute;
-	this.meridien;
+	this.meridiem;
 }
 
 Prelink.prototype.setTime = function() {
+	var d = new Date();
+	this.year = d.getFullYear();
+	this.month = d.getMonth();
+	this.day = d.getDate();
+	this.hour = Number($('.hour-num').val());
+	this.minute	= Number($('.minute-num').val());
+	this.meridiem = $('.meridiem').html();
+	if(this.meridiem=='AM'&&this.hour==12) {this.hour = 0;}
+	else if(this.meridiem=='PM'&&this.hour!=12) {this.hour += 12;}
 
+	var time = new Date(this.year, this.month, this.day, this.hour, this.minute);
+
+	if(this.editing=='start')
+	{
+		workingcase.prelinkstart = getUnixTime(time.valueOf());
+		$('.prelink-start').html('<p>Start Time<br>'+time.toLocaleString()+'</p>');
+	}
+	else if(this.editing=='end')
+	{
+		workingcase.prelinkend = getUnixTime(time.valueOf());
+		$('.prelink-end').html('<p>End Time<br>'+time.toLocaleString()+'</p>');
+	}
 }
 
 Prelink.prototype.edit = function(time) {
 	this.editing = time;
+}
+
+Prelink.prototype.enable = function() {
+	if(workingcase.prelinkenable)
+	{
+		workingcase.prelinkenable = false;
+		$('.prelink-toggle-text').html('Enable Pre-Link');
+		notify('Pre-Link Disabled');
+	}
+	else
+	{
+		workingcase.prelinkenable = true;
+		$('.prelink-toggle-text').html('Disable Pre-Link');
+		notify('Pre-Link Enabled');
+	}
 }

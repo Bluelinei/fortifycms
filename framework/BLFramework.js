@@ -152,11 +152,26 @@ function setEventListeners()
 	$('#myonoffswitch').on('click', changeCase);
 
 	//Timeset
-	$('.timeset-button').on('click', function(e) {
+	$('.time-start-button').on('click', function(e) {
+		if(prelink.editing) return;
 		$('.timeset-wrapper').removeClass('hidden');
+		prelink.edit('start');
+		log(prelink.editing);
 	});
+	$('.time-end-button').on('click', function(e) {
+		if(prelink.editing) return;
+		$('.timeset-wrapper').removeClass('hidden');
+		prelink.edit('end');
+		log(prelink.editing);
+	});
+	$('.prelink-toggle').on('click', function(e) {
+		prelink.enable();
+	});
+
 	$('.timeset-confirm').on('click', function(e) {
 		$('.timeset-wrapper').addClass('hidden');
+		prelink.setTime();
+		prelink.editing = undefined;
 	});
 	$('.meridiem').on('click', function(e) {
 		var src = $(e.target);
@@ -186,6 +201,51 @@ function setEventListeners()
 		//log(e.keyCode);
 		if(e.keyCode==13||e.which==13) {$(':focus').blur();}
 	});
+	
+	//TEMP SETTINGS STUFF
+	var d = new Date();
+	$('.clock-year').html(d.getFullYear());
+	$('.clock-month').html(d.getMonth());
+	$('.clock-day').html(d.getDate());
+	switch(d.getMonth())
+	{
+		case 0:
+			$('.clock-month').html('Jan');
+			break;
+		case 1:
+			$('.clock-month').html('Feb');
+			break;
+		case 2:
+			$('.clock-month').html('Mar');
+			break;
+		case 3:
+			$('.clock-month').html('Apr');
+			break;
+		case 4:
+			$('.clock-month').html('May');
+			break;
+		case 5:
+			$('.clock-month').html('Jun');
+			break;
+		case 6:
+			$('.clock-month').html('Jul');
+			break;
+		case 7:
+			$('.clock-month').html('Aug');
+			break;
+		case 8:
+			$('.clock-month').html('Sep');
+			break;
+		case 9:
+			$('.clock-month').html('Oct');
+			break;
+		case 10:
+			$('.clock-month').html('Nov');
+			break;
+		case 11:
+			$('.clock-month').html('Dec');
+			break;
+	}
 }
 
 function getDatabase()

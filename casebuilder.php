@@ -109,7 +109,10 @@
               <div class="timeset-wrapper hidden">
                 <div class="one-wide" style="position: relative; display: block;background: rgba(255,187,187,0.8);color:#fff;height: 100%;font-size: 12px;text-align: center;">
                   <div class="clock-container">
-                    <div class="time"><input class="vertical-middle time-input hour-num" type="number" value="12" min="0" max="13"/></div>
+                    <div class="time time-spin"><input class="vertical-middle time-input hour-num" type="number" value="12" min="0" max="13"/></div>
+                  </div>
+                  <div class="clock-container" style="width:18px;">
+                    <div class="time"><p class="vertical-middle no-select" style="font-size: 40px; padding-bottom:10px;">:</p></div>
                   </div>
                   <div class="clock-container">
                     <div class="time"><input class="vertical-middle time-input minute-num" type="number" value="23" min="-1" max="60"/></div>
@@ -117,9 +120,9 @@
                   <div class="clock-container">
                     <div class="time"><div class="vertical-middle meridiem no-select">AM</div></div>
                   </div>
-                  <div class="clock-container">
+                  <div class="clock-container no-select" style="overflow:hidden;">
                     <div class="set-calendar" style="position:relative;height:100%;width:100%; top:50%; transform: translateY(-50%);">
-                      <i class="fa fa-calendar fa-lg" style=";display: inline-block; font-size: 30px; bottom:10%; margin-right: 10px;"></i>
+                      <i class="fa fa-calendar fa-lg" style=";display: inline-block; font-size: 30px; bottom:10px; margin-right: 10px;"></i>
                       <div style="display: inline-block; width:30%; top:50%; transform:translateY(-50%);">
                         <div class="clock-month" style="text-align: center;">Nov</div>
                         <div class="clock-day">16</div>
@@ -136,14 +139,14 @@
               </div>
 
               <div class="prelink-block" style="z-index: 51;">
-                <div class="three-wide timeset-button prelink-start">
-                  <div class="vertical-middle no-select"><p>Start<br>11:52am</p></div>
+                <div class="three-wide timeset-button time-start-button">
+                  <div class="vertical-middle no-select prelink-start"><p>Start Time<br>[Click to Set]</p></div>
                 </div>
-                <div class="three-wide timeset-button prelink-end">
-                  <div class="vertical-middle no-select"><p>End<br>[Click to Set]</p></div>
+                <div class="three-wide timeset-button time-end-button">
+                  <div class="vertical-middle no-select prelink-end"><p>End Time<br>[Click to Set]</p></div>
                 </div>
                 <div class="three-wide prelink-toggle">
-                  <div class="vertical-middle no-select">Enable Pre-Link</div>
+                  <div class="vertical-middle no-select prelink-toggle-text">Enable Pre-Link</div>
                 </div>
               </div>
             </div>
