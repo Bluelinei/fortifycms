@@ -17,7 +17,7 @@ try{
 	$conn = new PDO("mysql:host=$hostname; port=$port; dbname=$database; charset=UTF8;", $username, $pass);
 } catch(PDOException $e) {getError($e);}
 
-function query($sql, $exarray, $fetchall=false, $fetchassoc=true)
+function query($sql, $exarray=null, $fetchall=false, $fetchassoc=true)
 {
 	global $conn;
 	try {
@@ -32,7 +32,7 @@ function query($sql, $exarray, $fetchall=false, $fetchassoc=true)
 	} catch(PDOException $e) {getError($e);}
 }
 
-function update($sql, $exarray)
+function update($sql, $exarray=null)
 {
 	global $conn;
 	try {

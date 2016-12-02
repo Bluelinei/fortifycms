@@ -759,7 +759,10 @@ Casefile.prototype.doHide = function() {
 Casefile.prototype.setButtonFunction = function() {
 	var ref = this;
 	$(document).on('click', '.'+this.uid+'_addfilebutton', clickHandler(addFileToCase, this));
-	$(document).on('click', '.'+this.uid+"_removebutton", clickHandler(removeFileFromCase, this));
+	$(document).on('click', '.'+this.uid+'_removebutton', clickHandler(removeFileFromCase, this));
+	$(document).on('click', '.'+this.uid+'_view-button', function(e){
+		href('video.php?view='+encodeURIComponent(ref.filepath)+'&type=mp4');
+	});
 	if(this.filetype == 'VIDEO')
 	{
 		$(document).on('mouseenter', '.'+ref.uid+'_view-button', function(e){

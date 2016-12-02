@@ -6,11 +6,12 @@ tinymce.init({
 });
 </script>
 
-<?php //if(!isset($_GET['view'])||!isset($_GET['type'])) header('Location: http://68.169.178.232/index.php?user='+USER); ?>
+<?php if(!isset($_GET['view'])||!isset($_GET['type'])) header('Location: http://68.169.178.232/index.php'); ?>
 
   <script src="framework/videoplayer/video.js"></script>
 
 <!--START Content-pane-->
+  <div style="display:none;"><div id="getViewFromURL"><?php echo $_GET['view']?></div><div id="getTypeFromURL"><?php echo $_GET['type'] ?></div></div>
   <div class="content-pane" id="page-body" style="overflow: auto;">
 <!--START video container main-->
     <div class="video-main-container">
@@ -20,7 +21,6 @@ tinymce.init({
 <!--START video box-->
         <div style="margin-bottom: -2px;">
           <video id="video" style="width: 100%;" class="point-cursor" autoplay>
-            <source src="framework/uploads/<?php echo $_GET['view'].".".$_GET['type'] ?>" type="video/<?php echo $_GET['type'] ?>">
           </video>
 
 <!--START video control container-->
@@ -217,10 +217,13 @@ tinymce.init({
           <div class="video-associate-add-button"><i class="fa fa-plus-circle" aria-hidden="false"></i></div>
 
         </div>
-
-
-
       </div><!--END video sidebar inner -->
     </div><!--END video sidebar container-->
     <div class="clear"></div>
+    <script>
+      var url = decodeURIComponent($('#getViewFromURL').html());
+      var type = decodeURIComponent($('#getTypeFromURL').html());
+      log(url);
+      $('#video').html('<source src="framework/'+url+'" type="video/'+type+'"/>');
+    </script>
 <?php require 'footer.php'; ?>
