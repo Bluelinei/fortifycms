@@ -3,7 +3,7 @@
 $hostname=	'localhost';
 $port=		'3306';
 $username=	'user';
-$pass=		'VGUZzusFJwf2sZFF';
+$pass=		'';
 $database=	'fortify';
 $conn;
 
