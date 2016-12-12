@@ -673,7 +673,7 @@ Casefile.prototype.newElement = function() {
 	this.element.addClass('casefile-element');
 	this.element.append('<p class="left ten-padding bold">'+this.filetype+'</p>');
 	this.element.append('<div class="delete-icon link-button point-cursor '+this.uid+'_removebutton"><i class="fa fa-minus-circle" aria-hidden="true"></i></div>');
-	this.element.append('<div class="view-icon link-button point-cursor '+this.uid+'_view-button"><i class="fa fa-eye" aria-hidden="true"></i></div>');
+	if(this.filetype == 'VIDEO'|| this.filetype == 'IMAGE') this.element.append('<div class="view-icon link-button point-cursor '+this.uid+'_view-button"><i class="fa fa-eye" aria-hidden="true"></i></div>');
 	this.element.append('<p class="right ten-padding">'+ new Date(this.filedate*1000).toLocaleDateString() + '</p>');
 	this.element.append('<div class="clear"></div>');
 	this.element.id = this.uid+"_case";
@@ -690,7 +690,7 @@ Casefile.prototype.newMediaElement = function() {
 	e.push('<div class="ev-curtain"><div class="vertical-middle">');
 	e.push('<h3 id="'+this.uid+'_name">'+this.truncName(15, 12)+'</h3>');
 	e.push('<p>'+d.toLocaleDateString()+'</p><br>');
-	e.push('<div class="'+this.uid+'_view-button" style="display: inline;"><i class="fa fa-eye point-cursor" aria-hidden="true" style="margin-right: 30px;"></i></div>');
+	if(this.filetype == 'VIDEO'|| this.filetype == 'IMAGE') e.push('<div class="'+this.uid+'_view-button" style="display: inline;"><i class="fa fa-eye point-cursor" aria-hidden="true" style="margin-right: 30px;"></i></div>');
 	e.push('<div id="'+this.uid+'_addremove" style="display: inline;"><i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i></div>');
 	e.push('</div></div>');
 	inner.append(e.join(''));
@@ -760,11 +760,11 @@ Casefile.prototype.setButtonFunction = function() {
 	var ref = this;
 	$(document).on('click', '.'+this.uid+'_addfilebutton', clickHandler(addFileToCase, this));
 	$(document).on('click', '.'+this.uid+'_removebutton', clickHandler(removeFileFromCase, this));
-	$(document).on('click', '.'+this.uid+'_view-button', function(e){
-		href('video.php?view='+encodeURIComponent(ref.filepath)+'&type=mp4');
-	});
 	if(this.filetype == 'VIDEO')
 	{
+		$(document).on('click', '.'+this.uid+'_view-button', function(e){
+			href('video.php?view='+encodeURIComponent(ref.filepath));
+		});
 		$(document).on('mouseenter', '.'+ref.uid+'_view-button', function(e){
 			clearPreview();
 			$('.media-preview-overlay').append('<video id="overlay-video" style="position: absolute; top:0%; right:0%; max-width: 100%; max-height: 100%;" autoplay></video>');
@@ -881,11 +881,53 @@ function Prelink()
 	this.meridiem;
 }
 
+Prelink.prototype.monthToNum = function(month) {
+	switch(month)
+	{
+		case 'Jan':
+			return 0;
+			break;
+		case 'Feb':
+			return 1;
+			break;
+		case 'Mar':
+			return 2;
+			break;
+		case 'Apr':
+			return 3;
+			break;
+		case 'May':
+			return 4;
+			break;
+		case 'Jun':
+			return 5;
+			break;
+		case 'Jul':
+			return 6;
+			break;
+		case 'Aug':
+			return 7;
+			break;
+		case 'Sep':
+			return 8;
+			break;
+		case 'Oct':
+			return 9;
+			break;
+		case 'Nov':
+			return 10;
+			break;
+		case 'Dec':
+			return 11;
+			break;
+	}
+}
+
 Prelink.prototype.setTime = function() {
 	var d = new Date();
-	this.year = d.getFullYear();
-	this.month = d.getMonth();
-	this.day = d.getDate();
+	this.year = Number($('.clock-year').html());
+	this.month = this.monthToNum($('.clock-month').html());
+	this.day = Number($('.clock-day').html());
 	this.hour = Number($('.hour-num').val());
 	this.minute	= Number($('.minute-num').val());
 	this.meridiem = $('.meridiem').html();
@@ -910,6 +952,17 @@ Prelink.prototype.setTime = function() {
 
 Prelink.prototype.edit = function(time) {
 	this.editing = time;
+	if(!workingcase.prelinkstart||!workingcase.prelinkend) return;
+	var d;
+	if(time=='start') d = new Date(workingcase.prelinkstart*1000);
+	else d = new Date(workingcase.prelinkend*1000);
+	$('.clock-year').html(d.getFullYear());
+	$('.clock-month').html(readMonth(d.getMonth()));
+	$('.clock-day').html(d.getDate());
+	var hour = d.getHours();
+	$('.hour-num').val((hour>11?hour-12:hour));
+	$('.minute-num').val(d.getMinutes());
+	$('.meridiem').html((hour>12?'PM':'AM'));
 }
 
 Prelink.prototype.enable = function() {

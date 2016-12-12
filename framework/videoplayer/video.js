@@ -1,3 +1,7 @@
+var playheadgrab = false;
+var video;
+var bar_timer;
+
 function formatTimecode(t)
 {
 	var h,m,s,hs,ms,ss;
@@ -13,19 +17,22 @@ function formatTimecode(t)
 	return hs+":"+ms+":"+ss;
 }
 
+function videoPlay()
+{
+	video.play();
+	$('#video-toggle').attr('src', 'img/pause-button.png');
+}
+
+function videoPause()
+{
+	video.pause();
+	$('#video-toggle').attr('src', 'img/play-button.png');
+}
+
 function togglePlayPause()
 {
-	var video = document.getElementById('video');
-	if(video.paused)
-	{
-		video.play();
-		$('#video-toggle').attr('src', 'img/pause-button.png');
-	}
-	else
-	{
-		video.pause();
-		$('#video-toggle').attr('src', 'img/play-button.png');
-	}
+	if(video.paused) videoPlay();
+	else videoPause();
 }
 
 function toggleAdvanced()
@@ -37,10 +44,9 @@ function toggleAdvanced()
 
 function setCurTime()
 {
-	var video = document.getElementById('video');
-	$('#video-curtime').text(formatTimecode(video.currentTime));
-	$('#video-duration').text(formatTimecode(video.duration-video.currentTime));
-	$('.progress-bar').css('width', Math.floor((video.currentTime/video.duration)*98)+'%');
+	$('#video-curtime').html(formatTimecode(video.currentTime));
+	$('#video-duration').html('- '+formatTimecode(video.duration-video.currentTime));
+	$('.progress-bar').css('width', (video.currentTime/video.duration)*98+'%');
 }
 
 function setEventListeners()
@@ -52,8 +58,43 @@ function setEventListeners()
 		$('#video-toggle').attr('src', 'img/play-button.png');
 	});
 	$('#advanced-menu-button').on('click', toggleAdvanced);
+	$('.play-head').on('mousedown', function(e) {playheadgrab=true; videoPause();});
+	$(document).on('mouseup', function(e) {playheadgrab=false;});
+	$(document).on('mousemove', function(e) {
+		if(playheadgrab)
+		{
+			var bar = $('.progress-bar-base');
+			var width = bar.width();
+			var offset = Math.floor(bar.offset().left);
+			var mousepos = e.clientX - offset;
+			var progress = ((mousepos>width?width:mousepos)/width);
+			$('.progress-bar').css({'width':((progress*98)+'%')});
+			video.currentTime = video.duration*progress;
+		}
+	});
+	$('.progress-bar-base').on('mousedown', function(e) {
+		playheadgrab = true;
+		videoPause();
+		var bar = $('.progress-bar-base');
+		var width = bar.width();
+		var offset = Math.floor(bar.offset().left);
+		var mousepos = e.clientX - offset;
+		var progress = ((mousepos>width?width:mousepos)/width);
+		$('.progress-bar').css({'width':((progress*98)+'%')});
+		video.currentTime = video.duration*progress;
+	});
+	$('.video-overlay-area').on('mouseenter', function(e) {
+		$('.video-control-container').removeClass('hidden');
+	});
+	$('.video-overlay-area').on('mouseleave', function(e) {
+		$('.video-control-container').addClass('hidden');
+	});
+	$(document).on('click', '#page-body', function(e) {
+		$('.notification-button-container').addClass('hidden');
+	});
 }
 
 window.onload = function(){
 	setEventListeners();
+	video = document.getElementById('video');
 }

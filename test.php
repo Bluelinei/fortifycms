@@ -1,119 +1,14 @@
-
-
-
-<div id="video-container">
-  <!-- Video -->
-  <video id="video" width="640" height="365">
-
-    <source src="video/test-video.mp4" type="video/mp4">
-    <p>
-      Your browser doesn't support HTML5 video.
-      <a href="videos/mikethefrog.mp4">Download</a> the video instead.
-    </p>
-  </video>
-  <!-- Video Controls -->
-  <div id="video-controls">
-    <button type="button" id="play-pause">Play</button>
-    <input type="range" id="seek-bar" value="0">
-    <button type="button" id="mute">Mute</button>
-    <input type="range" id="volume-bar" min="0" max="1" step="0.1" value="1">
-    <button type="button" id="full-screen">Full-Screen</button>
-  </div>
-</div>
-
-<script>
-window.onload = function() {
-
-  // Video
-  var video = document.getElementById("video");
-
-  // Buttons
-  var playButton = document.getElementById("play-pause");
-  var muteButton = document.getElementById("mute");
-  var fullScreenButton = document.getElementById("full-screen");
-
-  // Sliders
-  var seekBar = document.getElementById("seek-bar");
-  var volumeBar = document.getElementById("volume-bar");
-
-}
-
-// Event listener for the play/pause button
-playButton.addEventListener("click", function() {
-  if (video.paused == true) {
-    // Play the video
-    video.play();
-
-    // Update the button text to 'Pause'
-    playButton.innerHTML = "Pause";
-  } else {
-    // Pause the video
-    video.pause();
-
-    // Update the button text to 'Play'
-    playButton.innerHTML = "Play";
-  }
-});
-
-// Event listener for the mute button
-muteButton.addEventListener("click", function() {
-  if (video.muted == false) {
-    // Mute the video
-    video.muted = true;
-
-    // Update the button text
-    muteButton.innerHTML = "Unmute";
-  } else {
-    // Unmute the video
-    video.muted = false;
-
-    // Update the button text
-    muteButton.innerHTML = "Mute";
-  }
-});
-
-// Event listener for the full-screen button
-fullScreenButton.addEventListener("click", function() {
-  if (video.requestFullscreen) {
-    video.requestFullscreen();
-  } else if (video.mozRequestFullScreen) {
-    video.mozRequestFullScreen(); // Firefox
-  } else if (video.webkitRequestFullscreen) {
-    video.webkitRequestFullscreen(); // Chrome and Safari
-  }
-});
-
-// Event listener for the seek bar
-seekBar.addEventListener("change", function() {
-  // Calculate the new time
-  var time = video.duration * (seekBar.value / 100);
-
-  // Update the video time
-  video.currentTime = time;
-});
-
-// Update the seek bar as the video plays
-video.addEventListener("timeupdate", function() {
-  // Calculate the slider value
-  var value = (100 / video.duration) * video.currentTime;
-
-  // Update the slider value
-  seekBar.value = value;
-});
-
-// Pause the video when the slider handle is being dragged
-seekBar.addEventListener("mousedown", function() {
-  video.pause();
-});
-
-// Play the video when the slider handle is dropped
-seekBar.addEventListener("mouseup", function() {
-  video.play();
-});
-
-// Event listener for the volume bar
-volumeBar.addEventListener("change", function() {
-  // Update the video volume
-  video.volume = volumeBar.value;
-});
-</script>
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="datestyle.css"/>
+	<script src="http://code.jquery.com/jquery-3.1.1.js"></script>
+	<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<body>
+	<div class="dateobj"></div>
+	<script>
+		var d = $( ".dateobj" ).datepicker();
+	</script>
+</body>
+</html>

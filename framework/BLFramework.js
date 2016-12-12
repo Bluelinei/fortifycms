@@ -124,6 +124,57 @@ function changeCase()
 	workingcase.changeCase(true);
 }
 
+function updateDate(date)
+{
+	var darray = tokenize(date, '/');
+	$('.clock-year').html(darray[2]);
+	$('.clock-month').html(readMonth(Number(darray[0]-1)));
+	$('.clock-day').html(darray[1]);
+}
+
+function readMonth(m)
+{
+	switch(m)
+	{
+		case 0:
+			return 'Jan';
+			break;
+		case 1:
+			return 'Feb';
+			break;
+		case 2:
+			return 'Mar';
+			break;
+		case 3:
+			return 'Apr';
+			break;
+		case 4:
+			return 'May';
+			break;
+		case 5:
+			return 'Jun';
+			break;
+		case 6:
+			return 'Jul';
+			break;
+		case 7:
+			return 'Aug';
+			break;
+		case 8:
+			return 'Sep';
+			break;
+		case 9:
+			return 'Oct';
+			break;
+		case 10:
+			return 'Nov';
+			break;
+		case 11:
+			return 'Dec';
+			break;
+	}
+}
+
 function setEventListeners()
 {
 	$('#openfilebrowser').on('change', handleFileSelect);
@@ -156,13 +207,13 @@ function setEventListeners()
 	//Timeset
 	$('.time-start-button').on('click', function(e) {
 		if(prelink.editing) return;
-		$('.timeset-wrapper').removeClass('hidden');
 		prelink.edit('start');
+		$('.timeset-wrapper').removeClass('hidden');
 	});
 	$('.time-end-button').on('click', function(e) {
 		if(prelink.editing) return;
-		$('.timeset-wrapper').removeClass('hidden');
 		prelink.edit('end');
+		$('.timeset-wrapper').removeClass('hidden');
 	});
 	$('.prelink-toggle').on('click', function(e) {
 		prelink.enable();
@@ -170,6 +221,7 @@ function setEventListeners()
 
 	$('.timeset-confirm').on('click', function(e) {
 		$('.timeset-wrapper').addClass('hidden');
+		$('.dateobj').addClass('hidden');
 		prelink.setTime();
 		prelink.editing = undefined;
 	});
@@ -195,6 +247,10 @@ function setEventListeners()
 	$('.time-input').on('focus', function(e) {
 		$(e.target).select();
 	});
+	$('.set-calendar').on('click', function(e) {
+		if($('.dateobj').hasClass('hidden')) $('.dateobj').removeClass('hidden');
+		else $('.dateobj').addClass('hidden');
+	});
 
 	//KEYBOARD SHORTCUTS
 	$(document).on('keydown', function(e) {
@@ -205,7 +261,7 @@ function setEventListeners()
 	//TEMP SETTINGS STUFF
 	var d = new Date();
 	$('.clock-year').html(d.getFullYear());
-	$('.clock-month').html(d.getMonth());
+	$('.clock-month').html(readMonth(d.getMonth()));
 	$('.clock-day').html(d.getDate());
 	$('.minute-num').val(d.getMinutes());
 	var hour = d.getHours();
@@ -218,45 +274,6 @@ function setEventListeners()
 	{
 		$('.hour-num').val(hour);
 		$('.meridiem').html('AM');
-	}
-	switch(d.getMonth())
-	{
-		case 0:
-			$('.clock-month').html('Jan');
-			break;
-		case 1:
-			$('.clock-month').html('Feb');
-			break;
-		case 2:
-			$('.clock-month').html('Mar');
-			break;
-		case 3:
-			$('.clock-month').html('Apr');
-			break;
-		case 4:
-			$('.clock-month').html('May');
-			break;
-		case 5:
-			$('.clock-month').html('Jun');
-			break;
-		case 6:
-			$('.clock-month').html('Jul');
-			break;
-		case 7:
-			$('.clock-month').html('Aug');
-			break;
-		case 8:
-			$('.clock-month').html('Sep');
-			break;
-		case 9:
-			$('.clock-month').html('Oct');
-			break;
-		case 10:
-			$('.clock-month').html('Nov');
-			break;
-		case 11:
-			$('.clock-month').html('Dec');
-			break;
 	}
 }
 
@@ -301,7 +318,6 @@ function getDatabase()
 			for(var i=0; i<files.length; i++)
 			{
 				var obj = files[i];
-				log('Working on '+obj.nickname);
 				var cf = new Casefile(null, obj.uid);
 				cf.filepath = obj.filepath;
 				cf.filetype = obj.type;

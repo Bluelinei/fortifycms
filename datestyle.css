@@ -1,0 +1,87 @@
+@import url("css/style.css");
+
+.dateobj {
+	position: absolute;
+	text-align: center;
+	color: #fff;
+	text-shadow: 0px 1px 0px #333;
+	background: #500;
+	user-select: none;
+	-ms-user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	bottom: 0%;
+	right:10%;
+	transition: all 0.2s ease;
+}
+
+.dateobj.hidden {
+	opacity: 0;
+	pointer-events: none;
+}
+
+.dateobj td {
+	padding: 5px;
+	background: #d99;
+	transition: all 0.2s ease;
+	cursor: pointer;
+}
+
+.dateobj td:hover {
+	transition: all 0s;
+	background: #ebb;
+}
+
+.dateobj a {
+	width: 100%;
+	height: 100%;
+	font-size: 24px;
+	text-decoration: none;
+	text-shadow: 0px 1px 0px #333;
+	color: #fff;
+}
+
+.ui-datepicker-header {
+	margin-bottom: 10px;
+}
+
+.ui-datepicker-title {
+	margin-top: 10px;
+}
+
+.ui-datepicker-prev {
+	position: absolute;
+	display: inline;
+	width:100%;
+	height: 100%;
+	left:0%;
+	margin-left: 10px;
+	text-align: left;
+}
+
+.ui-datepicker-next {
+	position: absolute;
+	display: inline;
+	width:100%;
+	right:0%;
+	margin-right: 10px;
+	text-align: right;
+}
+
+.ui-datepicker-month {
+	margin-right: 10px;
+	border: none;
+	cursor: pointer;
+	background: rgba(255,255,255,0.5);
+	color: #fff;
+	text-shadow: 0px 1px 0px #333;
+}
+
+.ui-datepicker-year {
+	margin-left: 10px;
+	border: none;
+	cursor: pointer;
+	background: rgba(255,255,255,0.5);
+	color: #fff;
+	text-shadow: 0px 1px 0px #333;
+}

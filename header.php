@@ -15,7 +15,8 @@
     <link href="css/style.css?v=<?php echo sha1_file("css/style.css");?>" rel="stylesheet" type="text/css" />
     <script src="https://use.fontawesome.com/47f9a4e330.js"></script>
 
-    <script src="./framework/jquery3.1.1.js"></script>
+    <script src="http://code.jquery.com/jquery-3.1.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="./framework/toolkit.js?v=<?php echo sha1_file("framework/toolkit.js");?>"></script>
     <script src='//cdn.tinymce.com/4/tinymce.min.js'></script>
     <script src='./framework/notify.js?v=<?php echo sha1_file("framework/notify.js");?>'></script>

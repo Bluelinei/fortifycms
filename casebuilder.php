@@ -2,6 +2,7 @@
 
     <script src="./framework/casemanager.js?v=<?php echo sha1_file("framework/casemanager.js");?>"></script>
     <script src="./framework/BLFramework.js?v=<?php echo sha1_file("framework/BLFramework.js");?>"></script>
+    <link rel="stylesheet" href="datestyle.css"/>
 
 <!--START Content-pane-->
     <div class="content-pane" id="page-body">
@@ -107,6 +108,9 @@
             <div class="prelink-wrapper">
 
               <div class="timeset-wrapper hidden">
+                <div class="datepicker-wrapper">
+                  <div class="dateobj hidden"></div>
+                </div> 
                 <div class="one-wide" style="position: relative; display: block;background: rgba(255,187,187,0.8);color:#fff;height: 100%;font-size: 12px;text-align: center;">
                   <div class="clock-container">
                     <div class="time time-spin"><input class="vertical-middle time-input hour-num" type="number" value="12" min="0" max="13"/></div>
@@ -197,5 +201,18 @@
     $('#overlay-video').empty();
     $('#overlay-video').remove();
     $('#overlay-image').attr('src','');
+  });
+  $('.dateobj').datepicker({
+    nextText: '',
+    prevText: '',
+    changeMonth: true,
+    changeYear: true,
+    yearRange: '1970:+5',
+    gotoCurrent: true,
+    monthNamesShort: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    onSelect: function(r) {
+      updateDate(r);
+      $('.dateobj').addClass('hidden');
+    }
   });
 </script>
