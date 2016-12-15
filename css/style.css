@@ -1022,13 +1022,14 @@ h3.new-case:active{
 }
 
 .advanced-toolbar-inner{
-  margin: 0px auto;
-  width: 90%;
+  margin: 0px 40px;
+  width: 100%;
 }
 
 .advanced-tool-spacer{
   float: left;
-  width: 14.285%;
+  width: auto;
+  margin-right: 100px;
 }
 
 .advanced-tool{
@@ -1038,6 +1039,12 @@ h3.new-case:active{
   display: inline-block;
   font-size: 10px;
   padding: 10px;
+}
+
+.advanced-tool.selected {
+  transition: all 0s;
+  background: #696;
+  color: #fff;
 }
 
 .advanced-tool-img{
@@ -1053,6 +1060,10 @@ h3.new-case:active{
 .advanced-tool-img img{
   display: inline;
   width: 20px;
+}
+
+.playback-speed {
+  transition: all 0.2s ease;
 }
 
 /**05.05video comment container**/

@@ -1,6 +1,86 @@
 var playheadgrab = false;
 var video;
 var bar_timer;
+var audio;
+
+const BACK = 0;
+const FWRD = 1;
+
+function checkAPI()
+{
+	try {
+		window.AudioContext = window.AudioContext||window.webkitAudioContext;
+		audio = new AudioContext();
+	} catch(e) {
+		alert('The Web Audio API is not supported by your browser. Fortify is recommended for use in the most current versions of the Firefox and Google Chrome web browsers.')
+	}
+}
+
+function resetPlaybackButtons()
+{
+	$('.normal-speed').removeClass('selected');
+	$('.2-faster').removeClass('selected');
+	$('.4-faster').removeClass('selected');
+	$('.8-faster').removeClass('selected');
+	$('.2-slower').removeClass('selected');
+	$('.4-slower').removeClass('selected');
+	$('.8-slower').removeClass('selected');
+}
+
+function setPlaybackSpeed(trg)
+{
+	log(video.currentTime);
+	resetPlaybackButtons();
+	if(trg.hasClass('normal-speed'))
+	{
+		video.playbackRate = 1;
+		$('.normal-speed').addClass('selected');
+	}
+	else if(trg.hasClass('2-faster'))
+	{
+		video.playbackRate = 2;
+		$('.2-faster').addClass('selected');
+	}
+	else if(trg.hasClass('4-faster'))
+	{
+		video.playbackRate = 4;
+		$('.4-faster').addClass('selected');
+	}
+	else if(trg.hasClass('8-faster'))
+	{
+		video.playbackRate = 8;
+		$('.8-faster').addClass('selected');
+	}
+	else if(trg.hasClass('2-slower'))
+	{
+		video.playbackRate = 0.5;
+		$('.2-slower').addClass('selected');
+	}
+	else if(trg.hasClass('4-slower'))
+	{
+		video.playbackRate = 0.25;
+		$('.4-slower').addClass('selected');
+	}
+	else if(trg.hasClass('8-slower'))
+	{
+		video.playbackRate = 0.125;
+		$('.8-slower').addClass('selected');
+	}
+}
+
+function stepFrame(num)
+{
+	if(num)
+	{
+		videoPause();
+		video.currentTime += 0.04;
+	}
+	else
+	{
+		videoPause();
+		video.currentTime -= 0.04;
+	}
+}
 
 function formatTimecode(t)
 {
@@ -58,7 +138,7 @@ function setEventListeners()
 		$('#video-toggle').attr('src', 'img/play-button.png');
 	});
 	$('#advanced-menu-button').on('click', toggleAdvanced);
-	$('.play-head').on('mousedown', function(e) {playheadgrab=true; videoPause();});
+	$('.play-head').on('mousedown', function(e) {playheadgrab=true;});
 	$(document).on('mouseup', function(e) {playheadgrab=false;});
 	$(document).on('mousemove', function(e) {
 		if(playheadgrab)
@@ -74,7 +154,6 @@ function setEventListeners()
 	});
 	$('.progress-bar-base').on('mousedown', function(e) {
 		playheadgrab = true;
-		videoPause();
 		var bar = $('.progress-bar-base');
 		var width = bar.width();
 		var offset = Math.floor(bar.offset().left);
@@ -92,9 +171,16 @@ function setEventListeners()
 	$(document).on('click', '#page-body', function(e) {
 		$('.notification-button-container').addClass('hidden');
 	});
+	$('.playback-speed').on('click', function(e) {
+		setPlaybackSpeed($(e.target));
+	})
+	$('.step-forward-frame').on('click', function(e){stepFrame(FWRD);});
+	$('.step-back-frame').on('click', function(e){stepFrame(BACK);});
 }
 
 window.onload = function(){
+	checkAPI();
 	setEventListeners();
 	video = document.getElementById('video');
+	setPlaybackSpeed($('.normal-speed'));
 }

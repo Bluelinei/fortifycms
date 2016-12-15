@@ -73,7 +73,7 @@ tinymce.init({
         </div><!--END video box-->
 
 <!--START advanced tool bar (hidden until revealed by gear button)-->
-        <div class="advanced-toolbar-container hidden">
+        <div class="advanced-toolbar-container hidden no-select">
           <div class="advanced-toolbar-inner">
             <div class="advanced-tool-spacer">
               <div class="advanced-tool text-bold">Trim Tool</div>
@@ -87,21 +87,20 @@ tinymce.init({
               <div class="advanced-tool-img"><img src="img/zoom-minus.png" /></div>
             </div>
             <div class="advanced-tool-spacer">
-              <div class="advanced-tool-img"><img src="img/camera-icon.png" /></div>
+              <div class="advanced-tool-img video-screenshot"><img src="img/camera-icon.png" /></div>
             </div>
             <div class="advanced-tool-spacer">
-              <div class="advanced-tool text-bold">x2</div>
-              <div class="advanced-tool text-bold">x4</div>
-              <div class="advanced-tool text-bold">x8</div>
+              <div class="advanced-tool text-bold playback-speed 8-slower">.8</div>
+              <div class="advanced-tool text-bold playback-speed 4-slower">.4</div>
+              <div class="advanced-tool text-bold playback-speed 2-slower">.2</div>
+              <div class="advanced-tool text-bold playback-speed normal-speed">Default</div>
+              <div class="advanced-tool text-bold playback-speed 2-faster">x2</div>
+              <div class="advanced-tool text-bold playback-speed 4-faster">x4</div>
+              <div class="advanced-tool text-bold playback-speed 8-faster">x8</div>
             </div>
-            <div class="advanced-tool-spacer">
-              <div class="advanced-tool text-bold">.2</div>
-              <div class="advanced-tool text-bold">.4</div>
-              <div class="advanced-tool text-bold">.8</div>
-            </div>
-            <div class="advanced-tool-spacer">
-              <div class="advanced-tool text-bold">< Step</div>
-              <div class="advanced-tool text-bold">Step ></div>
+            <div class="advanced-tool-spacer" style="margin-right:0;">
+              <div class="advanced-tool text-bold step-back-frame">< Step</div>
+              <div class="advanced-tool text-bold step-forward-frame">Step ></div>
             </div>
             <div class="clear"></div>
           </div>
