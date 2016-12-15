@@ -772,6 +772,7 @@ h3.new-case:active{
 .overlay-container{
   background: rgba(18,18,25,0.9);
   width: 40%;
+  overflow:hidden;
   position: absolute;
   right: 0;
   z-index: 500;
@@ -816,7 +817,6 @@ h3.new-case:active{
 }
 
 .media-block-wrapper {
-  margin: 40px;
   padding: 0px;
   max-height:80%;
   overflow-y:auto;
@@ -924,6 +924,52 @@ h3.new-case:active{
   background-size: 50px 50px;
 }
 
+.evidence-block-size{
+  width: 100%;
+  height: 90%;
+}
+
+/**Shelf Tag**/
+
+.media-block-shelf-tag{
+  height: 100%;
+  width: 100%;
+}
+
+.media-block-shelf-tag h2{
+  padding: 10px 40px;
+  background: rgba(255,255,255,0.1);
+}
+
+.media-block-shelf-tag h2 label{
+  color: #fff;
+  float: right;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.shelf-tag-questions, .shelf-tag-photo{
+  color: #fff;
+  padding: 40px;
+  text-align: center;
+}
+
+.shelf-tag-questions{
+  background: rgba(255,255,255,0.2);
+}
+
+.shelf-tag-questions input[type="text"]{
+  border: 0;
+  margin-bottom: 3px;
+  padding: 10px;
+  width: 100%;
+}
+
+.shelf-tag-photo .photo-placeholder{
+  font-size: 90px;
+  margin-bottom: 20px;
+  text-align: center;
+}
 
 /** 05.00 Video Page**/
 
