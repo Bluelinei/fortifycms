@@ -2,7 +2,7 @@
 
 $hostname=	'localhost';
 $port=		'3306';
-$username=	'user';
+$username=	'root';
 $pass=		'';
 $database=	'fortify';
 $conn;
