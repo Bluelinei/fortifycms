@@ -196,6 +196,10 @@ function setEventListeners()
 		workingcase.activetime = getUnixTime();
 		notify('Case Active: '+workingcase.activetime);
 	});
+	$('#shelf-tag-button').on('click', function(e) {
+		$('.media-block-evidence').addClass('trans-y-up');
+		$('.media-block-shelf-tag').addClass('trans-y-up');
+	});
 
 	//On Case change
 	$('#report-number').on('input', changeCase);
