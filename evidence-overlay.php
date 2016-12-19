@@ -21,8 +21,7 @@
         </div>
       </div>
 
-
-
+<!--SHELF TAG BLOCK-->
         <div class="media-block-shelf-tag transition-ease">
           <h2>
             <div id="close-media-browser" class="close left point-cursor text-center"><i class="vertical-middle fa fa-close" style="font-size: 20px;"></i></div>
@@ -34,11 +33,13 @@
             <input type="text" placeholder="Item Name">
             <input type="text" placeholder="Item Color">
             <input type="text" placeholder="Number of Items">
+            <input type="submit" value="Manager"><input type="submit" value="Active Case">
           </div>
           <div class="two-wide shelf-tag-photo">
             <i class="fa fa-picture-o photo-placeholder" aria-hidden="true"></i>
             <div class="point-cursor upload text-center"><p class="vertical-middle">Add Photo</p></div>
           </div>
           <div class="clear"></div>
-      </div>
+          <textarea name="description" class="shelf-tag-description"></textarea>
+      </div><!--END shelftag block-->
   </div><!--END Evidence Manager Overlay-->
