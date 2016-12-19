@@ -959,7 +959,7 @@ h3.new-case:active{
 }
 
 .shelf-tag-questions{
-  background: rgba(255,255,255,0.2);
+//  background: rgba(255,255,255,0.2);
 }
 
 .trans-y-up{
@@ -977,6 +977,12 @@ h3.new-case:active{
   font-size: 90px;
   margin-bottom: 20px;
   text-align: center;
+}
+
+.shelf-tag-description{
+  height: 200px;
+  padding: 20px;
+  width: 100%;
 }
 
 /** 05.00 Video Page**/
