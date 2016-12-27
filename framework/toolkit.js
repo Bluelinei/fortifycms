@@ -3,12 +3,12 @@ const SHOW_CALLSTACK = false;
 const SHOW_LOGS = true;
 var callstack = [];
 
-function ajax(phpurl, f, func, errfunc=null)
+function ajax(phpurl, f=null, func=null, errfunc=null)
 {
 	$.ajax({
 		url: phpurl, data: f, method: 'POST', processData: false, contentType: false,
 		success: function(response) {
-			func(response);
+			if(func) func(response);
 		},
 		error: function(response) {
 			if(errfunc) errfunc(response);
@@ -58,6 +58,15 @@ function getFileType(file) //Gets the file type based on supplied MIME type.
 	else if(!file.indexOf('text')) return 'TEXT';
 	else if(!file.indexOf('image')) return 'IMAGE';
 	else return 'DOCUMENT';
+}
+
+function getScreenshot(src, time)
+{
+	var f = new FormData;
+	f.append('function', 'capture');
+	f.append('source', src);
+	f.append('time', time);
+	f.append('output', '');
 }
 
 function getUnixTime(time) //Return the number of seconds since the Unix Epoch
@@ -135,7 +144,11 @@ function login(user, pass)
 		contentType: false,
 		success: function(response) {
 			log(response);
-			if(response) href('casebuilder.php');
+			if(response=='login') href('casebuilder.php');
+			else if(response=='2fa')
+			{
+				href('loginauth.php');
+			}
 			else
 			{
 				loginNotify('Invalid login credentials');

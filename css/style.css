@@ -47,6 +47,16 @@ body{
   overflow-x: hidden;
 }
 
+.link {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.link:hover{
+  text-decoration: underline;
+  color: #339;
+}
+
 .point-cursor:hover{
   cursor: pointer !important;
 }

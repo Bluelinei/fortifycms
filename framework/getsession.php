@@ -1,6 +1,6 @@
 <?php
 
-include 'session.php';
+require 'session.php';
 
 echo json_encode($_SESSION);
 

@@ -9,7 +9,14 @@ $conn;
 
 error_reporting(E_ALL);
 
-include 'session.php';
+require_once 'session.php';
+
+//Definitions
+define("tMINUTE",60);
+define("tHOUR",3600);
+define("tDAY",86400);
+define("tMONTH",2592000);
+define("tYEAR",31536000);
 
 function getError($e) {die($e->getMessage());}
 

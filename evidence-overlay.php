@@ -24,22 +24,21 @@
 <!--SHELF TAG BLOCK-->
         <div class="media-block-shelf-tag transition-ease">
           <h2>
-            <div id="close-media-browser" class="close left point-cursor text-center"><i class="vertical-middle fa fa-close" style="font-size: 20px;"></i></div>
+            <div id="return-to-evidence" class="close left point-cursor text-center"><i class="vertical-middle fa fa-chevron-up" style="font-size: 20px;"></i></div>
             <label>Shelf Tag</label>
             <div class="clear"></div>
           </h2>
-
           <div class="two-wide shelf-tag-questions">
-            <input type="text" placeholder="Item Name">
-            <input type="text" placeholder="Item Color">
-            <input type="text" placeholder="Number of Items">
-            <input type="submit" value="Manager"><input type="submit" value="Active Case">
+            <input id="shelf-item-name" type="text" placeholder="Item Name">
+            <input id="shelf-item-color" type="text" placeholder="Item Color">
+            <input id="shelf-item-num" type="text" placeholder="Number of Items">
+            <input id="shelf-to-manager" type="submit" value="Manager"><input id="shelf-to-case" type="submit" value="Active Case">
           </div>
           <div class="two-wide shelf-tag-photo">
             <i class="fa fa-picture-o photo-placeholder" aria-hidden="true"></i>
-            <div class="point-cursor upload text-center"><p class="vertical-middle">Add Photo</p></div>
+            <div id="shelf-item-image" class="point-cursor upload text-center"><p class="vertical-middle">Add Photo</p></div>
           </div>
           <div class="clear"></div>
-          <textarea name="description" class="shelf-tag-description"></textarea>
+          <textarea id="shelf-item-desc" name="description" class="shelf-tag-description"></textarea>
       </div><!--END shelftag block-->
   </div><!--END Evidence Manager Overlay-->

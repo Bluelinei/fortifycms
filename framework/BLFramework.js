@@ -192,14 +192,14 @@ function setEventListeners()
 	$('#add-evidence').on('click', toggleMediaBrowser);
 	$('#close-media-browser').on('click', closeMediaBrowser);
 	$('#page-body').on('click', closeAllBrowsers);
-	$('#start-active').on('click', function(){
-		workingcase.activetime = getUnixTime();
-		notify('Case Active: '+workingcase.activetime);
-	});
 	$('#shelf-tag-button').on('click', function(e) {
 		$('.media-block-evidence').addClass('trans-y-up');
 		$('.media-block-shelf-tag').addClass('trans-y-up');
 	});
+	$('#return-to-evidence').on('click', function(e) {
+		$('.media-block-evidence').removeClass('trans-y-up');
+		$('.media-block-shelf-tag').removeClass('trans-y-up');
+	})
 
 	//On Case change
 	$('#report-number').on('input', changeCase);
@@ -260,6 +260,10 @@ function setEventListeners()
 	$(document).on('keydown', function(e) {
 		//log(e.keyCode);
 		if(e.keyCode==13||e.which==13) {$(':focus').blur();}
+	});
+
+	$('#shelf-item-image').on('click', function(e) {
+		
 	});
 	
 	//TEMP SETTINGS STUFF

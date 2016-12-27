@@ -33,7 +33,7 @@
         }
         function doLogin()
         {
-          if($('#user').val()==''&&$('#pass').val()=='') {login('dev', 'devpass'); return;} //DO NOT FORGET TO DELEVE THIS LINE WHEN FINISHING OUT THE CODE!!!
+          if($('#user').val()==''&&$('#pass').val()=='') {login('dev', 'devpass'); return;} //DO NOT FORGET TO DELETE THIS LINE WHEN FINISHING OUT THE CODE!!!
           else if($('#user').val()==''||$('#pass').val()=='')
           {
             loginNotify('Please enter login credentials.');

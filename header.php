@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+  <?php require 'framework/securesession.php'; ?>
   <head>
     <title>Fortify</title>
     <meta charset="utf-8">
@@ -23,14 +24,6 @@
 
   </head>
   <body>
-    <?php
-      if(!isset($_SESSION)) session_start();
-      if(!isset($_SESSION['user']))
-      {
-        header("Location: login.php");
-        die();
-      }
-    ?>
     <?php require 'evidence-overlay.php'; ?>
 
 <!--START quick-notify-->
@@ -88,7 +81,7 @@
   });
   $('.note-header').on('click', toggleNotifications);
   $('#nav-casebuilder').on('click', clickHandler(href, 'casebuilder.php'))
-  /*$(document).ready(function() {
+  $(document).ready(function() {
     idle_timer = setInterval(timerIncrement, 60000);
     $(this).mousemove(function() {idleTime = 0;});
     $(this).keypress(function() {idleTime = 0;});
@@ -97,5 +90,5 @@
   {
     idleTime++;
     if(idleTime>=10) logout();
-  }*/
+  }
 </script>

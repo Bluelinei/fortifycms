@@ -18,16 +18,14 @@ function generateObject()
 	global $file;
 	global $ds;
 	//Get UID
-	$hex = array("0","1","2","3","4","5","6","7","8","9",
-				 "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
-				 "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z");
+	$hex = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 	$uid;
 	$status = true;
 	while($status)
 	{
 		$status=false;
 		$uid = "";
-		while(strlen($uid)<16) {$uid .= $hex[rand(0,61)];}
+		while(strlen($uid)<16) {$uid .= substr($hex,rand(0,strlen($hex)-1),1);}
 
 		try {
 			$reply = query("SELECT TOP 1 FROM evidence WHERE uid=?", array($uid));

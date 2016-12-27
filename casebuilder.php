@@ -154,7 +154,7 @@
                 </div>
               </div>
             </div>
-          </div><!--END evidence inventory/follow up wrapper that houses evidence inventory and follupw up blocks as well as the date/time selector for prelinking stack-->
+          </div><!--END evidence inventory/follow up wrapper that houses evidence inventory and follow-up up blocks as well as the date/time selector for prelinking stack-->
           </div><!--END builder-block content wrapper-->
           </div><!--END builder-block-->
         </div><!--END builder wrapper-->
@@ -186,6 +186,7 @@
     </div><!--END Content Pane-->
     <div class="clear"></div>
     <input method="post" type="file" id="openfilebrowser" name="files[]" enctype="multipart/form-data" style="display:none;" multiple />
+    <input method="post" type="file" id="shelf-tag-image-upload" name="files[]" enctype="multipart/form-data" style="display:none;" />
 
 <?php require 'footer.php'; ?>
 
