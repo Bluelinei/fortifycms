@@ -1,6 +1,6 @@
 <!DOCTYPE html>
+<?php require 'framework/securesession.php'; ?>
 <html>
-  <?php require 'framework/securesession.php'; ?>
   <head>
     <title>Fortify</title>
     <meta charset="utf-8">

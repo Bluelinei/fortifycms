@@ -27,7 +27,7 @@ function login($conn)
 		else {
 			//create session login
 			$_SESSION['login'] = 'true';
-			$_SESSION['id'] = sha1(time()+rand());
+			$_SESSION['id'] = sha1(session_id());
 			update("UPDATE users SET sessid=?, sessionexp=? WHERE username=?", array($_SESSION['id'], time()+tDAY, $_SESSION['user']));
 			echo 'login';
 		}

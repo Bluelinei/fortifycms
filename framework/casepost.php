@@ -21,10 +21,7 @@ function newEntry($conn)
 }
 
 try {
-	$ifexist = "SELECT EXISTS(SELECT 1 FROM quickreport WHERE uid=?)";
-	$stmt = $conn->prepare($ifexist);
-	$stmt->execute(array($_POST['uid']));
-	$reply = $stmt->fetch();
+	$reply = query("SELECT EXISTS(SELECT 1 FROM quickreport WHERE uid=?)",array($_POST['uid']), false, false);
 	if($reply[0]!="0") updateEntry($conn);
 	else newEntry($conn);
 } catch(PDOException $e) {getError($e);}
