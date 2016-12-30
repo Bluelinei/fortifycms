@@ -10,13 +10,18 @@ function Casemanager() //case manager class
 
 	//functions
 	this.newCase = function() { //create new case object
-
+		var f = new FormData();
+		f.append('function', 'caseuid');
+		ajax('framework/functions.php', f, function(uid) {
+			var case = new Case(uid);
+			this.cases.push(case);
+		});
 	}
-	this.newFile = function() { //create new file object
-
+	this.newFile = function(file) { //create new file object
+		
 	}
 	this.postCase = function() { //save case to database
-
+		
 	}
 	this.postFile = function() { //save file to database
 
@@ -42,6 +47,9 @@ function Casemanager() //case manager class
 	this.getAll = function() { //returns all cases in the casemanager object
 
 	}
+	this.setAsActiveCase = function(case) { //sets case to be currently active
+
+	}
 }
 
 function Case(uid) //case object class
@@ -55,7 +63,6 @@ function Case(uid) //case object class
 	this.tags = []; //list of tags associated with case
 	this.admin = false; //further admin or follow up
 	this.type; //report type
-	this.user = []; //list of all authorized users attached to case
 	this.changed = false; //whether or not the case data has been changed since 
 	//prelinking
 	this.prelinkstart; //starting time for prelink in UNIX seconds
@@ -84,10 +91,8 @@ function File(uid, file=null) //file object class
 	this.uploaddate = 0;
 	this.lastmodified = 0;
 	this.element;
-	this.mediaelement;
 	this.thumbnail;
 	this.status;
-	this.user;
 	this.caseindex = [];
 	//functions
 }
