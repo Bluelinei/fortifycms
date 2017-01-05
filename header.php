@@ -81,6 +81,7 @@
   });
   $('.note-header').on('click', toggleNotifications);
   $('#nav-casebuilder').on('click', clickHandler(href, 'casebuilder.php'))
+  /*
   $(document).ready(function() {
     idle_timer = setInterval(timerIncrement, 60000);
     $(this).mousemove(function() {idleTime = 0;});
@@ -91,4 +92,5 @@
     idleTime++;
     if(idleTime>=10) logout();
   }
+  */
 </script>

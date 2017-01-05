@@ -13,7 +13,7 @@ function login($conn)
 		$_SESSION['user'] = $return['username'];
 		$_SESSION['name'] = $return['name'];
 		$_SESSION['agency'] = $return['agency'];
-		if((time()>=$return['sessionexp']&&$return['2fa']==1)||$return['sessid'])
+		if(time()>=$return['sessionexp']&&$return['2fa']==1)
 		{
 			//do 2fa
 			$chars = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -28,7 +28,7 @@ function login($conn)
 			//create session login
 			$_SESSION['login'] = 'true';
 			$_SESSION['id'] = sha1(session_id());
-			update("UPDATE users SET sessid=?, sessionexp=? WHERE username=?", array($_SESSION['id'], time()+tDAY, $_SESSION['user']));
+			update("UPDATE users SET sessid=?, sessionexp=? WHERE username=?", array($_SESSION['id'], time()+(tHOUR*12), $_SESSION['user']));
 			echo 'login';
 		}
 	}

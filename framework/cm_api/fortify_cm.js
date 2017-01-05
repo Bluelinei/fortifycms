@@ -17,8 +17,20 @@ function Casemanager() //case manager class
 			this.cases.push(case);
 		});
 	}
-	this.newFile = function(file) { //create new file object
+	this.newFile = function(file, callback, error) { //create new file object
+		var f = new FormData();
+		f.append('file', file);
+		f.append('filetype', getFileType(file.type));
+		f.append('lastModified', getUnixTime(file.lastModified));
+
+		var loadingPlace;
 		
+		//Check if the file already exists server side, if so, give it a UID and upload a new file. If not, return the uid of the object on the server.
+		$.ajax({
+			url: 'framework/fileupload.php', method: 'POST', data: f, processData: false, contentType: false,
+			success: function(){callback(response);},
+			error: function(){error(response);}
+		);
 	}
 	this.postCase = function() { //save case to database
 		
