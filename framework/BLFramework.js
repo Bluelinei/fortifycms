@@ -1,15 +1,6 @@
 //GLOBAL VARIABLES (MAINLY FOR DEBUGGING)
 
-const address = 'http://localhost/';
-
-var USER;
-$.ajax({
-	url:'framework/getsession.php',
-	method:'POST',
-	processData:false,
-	contentType:false,
-	success: function(response){USER = JSON.parse(response);}
-});
+const address = 'https://localhost/';
 
 var databaseload = 0;
 

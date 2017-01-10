@@ -623,6 +623,7 @@ function Casefile(file, uid)
 	pushStack('CaseFile');
 	this.uid = uid;
 	this.name = (file?file.name:'');
+	this.type;
 	this.filetype = (file?getFileType(file.type):'');
 	this.filepath = '';
 	this.filedate = getUnixTime((file?file.lastModified:0));
@@ -650,15 +651,18 @@ Casefile.prototype.postFile = function() {
 	var fdata = new FormData();
 	fdata.append('uid', this.uid);
 	fdata.append('nickname', (this.name?this.name:''));
-	fdata.append('file_path', this.filepath);
-	fdata.append('file_type', this.filetype);
-	fdata.append('upload_date', this.uploaddate);
-	fdata.append('lastmodified', this.filedate);
 	fdata.append('case_index', removeDuplicates(this.caseindex).join(''));
-	fdata.append('fortified', (this.caseindex.length?1:0));
+	fdata.append()
+	//data blob
+	var data = [];
+	data['file_path'] = this.filepath;
+	data['file_type'] = this.filetype;
+	data['upload_date'] = this.uploaddate;
+	data['lastmodified'] = this.filedate;
+	fdata.append('data', data);
 
 	ajax('framework/filepost.php', fdata, function(response) {
-			//log(response);
+			log(response);
 	});
 	popStack()
 }

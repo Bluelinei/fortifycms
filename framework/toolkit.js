@@ -130,12 +130,13 @@ function inList(list, item)
 
 function log(msg) {if(SHOW_LOGS) console.log(msg);} //Outputs a message to the browser console
 
-function login(user, pass)
+function login(user, pass, agency)
 {
 	var f = new FormData();
 	f.append('func', 'login');
 	f.append('user', user);
 	f.append('pass', pass);
+	f.append('agentid', agency);
 	$.ajax({
 		url: 'framework/login.php',
 		method: 'POST',
@@ -144,7 +145,7 @@ function login(user, pass)
 		contentType: false,
 		success: function(response) {
 			log(response);
-			if(response=='login') href('casebuilder.php');
+			if(response=='login') href('https://localhost/casebuilder.php');
 			else if(response=='2fa')
 			{
 				href('loginauth.php');

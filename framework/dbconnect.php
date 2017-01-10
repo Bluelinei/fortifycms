@@ -1,15 +1,16 @@
 <?php
 
-$hostname=	'localhost';
-$port=		'3306';
-$username=	'root';
-$pass=		'';
-$database=	'fortify';
-$conn;
+require_once 'session.php';
+
+$HOSTNAME=	'CHAIR-FORCE-ONE\SQLEXPRESS';
+$PORT=		'3306';
+$USERNAME=	'W5eMCKJbykm4fHfQdP4vi7XHFoDi7Wgx'; //W5eMCKJbykm4fHfQdP4vi7XHFoDi7Wgx
+$PASSWORD=	'ai2CZKqBNqF8sFniNybCl2GILqrDzQ1g'; //ai2CZKqBNqF8sFniNybCl2GILqrDzQ1g
+$DATABASE;
+
+if(isset($_SESSION['agency'])) $DATABASE = $_SESSION['agency'];
 
 error_reporting(E_ALL);
-
-require_once 'session.php';
 
 //Definitions
 define("tMINUTE",60);
@@ -20,14 +21,18 @@ define("tYEAR",31536000);
 
 function getError($e) {die($e->getMessage());}
 
-try{
-	$conn = new PDO("mysql:host=$hostname; port=$port; dbname=$database; charset=UTF8;", $username, $pass);
-} catch(PDOException $e) {getError($e);}
+/*try{
+	$conn = new PDO("sqlsrv:Server=$hostname; Database=$database;", $username, $pass);
+} catch(PDOException $e) {getError($e);}*/
 
 function query($sql, $exarray=null, $fetchall=false, $fetchassoc=true)
 {
-	global $conn;
+	global $USERNAME;
+	global $PASSWORD;
+	global $HOSTNAME;
+	global $DATABASE;
 	try {
+		$conn = new PDO("sqlsrv:Server=$HOSTNAME; Database=$DATABASE;", $USERNAME, $PASSWORD);
 		$stmt = $conn->prepare($sql);
 		$stmt->execute($exarray);
 		if(!$fetchall)
@@ -41,8 +46,12 @@ function query($sql, $exarray=null, $fetchall=false, $fetchassoc=true)
 
 function update($sql, $exarray=null)
 {
-	global $conn;
+	global $USERNAME;
+	global $PASSWORD;
+	global $HOSTNAME;
+	global $DATABASE;
 	try {
+		$conn = new PDO("sqlsrv:Server=$HOSTNAME; Database=$DATABASE;", $USERNAME, $PASSWORD);
 		$stmt = $conn->prepare($sql);
 		$stmt->execute($exarray);
 		return;

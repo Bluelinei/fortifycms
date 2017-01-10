@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<?php require 'framework/requireSSL.php'; ?>
 <html>
   <head>
     <meta charset="utf-8">
@@ -12,10 +13,11 @@
   
       <div class="vertical-middle login-page" style="width:500px;margin: 0px auto;">
         <img src="img/Fortify-Logo-Brushed.png" style="width: 100%; pointer-events:none;" />
-        <input id="user" type="text" placeholder="User Name" autocomplete="off" class="left"/>
-        <input id="pass" type="password" placeholder="Password" autocomplete="off" class="right"/>
+        <input id="agencyid" type="text" placeholder="Agency ID" autocomplete="on" />
+        <input id="user" type="text" placeholder="User Name" autocomplete="off" />
+        <input id="pass" type="password" placeholder="Password" autocomplete="off" />
         <div class="clear"></div>
-        <input id="login" type="submit" value="Login" />
+        <input id="login" type="submit" value="Login" style="width:50%; left:50%; transform: translateX(-50%)" />
         <div class="login-message hidden">
           
         </div>
@@ -33,13 +35,12 @@
         }
         function doLogin()
         {
-          if($('#user').val()==''&&$('#pass').val()=='') {login('dev', 'devpass'); return;} //DO NOT FORGET TO DELETE THIS LINE WHEN FINISHING OUT THE CODE!!!
-          else if($('#user').val()==''||$('#pass').val()=='')
+          if($('#user').val()==''||$('#pass').val()=='')
           {
             loginNotify('Please enter login credentials.');
             return;
           }
-          login($('#user').val(), $('#pass').val());
+          login($('#user').val(), $('#pass').val(), $('#agencyid').val());
         }
         $(document).on('click', '#login', doLogin);
         $(document).on('keypress', function(event){

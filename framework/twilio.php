@@ -10,7 +10,7 @@ function sendMessage($to, $body)
 {
 	if(!$to||!$body) return false;
 	global $CLIENT;
-	try {$message = $CLIENT->messages->create($to, array('from'=>'+14239331748', 'body'=>$body)); return 1;} catch(Exception $e) {return 0;}
+	try {$message = $CLIENT->messages->create($to, array('from'=>'+14239331748', 'body'=>$body)); return 0;} catch(Exception $e) {return $e;}
 }
 
 ?>

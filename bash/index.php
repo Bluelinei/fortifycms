@@ -78,6 +78,7 @@
 	var buffer_it = -1;
 	var return_value = {};
 	var return_mutex = false;
+	var agency;
 	function LOCK_MUTEX() {return_mutex = true;}
 	function UNLOCK_MUTEX() {return_mutex = false;}
 	function runScript(script,iter)
@@ -195,6 +196,7 @@
 		$('.output').append(obj);
 		obj[0].scrollIntoView();
 	}
+	function error(text) {out('<span style="color:#f33">'+text+'</span>');}
 	function command(cmd)
 	{
 		var token = tokenize(cmd, ' ');
@@ -228,13 +230,73 @@
 				{
 					variables[token[2]] = token[3];
 					out('Variable \'$'+token[2]+'\' set to value: '+variables[token[2]]);
+					break;
 				}
 				else if(token[1]=='macro'&&token[2]&&token[3])
 				{
 					macro[token[2]] = token[3];
 					out('Macro \'@'+token[2]+'\' set to command: '+macro[token[2]]);
+					break;
+				}
+				else if(token[1]=='agency'&&token[2])
+				{
+					agency = token[2];
+					out('Active Agency: '+token[2]);
+					break;
 				}
 				break;
+			}
+			case 'new':
+			{
+				if(token[1]=='agency'&&token[2])
+				{
+					var f = new FormData();
+					f.append('function', 'newagency');
+					f.append('agency', token[2]);
+					ajax('functions.php',f,function(response){
+						log(response)
+						var obj = JSON.parse(response);
+						if(obj.STATUS_HEADER)
+						{
+							out('<span style="color:#f33">'+obj.STATUS_MESSAGE+'</span>');
+							return;
+						}
+						else
+						{
+							agency = token[2];
+							out(obj.STATUS_MESSAGE);
+							return;
+						}
+					});
+				}
+				else if(token[1]=='user'&&token[2]&&token[3])
+				{
+					if(!agency)
+					{
+						error('No agency has been defined');
+						break;
+					}
+					var f = new FormData();
+					f.append('function', 'newuser');
+					f.append('agency', agency);
+					f.append('username', token[2]);
+					f.append('password', token[3]);
+					ajax('functions.php',f,function(response){
+						log(response)
+						var obj = JSON.parse(response);
+						if(obj.STATUS_HEADER)
+						{
+							error(obj.STATUS_MESSAGE);
+							return;
+						}
+						else
+						{
+							out(obj.STATUS_MESSAGE);
+							return;
+						}
+					});
+				}
+				else out('Undefined token \''+token[1]+'\'');
 			}
 			case 'del':
 			{
@@ -291,7 +353,7 @@
 			}
 			case 'out':
 			{
-				if(out===undefined) return;
+				if(out===undefined) break;
 				out(token[1]);
 				break;
 			}
@@ -361,16 +423,30 @@
 			{
 				if(token[1]=='user'&&token[2])
 				{
+					if(!agency)
+					{
+						out('<span style="color:#f33;">No agency has been defined</span>');
+						break;
+					}
 					var f = new FormData();
 					f.append('user', token[2]);
 					f.append('function', 'getuser');
+					f.append('agency', agency);
 					LOCK_MUTEX();
 					ajax('functions.php', f, function(response) {
-						obj = JSON.parse(response);
+						log(response);
+						try {
+							obj = JSON.parse(response);
+						} catch(e) {
+							out('<span style="color:#f33;">'+response+'</span>');
+							UNLOCK_MUTEX();
+							return;
+						}
 						var output = '';
 						if(obj.STATUS_HEADER!='0')
 						{
 							out('<span style="color:#f33;">'+obj.STATUS_MESSAGE+'</span>');
+							UNLOCK_MUTEX();
 							return;
 						}
 						else
