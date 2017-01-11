@@ -11,6 +11,8 @@ function dbExists($dbname)
 	else return 0;
 }
 
+$statecode = array("AL"=>100,"AK"=>200,"AZ"=>300,"AR"=>400,"CA"=>500,"CO"=>600,"CT"=>700,"DE"=>800,"DC"=>900,"FL"=>1000,"GA"=>1100,"HI"=>1200,"ID"=>1300,"IL"=>1400,"IN"=>1500,"IA"=>1600,"KS"=>1700,"KY"=>1800,"LA"=>1900,"ME"=>2000,"MD"=>2100,"MA"=>2200,"MI"=>2300,"MN"=>2400,"MS"=>2500,"MO"=>2600,"MT"=>2700,"NE"=>2800,"NV"=>2900,"NH"=>3000,"NJ"=>3100,"NM"=>3200,"NY"=>3300,"NC"=>3400,"ND"=>3500,"OH"=>3600,"OK"=>3700,"OR"=>3800,"PA"=>3900,"RI"=>4000,"SC"=>4100,"SD"=>4200,"TN"=>4300,"TX"=>4400,"UT",=>4500"VT"=>4600,"VA"=>4700,"WA"=>4800,"WV"=>4900,"WI"=>5000,"WY"=>5100);
+
 if(isset($_POST['function']))
 {
 	switch($_POST['function'])
@@ -32,6 +34,7 @@ if(isset($_POST['function']))
 		}
 		case 'newagency':
 		{
+			$id = $statecode[strtoupper($_POST['stateabr'])]+1000;
 			if(dbExists($_POST['agency']))
 			{
 				$response = [];
@@ -41,6 +44,8 @@ if(isset($_POST['function']))
 				return;
 			}
 			try {
+				//$DATABASE = 'agencylookup';
+				//update("INSERT INTO agencies (id, dbname, name) VALUES (?,?,?)",array($id, ));
 				$database = $_POST['agency'];
 				$conn = new PDO("sqlsrv:Server=CHAIR-FORCE-ONE\SQLEXPRESS;", 'W5eMCKJbykm4fHfQdP4vi7XHFoDi7Wgx', 'ai2CZKqBNqF8sFniNybCl2GILqrDzQ1g');
 				$stmt = $conn->prepare("CREATE DATABASE $database;");

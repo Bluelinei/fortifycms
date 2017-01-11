@@ -1,6 +1,7 @@
 
 const SHOW_CALLSTACK = false;
 const SHOW_LOGS = true;
+const SERVER_ADDRESS = 'https://192.168.1.13/';
 var callstack = [];
 
 function ajax(phpurl, f=null, func=null, errfunc=null)
@@ -145,7 +146,7 @@ function login(user, pass, agency)
 		contentType: false,
 		success: function(response) {
 			log(response);
-			if(response=='login') href('https://localhost/casebuilder.php');
+			if(response=='login') href(SERVER_ADDRESS+'casebuilder.php');
 			else if(response=='2fa')
 			{
 				href('loginauth.php');

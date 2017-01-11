@@ -2,30 +2,38 @@
 
 include 'dbconnect.php';
 
-function updateEntry($conn)
+$data = json_decode($_POST['data'],true);
+
+echo $_POST['data'];
+die();
+
+function updateEntry()
 {
+	global $data;
 	try {
-		update(	"UPDATE evidence SET nickname=?, filepath=?, type=?, uploaddate=?, caseindex=?, fortified=?, user=?, checksum=? WHERE uid=?",
-				array($_POST['nickname'],$_POST['file_path'],$_POST['file_type'],$_POST['upload_date'],$_POST['case_index'],$_POST['fortified'],$_SESSION['user'], sha1_file($_POST['file_path']),$_POST['uid']));
+		update(	"UPDATE evidence SET nickname=?, caseindex=?, checksum=?, data=? WHERE uid=?",
+				array($_POST['nickname'],$_POST['case_index'],sha1_file($data['file_path']),$_POST['uid']),$_POST['data']);
 		echo "Updated evidence in database ".$_POST['case_index'];
 		return;
 	} catch(PDOException $e) {echo getError($e);}
 }
 
-function newEntry($conn)
+function newEntry()
 {
+	global $data;
+	return;
 	try {
-		update(	"INSERT INTO evidence (uid, nickname, filepath, type, uploaddate, lastmodified, caseindex, fortified, user, checksum) VALUES (?,?,?,?,?,?,?,?,?)",
-				array($_POST['uid'],$_POST['nickname'],$_POST['file_path'],$_POST['file_type'],$_POST['upload_date'],$_POST['lastmodified'],$_POST['case_index'],$_POST['fortified'],$_SESSION['user'],sha1_file($_POST['file_path'])));
+		update(	"INSERT INTO evidence (uid, nickname, caseindex, checksum, data) VALUES (?,?,?,?,?)",
+				array($_POST['uid'],$_POST['nickname'],$_POST['case_index'],sha1_file($data['file_path']), $_POST['data']));
 		echo "Uploaded new evidence to database: ".$_POST['case_index'];
 		return;
 	} catch(PDOException $e) {echo getError($e);}
 }
 
 try {
-	$reply = query("SELECT EXISTS(SELECT 1 FROM evidence WHERE uid=?)", array($_POST['uid']), false, false);
-	if($reply[0]!=0) updateEntry($conn);
-	else newEntry($conn);
+	$reply = query("SELECT * FROM evidence WHERE uid=?", array($_POST['uid']), false, false);
+	if($reply) updateEntry();
+	else newEntry();
 } catch(PDOException $e) {echo getError($e);}
 
 ?>

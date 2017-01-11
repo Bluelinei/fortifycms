@@ -88,8 +88,12 @@ function newCaseFile(uploadedfile)
 	pushStack('newCaseFile');
 	var f = new FormData();
 	f.append('file', uploadedfile);
-	f.append('filetype', getFileType(uploadedfile.type));
-	f.append('lastModified', getUnixTime(uploadedfile.lastModified));
+	var data = {};
+	data['file_type'] = getFileType(uploadedfile.type);
+	data['lastmodified'] = getUnixTime(uploadedfile.lastModified);
+	f.append('data', JSON.stringify(data));
+
+	log(JSON.stringify(data));
 
 	var loadingPlace;
 	
@@ -111,8 +115,9 @@ function newCaseFile(uploadedfile)
 		},
 		url: 'framework/fileupload.php', method: 'POST', data: f, processData: false, contentType: false,
 		success: function(response){
-			//log('New Upload: '+response);
+			log('fileupload.php: '+response);
 			var obj = JSON.parse(response);
+			obj.data = JSON.parse(obj.data);
 			for(var i=0; i<casefiles.length; i++)
 			{
 				if(casefiles[i].uid == obj.uid)
@@ -124,10 +129,10 @@ function newCaseFile(uploadedfile)
 			}
 			//uid filepath uploaddate lastmodified nickname type user checksum
 			var cf = new Casefile(uploadedfile, obj.uid);
-			cf.filepath = obj.filepath;
+			cf.filepath = obj.data.file_path;
 			cf.nickname = uploadedfile.name;
 			cf.officer = obj.user;
-			cf.uploaddate = Number(obj.uploaddate);
+			cf.uploaddate = Number(obj.data.upload_date);
 			cf.init();
 			$('#li_'+loadingPlace.queue).replaceWith(cf.mediaelement);
 			$('#li_'+loadingPlace.queue).remove();
@@ -480,20 +485,22 @@ Case.prototype.postCase = function() {
 	pushStack('Case.postCase');
 	if(this.casenum==''||!this.type) {popStack(); return false;}
 	var f = new FormData();
-	f.append('uid',this.uid);
-	f.append('nickname',this.nickname);
-	f.append('reportnum',this.casenum);
-	f.append('reportloc', this.location);
-	f.append('reporttype',this.type);
-	f.append('reporttags',this.tags.join('<#>'));
+	f.append('uid',this.uid); //uid
+	f.append('nickname',this.nickname); //nickname
+	f.append('reportnum',this.casenum); //ref
+	f.append('reporttype',this.type); //type
+	f.append('reporttags',this.tags.join('<#>')); //tags
 	var filelist = []
 	var len = this.files.length;
 	for(var i=0; i<len; i++) {filelist.push(this.files[i].uid);}
 	for(var i=0; i<len; i++) {this.files[i].postFile();}
-	f.append('evidence',filelist.join(''));
-	f.append('admin',(this.admin?1:0));
+	f.append('evidence',filelist.join('')); //evidence
+	f.append('admin',(this.admin?1:0)); //admin
+	var data = {}
+	data['location'] = this.location;
+	f.append('data', JSON.stringify(data));
 	ajax('framework/casepost.php', f, function(response) {
-			//log(response);
+			log(response);
 	});
 	this.changeCase(false);
 	popStack();
@@ -636,6 +643,14 @@ function Casefile(file, uid)
 	this.officer;
 	this.caseindex = [];
 	popStack();
+	/*
+	DATA VARIABLES
+		file_path
+		file_type
+		upload_date
+		lastmodified
+		thumbnail
+	*/
 }
 
 Casefile.prototype.init = function()
@@ -652,17 +667,16 @@ Casefile.prototype.postFile = function() {
 	fdata.append('uid', this.uid);
 	fdata.append('nickname', (this.name?this.name:''));
 	fdata.append('case_index', removeDuplicates(this.caseindex).join(''));
-	fdata.append()
 	//data blob
-	var data = [];
+	var data = {};
 	data['file_path'] = this.filepath;
 	data['file_type'] = this.filetype;
 	data['upload_date'] = this.uploaddate;
 	data['lastmodified'] = this.filedate;
-	fdata.append('data', data);
+	fdata.append('data', JSON.stringify(data));
 
 	ajax('framework/filepost.php', fdata, function(response) {
-			log(response);
+			//log('filepost.php: '+response);
 	});
 	popStack()
 }
@@ -698,7 +712,7 @@ Casefile.prototype.newMediaElement = function() {
 	e.push('<div id="'+this.uid+'_addremove" style="display: inline;"><i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i></div>');
 	e.push('</div></div>');
 	inner.append(e.join(''));
-	inner.css({'background-image': 'url("'+address+'img/loading.gif")',
+	inner.css({'background-image': 'url("'+SERVER_ADDRESS+'img/loading.gif")',
 		'background-repeat': 'no-repeat',
 		'background-size': '50px 50px',
 		'background-position': 'center'
@@ -799,7 +813,7 @@ Casefile.prototype.setButtonFunction = function() {
 
 Casefile.prototype.updateThumb = function() {
 	if(!this.thumbnail) return;
-	$("#"+this.uid+"_blockelement").css({'background-image': 'url('+address+this.thumbnail+')',
+	$("#"+this.uid+"_blockelement").css({'background-image': 'url('+SERVER_ADDRESS+this.thumbnail+')',
 		'background-repeat': 'no-repeat',
 		'background-size': 'cover',
 		'background-position': 'center'

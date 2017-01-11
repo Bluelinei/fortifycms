@@ -1,93 +1,9 @@
 <!DOCTYPE html>
 <html>
-<style>
-	* {
-		box-sizing: border-box;
-		margin:0px;
-		padding:0px;
-	}
-	body {
-		margin: 0%;
-		background: #ddd;
-		font-family: 'Montserrat', sans-serif;
-	}
-
-	ul {
-		list-style-type: none;
-		margin: 0px;
-		padding: 0px;
-	}
-
-	.agency-list li {
-		padding-bottom: 10px;
-	}
-
-	.agency-list li:last-child {
-		padding-bottom: 0px;
-	}
-
-	.agency-list a {
-		color: #333;
-		font-size: 18px;
-		cursor: pointer;
-	}
-
-	.main-wrapper {
-		position: fixed;
-		width: calc(100% - 40px);
-		height: calc(100% - 40px);
-		top:50%;
-		left:50%;
-		transform: translate(-50%,-50%);
-		border: 2px groove #333;
-		background: #eee;
-	}
-
-	.agencies {
-		position:absolute;
-		height: 100%;
-		width: 15%;
-		padding: 10px;
-		border-right: 3px groove #333;
-		overflow-y: auto;
-	}
-
-	.users li {
-		padding: 0px;
-		padding-left: 20px;
-		margin: 0px;
-	}
-
-	.users a {
-		font-size: 16px;
-	}
-
-	.rightm {
-		margin-right: 10px;
-	}
-
-	.leftm {
-		margin-left: 10px;
-	}
-
-	li .icon-brace {
-		float:left;
-		width: 21px;
-		height: 21px;
-		background: url('mid.png');
-	}
-
-	li:last-child .icon-brace {
-		float:left;
-		width: 21px;
-		height: 21px;
-		background: url('end.png');
-		background-repeat: no-repeat;
-	}
-</style>
 <head>
 	<title>Fortify Agency Manager</title>
 	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet"> 
+	<link href="style.css" rel="stylesheet"> 
 	<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
 	<script src="../framework/toolkit.js"></script>
 	<script src="https://use.fontawesome.com/47f9a4e330.js"></script>
@@ -109,10 +25,16 @@
 				<li class="agency"><a>Mayberry PD (4503)<i class="fa fa-caret-right leftm"></i></a></li>
 			</ul>
 		</div>
-		<div>
-			<div class="">
+		<div class="editor">
+			<div class="fields">
+				<p style="margin-bottom: 0px;">Agency ID: 1</p>
+				<p>Database Ref: blueline_TN</p>
+				<label for="agency-name">Department Name: </label>
+				<input id="agency-name" type="text" placeholder="Agency Name"/><br/>
 			</div>
-			<div class="">
+			<div class="lists">
+				<p>Tags</p><br/>
+				<div class=""></div>
 			</div>
 		</div>
 	</div>
@@ -126,7 +48,6 @@
 		ajax('agencymanager.php', f, function(response){
 			log(response);
 			var data = JSON.parse(response);
-
 		});
 	}
 

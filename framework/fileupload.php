@@ -17,6 +17,7 @@ function generateObject()
 {
 	global $file;
 	global $ds;
+	$data = json_decode($_POST['data'], true);
 	//Get UID
 	$hex = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 	$uid;
@@ -28,14 +29,14 @@ function generateObject()
 		while(strlen($uid)<16) {$uid .= substr($hex,rand(0,strlen($hex)-1),1);}
 
 		try {
-			$reply = query("SELECT TOP 1 FROM evidence WHERE uid=?", array($uid));
+			$reply = query("SELECT * FROM evidence WHERE uid=?", array($uid));
 			if($reply) $status=true;
 		} catch(PDOException $e) {getError($e);}
 	}
 	//Save/Format File
 	$fn;
 	$targetDir = "uploads".$ds.$_SESSION['agency'].$ds.$_SESSION['user'];
-	switch($_POST['filetype'])
+	switch($data['file_type'])
 	{
 		case "VIDEO": {$targetDir .= $ds."video"; break;}
 		case "AUDIO": {$targetDir .= $ds."audio"; break;}
@@ -48,7 +49,7 @@ function generateObject()
 	$filename;
 	$finalPath;
 	$checksum = "";
-	if($_POST['filetype']=="VIDEO"&&pathinfo($file['name'], PATHINFO_EXTENSION)!="MP4")
+	if($data['file_type']=="VIDEO"&&pathinfo($file['name'], PATHINFO_EXTENSION)!="MP4")
 	{
 		$filename = $uid.".MP4";
 		$finalPath = $targetDir.$ds.$filename;
@@ -69,8 +70,11 @@ function generateObject()
 		echo "File could not be uploaded!";
 		return;
 	}
-	query(	"INSERT INTO evidence (uid, filepath, fortified, caseindex, uploaddate, lastmodified, nickname, type, user, checksum) VALUES (?,?,?,?,?,?,?,?,?,?)",
-			array($uid, $finalPath, "0", "", time(), $_POST['lastModified'], "", $_POST['filetype'], $_SESSION['user'], ($checksum?$checksum:sha1_file($finalPath)))	);
+	$data['file_path'] = $finalPath;
+	$data['upload_date'] = time();
+
+	query(	"INSERT INTO evidence (uid, caseindex, nickname, checksum, data) VALUES (?,?,?,?,?)",
+			array($uid, "", "", ($checksum?$checksum:sha1_file($finalPath)), json_encode($data)));
 	//Return json object
 	echo json_encode(getEvidenceByUID($uid));
 	return;
@@ -79,12 +83,13 @@ function generateObject()
 //********** CHECK IF FILE ALREADY EXISTS ON SERVER **********
 
 try {
-	$response = query("SELECT * FROM evidence WHERE checksum=? AND lastmodified=?", array(sha1_file($file['tmp_name']), $_POST['lastModified']), true);
+	$response = query("SELECT * FROM evidence WHERE checksum=?", array(sha1_file($file['tmp_name'])), true, true);
 	if($response)
 	{
 		foreach($response as $reply) //Iterate through all replies, in case multiple files have the same checksum for whatever reason.
 		{
-			system(".\\dfc\\dfc.exe ".$file['tmp_name']." ".$reply['filepath'], $out);
+			$replydata = json_decode($reply['data'], true);
+			system(".\\dfc\\dfc.exe ".$file['tmp_name']." ".$replydata['file_path'], $out);
 			if($out==0) continue;
 			else if($out<0) //Executable Error
 			{
@@ -100,9 +105,8 @@ try {
 				return;
 			}
 		}
-		generateObject(); //It doesn't exist on the server (false positive)
 	}
-	else generateObject(); //It doesn't exist on the server
+	generateObject(); //It doesn't exist on the server
 } catch(PDOException $e) {
 	$output = [];
 	$output[0] = $e->getMessage();

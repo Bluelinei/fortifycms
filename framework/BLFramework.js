@@ -1,7 +1,5 @@
 //GLOBAL VARIABLES (MAINLY FOR DEBUGGING)
 
-const address = 'https://localhost/';
-
 var databaseload = 0;
 
 function loading(v)

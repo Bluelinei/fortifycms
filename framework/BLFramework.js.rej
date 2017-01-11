@@ -1,0 +1,13 @@
+diff a/framework/BLFramework.js b/framework/BLFramework.js	(rejected hunks)
+@@ -472,8 +472,8 @@
+ 		session = JSON.parse(response);
+ 		getAPISupport();
+ 		loadINI();
+-		getDatabase();
++		//getDatabase();
+ 		setEventListeners();
+ 		loading(-1);
+ 	});
+-}
+\ No newline at end of file
++}
