@@ -470,7 +470,7 @@ window.onload = function()
 		session = JSON.parse(response);
 		getAPISupport();
 		loadINI();
-		//getDatabase();
+		getDatabase();
 		setEventListeners();
 		loading(-1);
 	});

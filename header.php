@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<?php //require 'framework/securesession.php'; ?>
-<?php //require 'framework/requireSSL.php'; ?>
+<?php require 'framework/securesession.php'; ?>
+<?php require 'framework/requireSSL.php'; ?>
 <html>
   <head>
     <title>Fortify</title>
