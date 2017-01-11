@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<?php require 'framework/securesession.php'; ?>
-<?php require 'framework/requireSSL.php'; ?>
+<?php //require 'framework/securesession.php'; ?>
+<?php //require 'framework/requireSSL.php'; ?>
 <html>
   <head>
     <title>Fortify</title>
@@ -26,6 +26,7 @@
   </head>
   <body>
     <?php require 'evidence-overlay.php'; ?>
+    <?php require 'search-overlay.php'; ?>
 
 <!--START quick-notify-->
   <div class="quick-notify hidden">
@@ -34,7 +35,6 @@
   </div>
 <!--END quick-notify-->
 
-<?php include 'search.php'; ?>
 <?php include 'notification-bar.php'; ?>
 
 <!--START Main Content Area wrapper (side-bar + content pane)-->

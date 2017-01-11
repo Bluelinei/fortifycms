@@ -252,9 +252,9 @@ function setEventListeners()
 	});
 
 	$('#shelf-item-image').on('click', function(e) {
-		
+
 	});
-	
+
 	//TEMP SETTINGS STUFF
 	var d = new Date();
 	$('.clock-year').html(d.getFullYear());
@@ -470,7 +470,7 @@ window.onload = function()
 		session = JSON.parse(response);
 		getAPISupport();
 		loadINI();
-		getDatabase();
+		//getDatabase();
 		setEventListeners();
 		loading(-1);
 	});
