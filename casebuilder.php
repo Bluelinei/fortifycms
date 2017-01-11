@@ -110,7 +110,7 @@
               <div class="timeset-wrapper hidden">
                 <div class="datepicker-wrapper">
                   <div class="dateobj hidden"></div>
-                </div> 
+                </div>
                 <div class="one-wide" style="position: relative; display: block;background: rgba(255,187,187,0.8);color:#fff;height: 100%;font-size: 12px;text-align: center;">
                   <div class="clock-container">
                     <div class="time time-spin"><input class="vertical-middle time-input hour-num" type="number" value="12" min="0" max="13"/></div>
@@ -144,10 +144,10 @@
 
               <div class="prelink-block" style="z-index: 51;">
                 <div class="three-wide timeset-button time-start-button">
-                  <div class="vertical-middle no-select prelink-start"><p>Start Time<br>[Click to Set]</p></div>
+                  <div class="vertical-middle no-select prelink-start"><p>Start Time<br><small>[Click to Set]</small></p></div>
                 </div>
                 <div class="three-wide timeset-button time-end-button">
-                  <div class="vertical-middle no-select prelink-end"><p>End Time<br>[Click to Set]</p></div>
+                  <div class="vertical-middle no-select prelink-end"><p>End Time<br><small>[Click to Set]</small></p></div>
                 </div>
                 <div class="three-wide prelink-toggle">
                   <div class="vertical-middle no-select prelink-toggle-text">Enable Pre-Link</div>
@@ -180,7 +180,7 @@
 <!--CASE LIST-->
         <ul id="case-list">
         </ul>
-        <div id="fortify-button" class="fortify-case-button no-select" style="height:auto;padding: 15px;margin-top:5px;border: 1px solid #440000;"><p class="no-event"><span class="fa-stack"><i class="fa fa-shield fa-stack-2x"></i><i class="fa fa-unlock-alt fa-stack-1x fa-inverse"></i></span> Fortify Cases</p></div>
+        <div id="fortify-button" class="fortify-case-button no-select" style="height:auto;padding: 15px;margin-top:5px;"><p class="no-event"><span class="fa-stack"><i class="fa fa-shield fa-stack-2x"></i><i class="fa fa-unlock-alt fa-stack-1x fa-inverse"></i></span> Fortify Cases</p></div>
       </div><!--END builder wrapper-->
 
     </div><!--END Content Pane-->
