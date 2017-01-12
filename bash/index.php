@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>Fortify Bash</title>
-	<script src="http://code.jquery.com/jquery-3.1.1.js"></script>
+	<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
 	<script src="../framework/toolkit.js"></script>
 	<style>
 		body {
@@ -79,6 +79,8 @@
 	var return_value = {};
 	var return_mutex = false;
 	var agency;
+	var waitingfor;
+	var waitdata = [];
 	function LOCK_MUTEX() {return_mutex = true;}
 	function UNLOCK_MUTEX() {return_mutex = false;}
 	function runScript(script,iter)
@@ -199,9 +201,83 @@
 	function error(text) {out('<span style="color:#f33">'+text+'</span>');}
 	function command(cmd)
 	{
+		$('.cmd').val('');
+		switch(waitingfor)
+		{
+			case 'dbpurge':
+			{
+				waitingfor = '';
+				if(cmd === 'DELETE')
+				{
+					var f = new FormData();
+					f.append('function', 'purge');
+					LOCK_MUTEX();
+					ajax('functions.php',f,function(response){
+						log(response);
+						UNLOCK_MUTEX();
+						var obj = JSON.parse(response);
+						out(obj.STATUS_MESSAGE);
+						waitingfor = [];
+					});
+				}
+				else
+				{
+					out('Purge Cancelled');
+				}
+				return;
+			}
+			case 'userpass':
+			{
+				return;
+			}
+			case 'userpassconf':
+			{
+				return;
+			}
+		}
 		var token = tokenize(cmd, ' ');
 		switch(token[0])
 		{
+			/*case 'sql':
+			{
+				if(token[1])
+				{
+					var f = new FormData();
+					f.append('agency', agency);
+					f.append('sql', token[1]);
+					f.append('function', 'sql');
+					LOCK_MUTEX();
+					ajax('functions.php',f,function(response)
+					{
+						log(response);
+						var list = JSON.parse(response);
+						for(var obj in list)
+						{
+							log(obj);
+							out('<span class="indent-1">'+obj+'</span>');
+							for(var key in obj)
+							{
+								log(obj[key]);
+								out('<span class="indent-2">'+key+': '+obj[key]+'</span>');
+							}
+						}
+						UNLOCK_MUTEX();
+					});
+				}
+				else
+				{
+					error('Missing argument: expected sql command');
+				}
+				return;
+			}*/
+			case 'purge':
+			{
+				waitingfor = 'dbpurge';
+				out('THIS ACTION WILL DELETE ALL AGENCY DATABASES FROM FORTIFY');
+				out('THIS CANNOT BE UNDONE');
+				out('If you are absolutely sure that you would like to continue, enter \'DELETE\' below (Case sensitive)');
+				out('Entering anything else will cancel the purge request');
+			}
 			case 'time':
 			{
 				var d = new Date();
@@ -248,14 +324,18 @@
 			}
 			case 'new':
 			{
-				if(token[1]=='agency'&&token[2])
+				if(token[1]=='agency'&&token[2]&&token[3]&&token[4])
 				{
 					var f = new FormData();
 					f.append('function', 'newagency');
 					f.append('agency', token[2]);
+					f.append('statecode', token[3]);
+					f.append('name', token[4])
+					LOCK_MUTEX();
 					ajax('functions.php',f,function(response){
 						log(response)
 						var obj = JSON.parse(response);
+						UNLOCK_MUTEX();
 						if(obj.STATUS_HEADER)
 						{
 							out('<span style="color:#f33">'+obj.STATUS_MESSAGE+'</span>');
@@ -281,9 +361,11 @@
 					f.append('agency', agency);
 					f.append('username', token[2]);
 					f.append('password', token[3]);
+					LOCK_MUTEX();
 					ajax('functions.php',f,function(response){
 						log(response)
 						var obj = JSON.parse(response);
+						UNLOCK_MUTEX();
 						if(obj.STATUS_HEADER)
 						{
 							error(obj.STATUS_MESSAGE);
@@ -339,12 +421,14 @@
 			{
 				if(token[1])
 				{
+					LOCK_MUTEX();
 					$.ajax({
 						method:'POST', url:token[1], dataType:'text', mimeType:'text/plain', async: true,
 						success: function(content) {
 							var script = content.split(/\r\n|\r|\n/g); //separate by line
 							var iter = 0;
 							//launch script
+							UNLOCK_MUTEX();
 							runScript(script, iter);
 						}
 					});
@@ -480,7 +564,6 @@
 				break;
 			}
 		}
-		$('.cmd').val('');
 	}
 	$(document).on('keydown', function(e) {
 		if(e.keyCode==13||e.which==13)
