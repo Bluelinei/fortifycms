@@ -471,6 +471,7 @@ function Case(uid)
 	this.prelinkstart = getUnixTime();
 	this.prelinkend = this.prelinkstart;
 	this.prelinkenable = false;
+	this.creationdate;
 
 	cases.push(this);
 	this.newElement();
@@ -509,6 +510,7 @@ Case.prototype.postCase = function() {
 	data['audcount'] = 0;
 	data['doccount'] = 0;
 	data['phycount'] = 0;
+	data['casedate'] = (this.creationdate?this.creationdate:getUnixTime());
 	for(var i=0; i<this.files.length; i++)
 	{
 		switch(this.files[i].filetype)

@@ -66,6 +66,7 @@
           c.prelinkstart = (data.prelinkstart?Number(data.prelinkstart):getUnixTime());
           c.prelinkend = (data.prelinkend?Number(data.prelinkend):getUnixTime());
           c.prelinkenable = (data.prelinkenable?true:false);
+          c.creationdate = (data.casedate?data.casedate:getUnixTime());
           var dbevidence = o.evidence;
           for(var i=0; i<dbevidence.length; i++)
           {
@@ -117,7 +118,7 @@
                           <h3>'+c.nickname+'</h3>\
                         </div>\
                         <div class="search-meta">\
-                          Create Date: '+c.data.casedate+'<br>\
+                          Creation Date: '+Date().toLocaleString(c.data.casedate*1000)+'<br>\
                           Report Officer: Zach Watts<br>\
                           Report Type: '+c.type+'<br><br>\
                           <i class="fa fa-map-marker" aria-hidden="true"></i> '+c.data.location+'<br>\

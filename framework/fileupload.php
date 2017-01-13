@@ -73,8 +73,8 @@ function generateObject()
 	$data['file_path'] = $finalPath;
 	$data['upload_date'] = time();
 
-	query(	"INSERT INTO evidence (uid, caseindex, nickname, checksum, data) VALUES (?,?,?,?,?)",
-			array($uid, "", "", ($checksum?$checksum:sha1_file($finalPath)), json_encode($data)));
+	query(	"INSERT INTO evidence (uid, caseindex, nickname, checksum, users, data) VALUES (?,?,?,?,?,?)",
+			array($uid, "", "", ($checksum?$checksum:sha1_file($finalPath)), $_SESSION['user'], json_encode($data)));
 	//Return json object
 	echo json_encode(getEvidenceByUID($uid));
 	return;
@@ -83,10 +83,12 @@ function generateObject()
 //********** CHECK IF FILE ALREADY EXISTS ON SERVER **********
 
 try {
-	$response = query("SELECT * FROM evidence WHERE checksum=?", array(sha1_file($file['tmp_name'])), true, true);
+	$response = query("SELECT * FROM evidence WHERE checksum=?", array(sha1_file($file['tmp_name'])), false, true);
 	if($response)
 	{
-		foreach($response as $reply) //Iterate through all replies, in case multiple files have the same checksum for whatever reason.
+		echo json_encode($response);
+		die();
+		/*foreach($response as $reply) //Iterate through all replies, in case multiple files have the same checksum for whatever reason.
 		{
 			$replydata = json_decode($reply['data'], true);
 			system(".\\dfc\\dfc.exe ".$file['tmp_name']." ".$replydata['file_path'], $out);
@@ -104,7 +106,7 @@ try {
 				echo json_encode($reply);
 				return;
 			}
-		}
+		}*/
 	}
 	generateObject(); //It doesn't exist on the server
 } catch(PDOException $e) {

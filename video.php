@@ -111,7 +111,7 @@ tinymce.init({
   <li class="video-comment-focused">
     <div class="fifteen-per-wide hundred-tall left text-center">
       <div class="hundred-tall">
-        <p class="vertical-middle">5:05:09</p>
+        <p class="vertical-middle">00:05:09</p>
       </div>
     </div>
     <div class="hundred-tall eighty-five-per-wide left twenty-padding-right">
@@ -125,12 +125,12 @@ tinymce.init({
   <li>
     <div class="fifteen-per-wide hundred-tall left text-center">
       <div class="hundred-tall">
-        <p class="vertical-middle">10:20:15</p>
+        <p class="vertical-middle">00:06:15</p>
       </div>
     </div>
     <div class="hundred-tall eighty-five-per-wide left twenty-padding-right">
       <p class="vertical-middle">
-        Assailant appears to throw a gun from the passenger side window - perceived gun hits sidewalk then bounces off to the side of the streen sign before coming to a rest under a bush.</p>
+        Vehicle is flagged down and pulled to a stop.</p>
     </div>
     <div class="clear"></div>
    <!--END TIMELINE COMMENT-->
@@ -167,8 +167,8 @@ tinymce.init({
     <div class="video-sidebar-container">
 <!--START video sidebar inner-content -->
       <div class="video-sidebar-inner">
-        <h2 class="video-sidebar-header">Roadside drug bust</h2>
-        <div class="video-sidebar-date">Incident: Oct. 25, 2016</div>
+        <h2 class="video-sidebar-header">Highway 24 Speed Citation</h2>
+        <div class="video-sidebar-date">Incident: Jan. 4, 2017</div>
 
         <ul class="video-meta-container">
           <li>
@@ -178,7 +178,7 @@ tinymce.init({
           </li>
           <li>
             <div class="fourty-per-wide ten-padding left video-meta-header">Purging</div>
-            <div class="sixty-per-wide ten-padding left video-meta-body">10/25/2016</div>
+            <div class="sixty-per-wide ten-padding left video-meta-body">4/25/2017</div>
             <div class="clear"></div>
           </li>
         </ul>
@@ -187,17 +187,12 @@ tinymce.init({
           <div class="video-taglist-header">Tag list</div>
             <ul id="tag-list" class="video-taglist-body">
               <li style="background: #cc3333;">
-                <p class="left">Murder</p>
+                <p class="left">Speeding</p>
                 <div class="fa fa-minus-circle right link-button point-cursor"></div>
                 <div class="clear"></div>
               </li>
                 <li>
-                  <p class="left">DUI</p>
-                  <div class="fa fa-minus-circle right link-button point-cursor"></div>
-                  <div class="clear"></div>
-                </li>
-                <li>
-                  <p class="left">Child Endangerment</p>
+                  <p class="left">Improper Maneuver</p>
                   <div class="fa fa-minus-circle right link-button point-cursor"></div>
                   <div class="clear"></div>
                 </li>
@@ -206,12 +201,12 @@ tinymce.init({
           <ul class="video-associate-list">
             <li>
               <div class="fourty-per-wide ten-padding left video-meta-header">Case</div>
-              <div class="sixty-per-wide ten-padding left video-meta-body">10SL000000987</div>
+              <div class="sixty-per-wide ten-padding left video-meta-body">17-000987</div>
               <div class="clear"></div>
             </li>
             <li>
               <div class="fourty-per-wide ten-padding left video-meta-header">Intel</div>
-              <div class="sixty-per-wide ten-padding left video-meta-body">Gang Symbols</div>
+              <div class="sixty-per-wide ten-padding left video-meta-body">Highway 24 Traffic Citations</div>
               <div class="clear"></div>
             </li>
           </ul>

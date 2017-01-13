@@ -19,7 +19,7 @@ if(isset($_POST['get'])&&isset($_POST['uid']))
 		}
 		case 'evidence':
 		{
-			$ev = query("SELECT * FROM evidence WHERE (users LIKE ?) AND uid=?", array($_SESSION['user'], $_POST['uid']));
+			$ev = query("SELECT * FROM evidence WHERE (users LIKE ?) AND (uid LIKE ?)", array($_SESSION['user'], $_POST['uid']));
 			echo json_encode($ev);
 			return;
 		}

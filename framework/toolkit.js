@@ -1,7 +1,7 @@
 
 const SHOW_CALLSTACK = false;
 const SHOW_LOGS = true;
-const SERVER_ADDRESS = 'https://localhost/';
+const SERVER_ADDRESS = 'https://192.168.1.13/';
 var callstack = [];
 
 function ajax(phpurl, f=null, func=null, errfunc=null)
