@@ -4,15 +4,12 @@ include 'dbconnect.php';
 
 $data = json_decode($_POST['data'],true);
 
-echo $_POST['data'];
-die();
-
 function updateEntry()
 {
 	global $data;
 	try {
 		update(	"UPDATE evidence SET nickname=?, caseindex=?, checksum=?, data=? WHERE uid=?",
-				array($_POST['nickname'],$_POST['case_index'],sha1_file($data['file_path']),$_POST['uid']),$_POST['data']);
+				array($_POST['nickname'],$_POST['case_index'],sha1_file($data['file_path']),$_POST['data'],$_POST['uid']));
 		echo "Updated evidence in database ".$_POST['case_index'];
 		return;
 	} catch(PDOException $e) {echo getError($e);}

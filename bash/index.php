@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<?php require_once '../framework/requireSSL.php' ?>
 <html>
 <head>
 	<title>Fortify Bash</title>

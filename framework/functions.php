@@ -2,27 +2,29 @@
 
 include 'dbconnect.php';
 
+function tokenizeUID($string)
+{
+	$tokens = [];
+	while(strlen($string))
+	{
+		array_push($tokens, substr($string,0,16));
+		$string = substr($string, 16);
+	}
+	return $tokens;
+}
+
 function getData()
 {
-	switch($_POST['table'])
-	{
-		case 'quickreport':
-		{
-			try {
-				$response = query("SELECT * FROM quickreport WHERE officer=?", array($_SESSION['user']), true);
-				echo json_encode($response);
-			} catch(PDOException $e) {getError($e);}
-			break;
-		}
-		case 'evidence':
-		{
-			try {
-				$response = query("SELECT * FROM evidence WHERE uid=? AND user=?", array($_POST['uid'], $_SESSION['user']));
-				if($response) echo json_encode($response);
-			} catch(PDOException $e) {getError($e);}
-			break;
-		}
-	}
+	//Compile list of cases associated with username and database
+	$cases = query("SELECT * FROM cases WHERE users LIKE ?",array($_SESSION['user']),true);
+	//Get list of all uid's that need to be pulled from the database
+	$evidence = query("SELECT * FROM evidence WHERE users LIKE ?",array($_SESSION['user']),true);
+	//Return JSON string to requestee
+	$return = [];
+	$return['cases'] = $cases;
+	$return['evidence'] = $evidence;
+	echo json_encode($return);
+	return;
 }
 
 function getUnfort()

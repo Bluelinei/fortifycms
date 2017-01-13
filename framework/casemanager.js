@@ -166,7 +166,6 @@ function newCaseFile(uploadedfile)
 				if(cf.filedate>cases[i].prelinkstart&&cf.filedate<cases[i].prelinkend) cases[i].addFile(cf);
 			}
 			updateMedia();
-			cf.postFile();
 		}
 	});
 
@@ -247,6 +246,11 @@ function updateReport()
 	$('#report-type').val(workingcase.type);
 	if(workingcase.prelinkenable) $('.prelink-toggle-text').html('Disable Pre-Link');
 	else $('.prelink-toggle-text').html('Enable Pre-Link');
+	prelink.edit('start');
+	prelink.setTime();
+	prelink.edit('end');
+	prelink.setTime();
+	prelink.editing = undefined;
 	updateFileList();
 	updateTags();
 	updateMedia();
@@ -465,8 +469,8 @@ function Case(uid)
 	this.changed = false;
 	this.DELETED = false;
 	this.editnick = false;
-	this.prelinkstart;
-	this.prelinkend;
+	this.prelinkstart = getUnixTime();
+	this.prelinkend = this.prelinkstart;
 	this.prelinkenable = false;
 
 	cases.push(this);
@@ -489,7 +493,7 @@ Case.prototype.postCase = function() {
 	f.append('nickname',this.nickname); //nickname
 	f.append('reportnum',this.casenum); //ref
 	f.append('reporttype',this.type); //type
-	f.append('reporttags',this.tags.join('<#>')); //tags
+	f.append('reporttags',JSON.stringify(this.tags)); //tags
 	var filelist = []
 	var len = this.files.length;
 	for(var i=0; i<len; i++) {filelist.push(this.files[i].uid);}
@@ -498,6 +502,35 @@ Case.prototype.postCase = function() {
 	f.append('admin',(this.admin?1:0)); //admin
 	var data = {}
 	data['location'] = this.location;
+	data['prelinkstart'] = this.prelinkstart;
+	data['prelinkend'] = this.prelinkend;
+	data['prelinkenable'] = this.prelinkenable;
+	data['vidcount'] = 0;
+	data['imgcount'] = 0;
+	data['audcount'] = 0;
+	data['doccount'] = 0;
+	data['phycount'] = 0;
+	for(var i=0; i<this.files.length; i++)
+	{
+		switch(this.files[i].type)
+		{
+			case 'VIDEO':
+				data['vidcount']++;
+				break;
+			case 'AUDIO':
+				data['audcount']++;
+				break;
+			case 'DOCUMENT':
+				data['doccount']++;
+				break;
+			case 'TEXT':
+				data['doccount']++;
+				break;
+			case 'IMAGE':
+				data['imgcount']++;
+				break;
+		}
+	}
 	f.append('data', JSON.stringify(data));
 	ajax('framework/casepost.php', f, function(response) {
 			log(response);
@@ -577,7 +610,6 @@ Case.prototype.addFile = function(file) {
 	var len = this.files.length;
 	for(var i=0; i<len; i++) {if(this.files[i].uid==file.uid) {popStack(); return 0;}}
 	this.files.push(file);
-	file.caseindex.push(this.uid);
 	file.updateMediaElement();
 	this.updateElement();
 	updateFileList();
@@ -673,10 +705,11 @@ Casefile.prototype.postFile = function() {
 	data['file_type'] = this.filetype;
 	data['upload_date'] = this.uploaddate;
 	data['lastmodified'] = this.filedate;
+	data['thumbnail'] = this.thumbnail;
 	fdata.append('data', JSON.stringify(data));
 
 	ajax('framework/filepost.php', fdata, function(response) {
-			//log('filepost.php: '+response);
+		//log('filepost.php: '+response);
 	});
 	popStack()
 }
@@ -786,7 +819,7 @@ Casefile.prototype.setButtonFunction = function() {
 		$(document).on('mouseenter', '.'+ref.uid+'_view-button', function(e){
 			clearPreview();
 			$('.media-preview-overlay').append('<video id="overlay-video" style="position: absolute; top:0%; right:0%; max-width: 100%; max-height: 100%;" autoplay></video>');
-			$('#overlay-video').html('<source src="framework/'+ref.filepath+'" type="video/mp4"/>');
+			$('#overlay-video').html('<source src="'+SERVER_ADDRESS+'framework/'+ref.filepath+'" type="video/mp4"/>');
 			$('#overlay-video').get(0).oncanplay = function(){
 				var pos = getOverlayPosition(e);
 				$('.media-preview-overlay').css({top: pos.y, left: pos.x});
@@ -798,7 +831,7 @@ Casefile.prototype.setButtonFunction = function() {
 	{
 		$(document).on('mouseenter', '.'+this.uid+'_view-button', function(e){
 			clearPreview();
-			$('.media-preview-overlay').append('<img id="overlay-image" src="'+ref.thumbnail+'" style="position: absolute; top:0%; right:0%; max-width: 100%; max-height: 100%;" />');
+			$('.media-preview-overlay').append('<img id="overlay-image" src="'+SERVER_ADDRESS+ref.thumbnail+'" style="position: absolute; top:0%; right:0%; max-width: 100%; max-height: 100%;" />');
 			var pos = getOverlayPosition(e);
 			$('.media-preview-overlay').css({top: pos.y, left: pos.x});
 			$('.media-preview-overlay').removeClass('hidden');
@@ -818,6 +851,7 @@ Casefile.prototype.updateThumb = function() {
 		'background-size': 'cover',
 		'background-position': 'center'
 	});
+	this.postFile();
 }
 
 function getOverlayPosition(e)
@@ -896,7 +930,6 @@ function Prelink()
 	this.day;
 	this.hour;
 	this.minute;
-	this.meridiem;
 }
 
 Prelink.prototype.monthToNum = function(month) {
@@ -948,9 +981,6 @@ Prelink.prototype.setTime = function() {
 	this.day = Number($('.clock-day').html());
 	this.hour = Number($('.hour-num').val());
 	this.minute	= Number($('.minute-num').val());
-	this.meridiem = $('.meridiem').html();
-	if(this.meridiem=='AM'&&this.hour==12) {this.hour = 0;}
-	else if(this.meridiem=='PM'&&this.hour!=12) {this.hour += 12;}
 
 	var time = new Date(this.year, this.month, this.day, this.hour, this.minute);
 
@@ -958,13 +988,13 @@ Prelink.prototype.setTime = function() {
 	{
 		workingcase.prelinkstart = getUnixTime(time.valueOf());
 		var h = time.getHours();
-		$('.prelink-start').html('<p>Start Time<br>'+time.toLocaleDateString()+', '+(h>12?h-12:h)+':'+(time.getMinutes()>10?time.getMinutes():'0'+time.getMinutes())+' '+this.meridiem+'</p>');
+		$('.prelink-start').html('<p>Start Time<br>'+time.toLocaleDateString()+', '+(h<10?'0'+h:h)+':'+(time.getMinutes()>10?time.getMinutes():'0'+time.getMinutes())+'</p>');
 	}
 	else if(this.editing=='end')
 	{
 		workingcase.prelinkend = getUnixTime(time.valueOf());
 		var h = time.getHours();
-		$('.prelink-end').html('<p>End Time<br>'+time.toLocaleDateString()+', '+(h>12?h-12:h)+':'+(time.getMinutes()>10?time.getMinutes():'0'+time.getMinutes())+' '+this.meridiem+'</p>');
+		$('.prelink-end').html('<p>End Time<br>'+time.toLocaleDateString()+', '+(h<10?'0'+h:h)+':'+(time.getMinutes()>10?time.getMinutes():'0'+time.getMinutes())+'</p>');
 	}
 }
 
@@ -977,10 +1007,9 @@ Prelink.prototype.edit = function(time) {
 	$('.clock-year').html(d.getFullYear());
 	$('.clock-month').html(readMonth(d.getMonth()));
 	$('.clock-day').html(d.getDate());
-	var hour = d.getHours();
-	$('.hour-num').val((hour>11?hour-12:hour));
+	var hour = d.getHours(); //0-23
+	$('.hour-num').val(hour);
 	$('.minute-num').val(d.getMinutes());
-	$('.meridiem').html((hour>12?'PM':'AM'));
 }
 
 Prelink.prototype.enable = function() {

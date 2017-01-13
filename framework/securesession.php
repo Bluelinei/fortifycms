@@ -4,9 +4,11 @@ require_once 'dbconnect.php';
 
 function forceLogin()
 {
-	header("Location: https://localhost/login.php");
+	header("Location: https://".$_SERVER['SERVER_NAME']."/login.php");
 	die();
 }
+
+$DATABASE = $_SESSION['agency'];
 
 if(!isset($_SESSION['login'])||!isset($_SESSION['user'])) forceLogin();
 

@@ -447,7 +447,7 @@ small{
   position: relative;
   float: left;
   height: 100%;
-  width: calc(20% - 4px);
+  width: calc(25% - 5px);
 }
 
 .set-calendar {
@@ -526,23 +526,6 @@ small{
   transition: all 0s;
   //text-shadow: 0px -1px 0px #333;
   background: #383144;
-}
-
-.meridiem {
-  font-size: 30px;
-  color:#fff;
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.meridiem:hover {
-  text-shadow: 0px 1px 0px #333;
-}
-
-.meridiem:active {
-  transition: all 0s;
-  text-shadow: 0px 1px 0px #fff;
-  color: #333;
 }
 
 .prelink-toggle {
@@ -657,6 +640,16 @@ select:-moz-focusring {
   margin-bottom:3px;
 	padding: 10px;
 	text-align: center;
+}
+
+.tag li{
+  background: #999;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 10px;
+  margin-bottom:3px;
+  padding: 10px;
+  text-align: center;
 }
 
 /** 03.02 Case Manager Block **/
@@ -935,7 +928,7 @@ h3.new-case:active{
 }
 
 .placeholder {
-  background-image: url("http://localhost/img/loading.gif");
+  background-image: url("https://192.168.1.13/img/loading.gif");
   background-position: center;
   background-repeat: no-repeat;
   background-size: 50px 50px;
@@ -1521,7 +1514,7 @@ footer .headshot{
 /**12.00 search**/
 
 .search-box{
-  background: rgba(000,000,000,0.9);
+  background: rgba(18,18,25,0.9);; /*rgba(000,000,000,0.9)*/
   color: #fff;
   height: 100%;
   padding: 0px 0px;
@@ -1529,11 +1522,11 @@ footer .headshot{
   top: 0;
   width: 60%;
   z-index: 401; /*Above all but pageload-overlay*/
-  transition: opacity 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .search-box.hidden {
-  opacity: 0;
+  transform: translateX(-100%);
   pointer-events: none;
 }
 
@@ -1648,7 +1641,7 @@ footer .headshot{
 }
 
 .search-result-col{
-  border-right: 1px dotted #000;
+  border-right: 1px solid #333;
   float: left;
   height: 100%;
   width: 33.333333339%;

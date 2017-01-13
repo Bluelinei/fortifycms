@@ -8,10 +8,13 @@
     
     <div class="vertical-middle search-close" style="top: 40%;">
       <img src="img/Fortify-Logo-Brushed.png" style="pointer-events:none;" />
-      <input type="text" placeholder="Enter search criteria" />
+      <input id="search-query" type="text" placeholder="Enter search criteria" />
       <input type="submit" value="Execute Search" />
     </div>
     
-  </div>
+  </div> 
+  <script>
+    
+  </script>
 
 <!--END search box-->

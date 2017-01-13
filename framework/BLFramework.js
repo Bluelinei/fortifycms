@@ -69,11 +69,16 @@ function closeAllBrowsers()
 {
 	$('#media-browser').removeClass('show');
 	$('.notification-button-container').addClass('hidden');
+	$('.search-box').addClass('hidden');
+	$('.media-block-evidence').removeClass('trans-y-up');
+	$('.media-block-shelf-tag').removeClass('trans-y-up');
 }
 
 function closeMediaBrowser()
 {
 	$('#media-browser').removeClass('show');
+	$('.media-block-evidence').removeClass('trans-y-up');
+	$('.media-block-shelf-tag').removeClass('trans-y-up');
 }
 
 function toggleMediaBrowser(event)
@@ -218,18 +223,13 @@ function setEventListeners()
 		prelink.setTime();
 		prelink.editing = undefined;
 	});
-	$('.meridiem').on('click', function(e) {
-		var src = $(e.target);
-		if(src.html()=='AM') src.html('PM');
-		else src.html('AM');
-	});
 
 	$('.time-input').on('change', function(e) {
 		var src = $(e.target);
 		if(src.hasClass('hour-num'))
 		{
-			if(src.val()>12) src.val(1);
-			else if(src.val()<1) src.val(12);
+			if(src.val()>23) src.val(0);
+			else if(src.val()<0) src.val(23);
 		}
 		else if(src.hasClass('minute-num'))
 		{
@@ -251,167 +251,79 @@ function setEventListeners()
 		if(e.keyCode==13||e.which==13) {$(':focus').blur();}
 	});
 
-	$('#shelf-item-image').on('click', function(e) {
-
-	});
-
 	//TEMP SETTINGS STUFF
 	var d = new Date();
 	$('.clock-year').html(d.getFullYear());
 	$('.clock-month').html(readMonth(d.getMonth()));
 	$('.clock-day').html(d.getDate());
+	$('.hour-num').val(d.getHours());
 	$('.minute-num').val(d.getMinutes());
-	var hour = d.getHours();
-	if(hour>12)
-	{
-		$('.hour-num').val(hour-12);
-		$('.meridiem').html('PM');
-	}
-	else
-	{
-		$('.hour-num').val(hour);
-		$('.meridiem').html('AM');
-	}
 }
+
 
 function getDatabase()
 {
+	//request data from server by session
 	var f = new FormData();
-	f.append('table', 'quickreport');
-	f.append('function', 'get');
+	f.append('function','get');
 	loading(1);
-	var compiled = [];
-	ajax('framework/functions.php', f, function(response) {
+	ajax(SERVER_ADDRESS+'framework/functions.php',f,function(response){
 		log(response);
-		var o = JSON.parse(response);
-		if(o.length)
+		var obj = JSON.parse(response);
+		//Will return assoc array of 'cases' and 'evidence' with all of their data
+		var dbcases = obj.cases;
+		var dbevidence = obj.evidence;
+		//Generate case objects
+		for(var i=0; i<dbcases.length; i++)
 		{
-			//LOAD CASES
-			var len = o.length;
-			for(var i=0; i<len; i++)
-			{
-				var x = o[i];
-				var c = new Case(x.uid);
-				c.nickname = x.nickname;
-				c.casenum = (x.casenum?x.casenum:'[No Report Number]');
-				c.location = x.location;
-				c.type = (x.type=='undefined'?'':x.type);
-				c.tags = tokenize(x.tags, '<#>');
-				c.admin = (x.admin=="1"?true:false);
-				c.officer = x.officer;
-				var evidence = tokenizeUID(x.evidence);
-
-				//FROM CASES COMPILE LIST OF ALL FILES THAT NEED TO BE LOADED
-				compiled = concatLists(compiled, evidence);
-			}
+			var c = new Case(dbcases[i].uid);
+			var data = JSON.parse(dbcases[i].data);
+			c.nickname = dbcases[i].nickname;
+			c.casenum = dbcases[i].ref;
+			c.location = data.location;
+			if(dbcases[i].tags) c.tags = JSON.parse(dbcases[i].tags);
+			c.admin = (dbcases[i].admin=="1"?true:false);
+			c.officer = dbcases[i].users;
+			c.type = dbcases[i].type;
+			c.filelist = tokenizeUID(dbcases[i].evidence);
+			c.prelinkstart = (data.prelinkstart?Number(data.prelinkstart):getUnixTime());
+			c.prelinkend = (data.prelinkend?Number(data.prelinkend):getUnixTime());
+			c.prelinkenable = (data.prelinkenable?true:false);
 		}
-		setAsActiveCase(cases[0]);
-		//GET FILES FROM DATABASE THAT ARE NOT FORTIFIED
-		f = new FormData();
-		f.append('function', 'unfort');
-		ajax('framework/functions.php', f, function(response){
-			if(!response) return;
-			var files = JSON.parse(response);
-			for(var i=0; i<files.length; i++)
-			{
-				var obj = files[i];
-				var cf = new Casefile(null, obj.uid);
-				cf.filepath = obj.filepath;
-				cf.filetype = obj.type;
-				cf.name = obj.nickname;
-				cf.officer = obj.user;
-				cf.uploaddate = Number(obj.uploaddate);
-				cf.filedate = Number(obj.lastmodified);
-				cf.caseindex = tokenizeUID(obj.caseindex);
-				cf.init();
-				switch(cf.filetype)
-				{
-					case 'VIDEO':
-						cf.thumbnail = 'framework/uploads/'+session.agency+'/'+session.user+'/thumbs/'+cf.uid+'.png';
-						updateMedia();
-						break;
-					case 'IMAGE':
-						cf.thumbnail = 'framework/'+cf.filepath;
-						break;
-					case 'AUDIO':
-						cf.thumbnail = 'img/audioicon.png';
-						break;
-					case 'TEXT':
-						cf.thumbnail = 'img/texticon.png';
-						break;
-					case 'DOCUMENT':
-						cf.thumbnail = 'img/docicon.png';
-						break;
-					default: break;
-				}
-				updateMedia();
-			}
-		});
-		//ONCE WE'RE DONE COMPILING THE EVIDENCE LIST, BEGIN LOADING ALL EVIDENCE
-		len = compiled.length;
-		for(var i=0; i<len; i++)
+		//Generate evidence objects
+		if(dbcases.length)
 		{
-			loading(1);
-			f = new FormData();
-			f.append('table', 'evidence');
-			f.append('function', 'get');
-			f.append('uid', compiled[i]);
-			ajax('framework/functions.php', f, function(response) {
-				var obj;
-				try {
-					obj = JSON.parse(response);
-				} catch(e) {
-					log('Could not retrieve Casefile data from server: '+response);
-					loading(-1);
-					return;
-				}
-				var cf = new Casefile(null, obj.uid);
-				cf.filepath = obj.filepath;
-				cf.filetype = obj.type;
-				cf.name = obj.nickname;
-				cf.officer = obj.user;
-				cf.uploaddate = Number(obj.uploaddate);
-				cf.filedate = Number(obj.lastmodified);
-				cf.caseindex = tokenizeUID(obj.caseindex);
+			for(var i=0; i<dbevidence.length; i++)
+			{
+				var data = JSON.parse(dbevidence[i].data);
+				var cf = new Casefile(null, dbevidence[i].uid);
+				cf.type = dbevidence[i].type;
+				cf.caseindex = tokenizeUID(dbevidence[i].caseindex);
+				cf.filepath = data.file_path;
+				cf.filetype = data.file_type;
+				cf.name = dbevidence[i].nickname;
+				cf.uploaddate = Number(data.upload_date);
+				cf.filedate = Number(data.lastmodified);
+				cf.thumbnail = data.thumbnail;
 				cf.init();
-				switch(cf.filetype)
+				//Populate cases with evidence
+				for(var j=0; j<cases.length; j++)
 				{
-					case 'VIDEO':
-						cf.thumbnail = 'framework/uploads/'+session.agency+'/'+session.user+'/thumbs/'+cf.uid+'.png';
-						updateMedia();
-						break;
-					case 'IMAGE':
-						cf.thumbnail = 'framework/'+cf.filepath;
-						break;
-					case 'AUDIO':
-						cf.thumbnail = 'img/audioicon.png';
-						break;
-					case 'TEXT':
-						cf.thumbnail = 'img/texticon.png';
-						break;
-					case 'DOCUMENT':
-						cf.thumbnail = 'img/docicon.png';
-						break;
-					default: break;
+					if(!cases[j].filelist.length) continue;
+					if(inList(cases[j].filelist, cf.uid)) {cases[j].addFile(cf);}
 				}
-
-				var caselen = cf.caseindex.length;
-				for(var j=0; j<caselen; j++)
-				{
-					var indx = getCaseById(cf.caseindex[j]);
-					if(!indx)
-					{
-						log('Indx returned null: '+cf.caseindex[j]);
-						continue;
-					}
-					indx.addFile(cf);
-				}
-				updateCases();
-				updateMedia();
-				updateReport();
-				loading(-1);
-			});
+			}
+			setAsActiveCase(cases[0]);
 		}
+		else
+		{
+			newCase();
+		}
+		loading(-1);
+	}, function(response){
+		log(response);
+		$('html').html('');
+		$('html').append(response.responseText);
 		loading(-1);
 	});
 }
@@ -452,6 +364,7 @@ function loadINI()
 					}
 				}
 				generateTags();
+				updateReport();
 				loading(-1);
 			},
 			error: function(err) {
@@ -466,12 +379,9 @@ function loadINI()
 window.onload = function()
 {
 	loading(1);
-	ajax('framework/getsession.php', null, function(response) {
-		session = JSON.parse(response);
-		getAPISupport();
-		loadINI();
-		getDatabase();
-		setEventListeners();
-		loading(-1);
-	});
+	getAPISupport();
+	loadINI();
+	getDatabase();
+	setEventListeners();
+	loading(-1);
 }

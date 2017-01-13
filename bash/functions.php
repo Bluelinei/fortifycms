@@ -105,7 +105,9 @@ if(isset($_POST['function']))
 				$conn = new PDO("sqlsrv:Server=CHAIR-FORCE-ONE\SQLEXPRESS;", 'W5eMCKJbykm4fHfQdP4vi7XHFoDi7Wgx', 'ai2CZKqBNqF8sFniNybCl2GILqrDzQ1g');
 				$stmt = $conn->prepare("CREATE DATABASE $database;");
 				$stmt->execute();
-				$stmt = $conn->prepare("USE $database; CREATE TABLE users (username VARCHAR(32) NOT NULL PRIMARY KEY,password VARCHAR(128),passwordsalt VARCHAR(128),name VARCHAR(64),agency VARCHAR(64),phone VARCHAR(16),authenticate TINYINT,sessid VARCHAR(128),sessexpire INT,authcode VARCHAR(8),authexpire INT); CREATE TABLE evidence(uid VARCHAR(16) NOT NULL PRIMARY KEY,checksum VARCHAR(128),type VARCHAR(64),nickname VARCHAR(64),caseindex TEXT,data TEXT); CREATE TABLE cases(uid VARCHAR(16) NOT NULL PRIMARY KEY,nickname VARCHAR(64),ref VARCHAR(64),type VARCHAR(64),admin TINYINT,users TEXT,tags TEXT,evidence TEXT);");
+				$stmt = $conn->prepare("USE $database; CREATE TABLE users (username VARCHAR(32) NOT NULL PRIMARY KEY,password VARCHAR(128),passwordsalt VARCHAR(128),name VARCHAR(64),agency VARCHAR(64),phone VARCHAR(16),authenticate TINYINT,sessid VARCHAR(128),sessexpire INT,authcode VARCHAR(8),authexpire INT);
+					CREATE TABLE evidence(uid VARCHAR(16) NOT NULL PRIMARY KEY,checksum VARCHAR(128),type VARCHAR(64),nickname VARCHAR(64),caseindex TEXT,data TEXT);
+					CREATE TABLE cases(uid VARCHAR(16) NOT NULL PRIMARY KEY,nickname VARCHAR(64),ref VARCHAR(64),type VARCHAR(64),admin TINYINT,users TEXT,tags TEXT,evidence TEXT,data TEXT);");
 				$stmt->execute();
 				if(dbExists($database))
 				{
