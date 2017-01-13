@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<?php require 'framework/requireSSL.php'; ?>
+<?php //require 'framework/requireSSL.php'; ?>
 <html>
   <head>
     <meta charset="utf-8">
@@ -10,7 +10,7 @@
     <script src="./framework/toolkit.js?v=<?php echo sha1_file("framework/toolkit.js");?>"></script>
   </head>
   <body style= "background: linear-gradient(#bfbfbf, #fff);">
-  
+
       <div class="vertical-middle login-page" style="width:500px;margin: 0px auto;">
         <img src="img/Fortify-Logo-Brushed.png" style="width: 100%; pointer-events:none;" />
         <input id="agencyid" type="text" placeholder="Agency ID" autocomplete="on" />
@@ -19,7 +19,7 @@
         <div class="clear"></div>
         <input id="login" type="submit" value="Login" style="width:50%; left:50%; transform: translateX(-50%)" />
         <div class="login-message hidden">
-          
+
         </div>
       </div>
       <script>
