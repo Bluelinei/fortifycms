@@ -16,150 +16,6 @@
       <div class="search-critera">
         <div id="query-output"></div>
       </div><!--END search critera box-->
-
-
-
-
-<!--START SEARCH RESULT BLOCK
-      <div class="search-result">
-        <div class="search-result-meta">
-          <div class="search-meta-header">
-            <h2>16-00001234</h2>
-            <h3>Domestic Dispute at Ridgewood Estates</h3>
-          </div><!--END search meta header
-
-          <div class="search-meta">
-            Create Date: 1-5-17<br>
-            Report Officer: Zach Watts<br>
-            Report Type: Arrest Report<br><br>
-            <i class="fa fa-map-marker" aria-hidden="true"></i> 169 Ridgewood Pkwy, 31909
-            <br>
-          </div>
-        </div><!--END result meta
-
-<!--START search result content-
-        <div class="search-result-content">
-          <div class="search-result-col ten-padding twenty-padding-left twenty-padding-right">
-            <ul class="tag"> <!-- THIS ELEMENT REQUIRES A UID 
-              <li>DUI</li>
-              <li>Domestic Abuse</li>
-              <li>Public Endangerment</li>
-            </ul>
-          </div>
-          <div class="search-result-col">
-            <ul class="search-result-evidence-count hundred-tall">
-              <li>
-                <div class="left">Video</div>
-                <div class="right">12</div>
-                <div class="clear"></div>
-              </li>
-              <li>
-                <div class="left">Photo</div>
-                <div class="right">2</div>
-                <div class="clear"></div>
-              </li>
-              <li>
-                <div class="left">Physical</div>
-                <div class="right">0</div>
-                <div class="clear"></div>
-              </li>
-              <li>
-                <div class="left">Document</div>
-                <div class="right">1</div>
-                <div class="clear"></div>
-              </li>
-              <li>
-                <div class="left">Audio</div>
-                <div class="right">0</div>
-                <div class="clear"></div>
-              </li>
-            </ul>
-          </div>
-          <div class="search-result-col">
-            <h2 class="suspect-search-header">Suspect List</h2>
-            <ul class="tag ten-padding twenty-padding-left twenty-padding-right"> <!-- THIS ELEMENT REQUIRES A UID 
-              <li>Ronald McDonald</li>
-              <li>Jared from Subway</li>
-              <li>The BurgerKing</li>
-            </ul>
-            <div class="search-result-more-button">10 more suspects</div>
-          </div>
-          <div class="clear"></div>
-        </div><!--END search result content-
-        <div class="clear"></div>
-      </div><!--END SEARCH RESULT BLOCK-
-
-
-
-
-
-      <!--START SEARCH RESULT BLOCK
-            <div class="search-result">
-              <div class="search-result-meta">
-                <div class="search-meta-header">
-                  <h2>16-00001234</h2>
-                  <h3>Domestic Dispute at Ridgewood Estates</h3>
-                </div><!--END search meta header 
-
-                <div class="search-meta">
-                  Create Date: 1-5-17<br>
-                  Report Officer: Zach Watts<br>
-                  Report Type: Arrest Report<br><br>
-                  <i class="fa fa-map-marker" aria-hidden="true"></i> 169 Ridgewood Pkwy, 31909
-                  <br>
-                </div>
-              </div><!--END result meta
-
-      <!--START search result content
-              <div class="search-result-content">
-                <div class="search-result-col ten-padding twenty-padding-left twenty-padding-right">
-                  <ul class="tag"> <!-- THIS ELEMENT REQUIRES A UID 
-                    <li>DUI</li>
-                    <li>Domestic Abuse</li>
-                    <li>Public Endangerment</li>
-                  </ul>
-                </div>
-                <div class="search-result-col">
-                  <ul class="search-result-evidence-count hundred-tall">
-                    <li>
-                      <div class="left">Video</div>
-                      <div class="right">12</div>
-                      <div class="clear"></div>
-                    </li>
-                    <li>
-                      <div class="left">Photo</div>
-                      <div class="right">2</div>
-                      <div class="clear"></div>
-                    </li>
-                    <li>
-                      <div class="left">Physical</div>
-                      <div class="right">0</div>
-                      <div class="clear"></div>
-                    </li>
-                    <li>
-                      <div class="left">Document</div>
-                      <div class="right">1</div>
-                      <div class="clear"></div>
-                    </li>
-                    <li>
-                      <div class="left">Audio</div>
-                      <div class="right">0</div>
-                      <div class="clear"></div>
-                    </li>
-                  </ul>
-                </div>
-                <div class="search-result-col">
-                  <h2 class="suspect-search-header">Suspect List</h2>
-                  <ul class="tag ten-padding twenty-padding-left twenty-padding-right"> <!-- THIS ELEMENT REQUIRES A UID 
-                    <li>Ronald McDonald</li>
-
-                    <li>Dave Thomas</li>
-                  </ul>
-                </div>
-                <div class="clear"></div>
-              </div><!--END search result content
-              <div class="clear"></div>
-            </div><!--END SEARCH RESULT BLOCK-->
       <div id="results-block"></div>
       <!--LOAD MORE SEARCH RESULTS BUTTON-->
       <div class="load-more-searches text-center">Load More Results</div>
@@ -167,6 +23,7 @@
     </div><!--END div container that allows for click-to-close -->
   </div>
   <script>
+    var eventlisteners = [];
     function setButtonFunctions()
     {
       $('#search-query').on('input', function(){
@@ -186,6 +43,57 @@
           }
         });
       });
+      $(document).on('click', '.add-to-workspace', function(e){
+        e.stopPropagation()
+        var cs = $(e.target).children('div').html();
+        if(getCaseById(cs)) return;
+        var f = new FormData();
+        f.append('uid', cs);
+        f.append('get', 'case');
+        ajax('framework/search.php',f,function(response){
+          log(response);
+          var o = JSON.parse(response);
+          var c = new Case(o.case.uid);
+          var data = JSON.parse(o.case.data);
+          c.nickname = o.case.nickname;
+          c.casenum = o.case.ref;
+          c.location = data.location;
+          if(o.case.tags) c.tags = JSON.parse(o.case.tags);
+          c.admin = (o.case.admin=="1"?true:false);
+          c.officer = o.case.users;
+          c.type = o.case.type;
+          c.filelist = tokenizeUID(o.case.evidence);
+          c.prelinkstart = (data.prelinkstart?Number(data.prelinkstart):getUnixTime());
+          c.prelinkend = (data.prelinkend?Number(data.prelinkend):getUnixTime());
+          c.prelinkenable = (data.prelinkenable?true:false);
+          var dbevidence = o.evidence;
+          for(var i=0; i<dbevidence.length; i++)
+          {
+            var loaded = getCasefileById(dbevidence[i].uid);
+            if(loaded)
+            {
+              c.addFile(loaded);
+              continue;
+            }
+            var data = JSON.parse(dbevidence[i].data);
+            var cf = new Casefile(null, dbevidence[i].uid);
+            cf.type = dbevidence[i].type;
+            cf.caseindex = tokenizeUID(dbevidence[i].caseindex);
+            cf.filepath = data.file_path;
+            cf.filetype = data.file_type;
+            cf.name = dbevidence[i].nickname;
+            cf.uploaddate = Number(data.upload_date);
+            cf.filedate = Number(data.lastmodified);
+            cf.thumbnail = data.thumbnail;
+            cf.init();
+            //Populate cases with evidence
+            c.addFile(cf);
+          }
+          setAsActiveCase(c);
+          updateReport();
+          $('.search-box').addClass('hidden');
+        });
+      });
     }
 
     function genElement(c)
@@ -201,8 +109,8 @@
       //  doccount
       //  audcount
       //  suspects (list)
-      var element = '<div class="search-result">\
-                      <div id="'+c.uid+'_addtoworkspace" class="add-to-workspace"></div>\
+      var element= '<div class="search-result">\
+                      <div class="add-to-workspace no-select"><div style="display:none;">'+c.uid+'</div></div>\
                       <div class="search-result-meta">\
                         <div class="search-meta-header">\
                           <h2>'+c.ref+'</h2>\
@@ -261,9 +169,6 @@
                     <div class="clear"></div>\
                   </div>';
       $('#results-block').append($(element));
-      $(document).on('click', c.uid+'_addtoworkspace', function(){
-        var cs = c.uid;
-      });
     }
 
     $(window).on('load', function(){

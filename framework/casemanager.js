@@ -214,7 +214,6 @@ function deleteCase(c)
 	for(var i=0; i<len; i++) {
 		if(cases[i].uid == c.uid) 
 		{
-			c.element.detach();
 			c.deleteCase();
 			cases.splice(i,1);
 			break;
@@ -512,7 +511,7 @@ Case.prototype.postCase = function() {
 	data['phycount'] = 0;
 	for(var i=0; i<this.files.length; i++)
 	{
-		switch(this.files[i].type)
+		switch(this.files[i].filetype)
 		{
 			case 'VIDEO':
 				data['vidcount']++;
@@ -533,7 +532,7 @@ Case.prototype.postCase = function() {
 	}
 	f.append('data', JSON.stringify(data));
 	ajax('framework/casepost.php', f, function(response) {
-			log(response);
+			//log(response);
 	});
 	this.changeCase(false);
 	popStack();
@@ -610,6 +609,7 @@ Case.prototype.addFile = function(file) {
 	var len = this.files.length;
 	for(var i=0; i<len; i++) {if(this.files[i].uid==file.uid) {popStack(); return 0;}}
 	this.files.push(file);
+	file.caseindex.push(this.uid)
 	file.updateMediaElement();
 	this.updateElement();
 	updateFileList();
@@ -643,7 +643,10 @@ Case.prototype.getFileList = function() {
 
 Case.prototype.deleteCase = function() {
 	pushStack('Case.deleteCase');
-	while(this.files.length) {this.removeFile(this.files[0]);}
+	this.element.off('click');
+	$(document).off('click','.'+this.uid),
+	this.element.find('.'+this.uid+'_case_text').off('click');
+	this.element.remove();
 	this.DELETED = true;
 	popStack();
 };

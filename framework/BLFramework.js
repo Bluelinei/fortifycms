@@ -319,6 +319,7 @@ function getDatabase()
 		{
 			newCase();
 		}
+		if(workingcase) updateReport();
 		loading(-1);
 	}, function(response){
 		log(response);
@@ -364,7 +365,6 @@ function loadINI()
 					}
 				}
 				generateTags();
-				updateReport();
 				loading(-1);
 			},
 			error: function(err) {
@@ -381,7 +381,8 @@ window.onload = function()
 	loading(1);
 	getAPISupport();
 	loadINI();
-	getDatabase();
+	//getDatabase();
+	newCase();
 	setEventListeners();
 	loading(-1);
 }

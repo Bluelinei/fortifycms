@@ -854,10 +854,10 @@ h3.new-case:active{
 }
 
 .green-border{
-  border: 5px solid #9f9;
-  box-shadow: inset 0 0 25px #9f9;
-  -moz-box-shadow: inset 0 0 25px #9f9;
-  -webkit-box-shadow: inset 0 0 25px #9f9;
+  border: 5px solid #eff; /*Original color #9f9*/
+  box-shadow: inset 0 0 25px #eef;
+  -moz-box-shadow: inset 0 0 25px #eef;
+  -webkit-box-shadow: inset 0 0 25px #eef;
 }
 
 .red-border{
@@ -1523,6 +1523,20 @@ footer .headshot{
   width: 60%;
   z-index: 401; /*Above all but pageload-overlay*/
   transition: all 0.2s ease;
+}
+
+.add-to-workspace {
+  position: absolute;
+  cursor: pointer;
+  width:100%;
+  height: 100%;
+  z-index: 405;
+  transition: all 0.2s ease;
+  color: rgba(0,0,0,0);
+}
+
+.add-to-workspace:hover {
+  background: rgba(200,255,255,0.2);
 }
 
 .search-box.hidden {
