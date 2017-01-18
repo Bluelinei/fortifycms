@@ -167,7 +167,7 @@ tinymce.init({
     <div class="video-sidebar-container">
 <!--START video sidebar inner-content -->
       <div class="video-sidebar-inner">
-        <h2 class="video-sidebar-header">Highway 24 Speed Citation</h2>
+        <h2 class="video-sidebar-header">Hwy 24 Speed Citation</h2>
         <div class="video-sidebar-date">Incident: Jan. 4, 2017</div>
 
         <ul class="video-meta-container">
@@ -206,7 +206,7 @@ tinymce.init({
             </li>
             <li>
               <div class="fourty-per-wide ten-padding left video-meta-header">Intel</div>
-              <div class="sixty-per-wide ten-padding left video-meta-body">Highway 24 Traffic Citations</div>
+              <div class="sixty-per-wide ten-padding left video-meta-body">Hwy 24 Traffic Citations</div>
               <div class="clear"></div>
             </li>
           </ul>

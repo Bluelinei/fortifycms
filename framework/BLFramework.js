@@ -72,6 +72,8 @@ function closeAllBrowsers()
 	$('.search-box').addClass('hidden');
 	$('.media-block-evidence').removeClass('trans-y-up');
 	$('.media-block-shelf-tag').removeClass('trans-y-up');
+	$('.nav-side-bar').addClass('hidden');
+	$('.fortify-header-box').addClass('small');
 }
 
 function closeMediaBrowser()
@@ -85,7 +87,11 @@ function toggleMediaBrowser(event)
 {
 	event.stopPropagation();
 	if($('#media-browser').hasClass('show')) $('#media-browser').removeClass('show');
-	else $('#media-browser').addClass('show');
+	else
+	{
+		$('#media-browser').addClass('show');
+		if(!$('.search-box').hasClass('hidden')) $('.search-box').addClass('hidden');
+	}
 }
 
 function openFileBrowser() {document.getElementById('openfilebrowser').click();} //Calls the file upload input which is hidden by default. This if to allow clicking of drop area to function as browse button.

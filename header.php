@@ -40,29 +40,31 @@
 <!--START Main Content Area wrapper (side-bar + content pane)-->
 <div class="content-wrapper">
 <!--START Nav/Logo side-bar-->
-    <div class="nav-side-bar">
+    <div class="nav-side-bar hidden">
 
 <!--LOGO BOX is 30% 0f the nav-side-bar -->
-          <div class="logo-box">
-            <div class="expand-container">
+          <div class="logo-box no-select">
+            <div id="expand-nav-bar" class="expand-container">
               <div class="expand-button">
                 <i class="fa fa-bars" aria-hidden="true"></i>
               </div>
               <div class="clear"></div>
             </div>
-              <div style="padding: 25px;padding-bottom: 35px; width: 100%;height: 90%;">
+            <div class="fortify-header-box small">
+              <div class="fortify-header-logo">
                 <img src="img/logo.png" class="logo"/>
               </div>
+            </div>
           </div>
 
 <!-- CURRENT USER data box -->
           <div class="current-user-data-wrapper">
             <div class="current-user-data nav-side-bar-content">
-                <ul>
+                <!--<ul>
                   <li><div class="inner">Focused Case<br>17-000001234</div></li>
                   <li><div class="inner">Start Time</div></li>
                   <li><div class="inner">PreLink ON/Off</div></li>
-                <ul>
+                </ul>-->
             </div>
             <div class="clear"></div>
           </div>
@@ -70,7 +72,7 @@
 
 <!-- LINK BOX-->
 
-          <div class="nav-button-box">
+          <div class="nav-button-box no-select">
             <div class="nav-buttons left">
                 <ul>
                   <li id="nav-evidence">
@@ -79,19 +81,19 @@
                       <label>Evidence</label>
                     </div>
                   </li>
-                  <li>
+                  <li id="">
                     <div class="vertical-middle text-center">
                       <i class="fa fa-reply-all" aria-hidden="true"></i>
                       <label>Recent</label>
                     </div>
                   </li>
-                  <li>
+                  <li id="to-casebuilder">
                     <div class="vertical-middle text-center">
                       <i class="fa fa-pencil" aria-hidden="true"></i>
                       <label>Builder</label>
                     </div>
                   </li>
-                  <li>
+                  <li id="logout">
                     <div class="vertical-middle text-center">
                       <i class="fa fa-power-off" aria-hidden="true"></i>
                       <label>Log-off</label>
@@ -103,7 +105,7 @@
                       <label>Notification</label>
                     </div>
                   </li>
-                  <li>
+                  <li id="search-button">
                     <div class="vertical-middle text-center">
                       <i class="fa fa-search" aria-hidden="true"></i>
                       <label>Search</label>
@@ -134,7 +136,35 @@
     }
   }
 
-  $('#search-button').on('click', function(){$('.search-box').removeClass('hidden');});
+  $('#expand-nav-bar').on('click', function(e){
+    if($('.nav-side-bar').hasClass('hidden'))
+    {
+      $('.nav-side-bar').removeClass('hidden');
+      $('.fortify-header-box').removeClass('small');
+    }
+    else
+    {
+      $('.nav-side-bar').addClass('hidden');
+      $('.fortify-header-box').addClass('small');
+    }
+  });
+
+  $('#to-casebuilder').on('click', function(e){
+    href('casebuilder.php');
+  });
+
+  $('#logout').on('click', function(e) {
+    logout();
+  });
+
+  $('#search-button').on('click', function(){
+    if($('.search-box').hasClass('hidden'))
+    {
+      $('.search-box').removeClass('hidden');
+      if($('#media-browser').hasClass('show')) $('#media-browser').removeClass('show');
+    }
+    else $('.search-box').addClass('hidden');
+  });
   $('.search-close').on('click', function(e){
     if(e.target!=this) return;
     $('.search-box').addClass('hidden');

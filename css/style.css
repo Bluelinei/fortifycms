@@ -98,7 +98,7 @@ body{
   top: 0;
   left: 0;
   background: #242533;
-  z-index: 500;
+  z-index: 500000;
   transition: transform 1s cubic-bezier(0.9, 0, 0.1, 1), opacity 0.8s cubic-bezier(0.9, 0, 0.1, 1) 0.2s;
 }
 
@@ -162,7 +162,7 @@ small{
 .current-user-data ul{
   float: right;
   height: 100%;
-  width: 33.3333333339%;
+  width: 33.3333333333%;
 }
 
 .current-user-data li{
@@ -183,10 +183,15 @@ small{
   overflow: hidden;
 	height: 100%;
   min-width: 300px;
-  left: -16.6666666667%;
-  position: absolute;
+  left: 0;
+  position: fixed;
 	width: 25%;
   z-index: 1090;
+  transition: all 0.2s ease;
+}
+
+.nav-side-bar.hidden {
+  transform: translateX(-66.6666666667%);
 }
 
 .nav-button-box{
@@ -197,6 +202,13 @@ small{
 
 .expand-container{
   background: #3e63b8;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.expand-container:hover {
+  background: #6685cc;
+  transition: none;
 }
 
 .expand-button{
@@ -205,7 +217,6 @@ small{
   padding: 10px;
   text-align: center;
   width: 33.3333333339%;
-
 }
 
 .nav-buttons{
@@ -231,6 +242,7 @@ small{
   margin: 0px;
   padding: 0;
   width: 33.3333333339%;
+  transition: all 0.1s ease;
 }
 
 .nav-buttons li:nth-child(3), .nav-buttons li:nth-child(6){
@@ -244,6 +256,7 @@ small{
 .nav-buttons li:hover{
   background: #2b4fa1;
   cursor: pointer;
+  transition: none;
 }
 
 .nav-buttons li label{
@@ -1213,7 +1226,7 @@ h3.new-case:active{
 .advanced-tool-spacer{
   float: left;
   width: auto;
-  margin-right: 100px;
+  margin-right: 30px;
 }
 
 .advanced-tool{
@@ -1469,6 +1482,24 @@ h3.new-case:active{
   margin: 0px auto;
 }
 
+.fortify-header-box {
+  width: 100%;
+  height: 100%;
+  float: right;
+  transition: all 0.2s ease;
+}
+
+.fortify-header-box.small {
+  width: 33.3333333%;
+}
+
+.fortify-header-logo {
+  padding-top: 25px; 
+  padding-bottom: 35px;
+  height: 90%;
+  margin: 0px auto;
+}
+
   /**09.02 Nav**/
 
 .logout-button{
@@ -1619,6 +1650,7 @@ footer .headshot{
   padding: 0px 0px;
   position: fixed;
   top: 0;
+  right: 0;
   width: 60%;
   z-index: 401; /*Above all but pageload-overlay*/
   transition: all 0.2s ease;
@@ -1639,7 +1671,7 @@ footer .headshot{
 }
 
 .search-box.hidden {
-  transform: translateX(-100%);
+  transform: translateX(100%);
   pointer-events: none;
 }
 
