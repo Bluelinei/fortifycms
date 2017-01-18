@@ -149,22 +149,141 @@ small{
 
 /** 02.00 Nav/Side bar **/
 
-.nav-side-bar{
-	//background: linear-gradient(#13244A, #2234A8);
-  background: #3e63b8;
-	float: left;
-	height: 92%;
-	width: 10%;
+.current-user-data-wrapper{
+  height: 40%;
+  width: 100%;
 }
+
+.current-user-data{
+  height: 100%;
+  width: 85%;
+}
+
+.current-user-data ul{
+  float: right;
+  height: 100%;
+  width: 33.3333333339%;
+}
+
+.current-user-data li{
+  height: 33.333333333%;
+  padding: 0 5px 5px 5px;
+  width: 100%;
+}
+
+.current-user-data li .inner{
+  display: none;
+  background: #fff;
+  font-size: 10px;
+  height: 100%;
+  text-align: center;
+}
+
+.nav-side-bar{
+  overflow: hidden;
+	height: 100%;
+  min-width: 300px;
+  left: -16.6666666667%;
+  position: absolute;
+	width: 25%;
+  z-index: 1090;
+}
+
+.nav-button-box{
+  background: rgba(62,99,184,0.9);
+  height: 30%;
+  width: 100%;
+}
+
+.expand-container{
+  background: #3e63b8;
+}
+
+.expand-button{
+  color: #fff;
+  float: right;
+  padding: 10px;
+  text-align: center;
+  width: 33.3333333339%;
+
+}
+
+.nav-buttons{
+  height: 100%;
+  width: 100%;
+}
+
+.nav-buttons ul{
+//  border-top: 20px solid #2b4fa1;
+  width: 100%;
+  height: 100%;
+
+}
+
+.nav-buttons li{
+  background: #21428c;
+  border-left: 5px solid #1d3773;
+  border-bottom: 5px solid #1d3773;
+  color: #fff;
+  float: left;
+  font-size: 30px;
+  height: 50%;
+  margin: 0px;
+  padding: 0;
+  width: 33.3333333339%;
+}
+
+.nav-buttons li:nth-child(3), .nav-buttons li:nth-child(6){
+  border-right: 5px solid #1d3773;
+}
+
+.nav-buttons li:nth-child(1), .nav-buttons li:nth-child(2), .nav-buttons li:nth-child(3){
+  border-top: 5px solid #1d3773;
+}
+
+.nav-buttons li:hover{
+  background: #2b4fa1;
+  cursor: pointer;
+}
+
+.nav-buttons li label{
+  color: #dae5ff;
+  display: block;
+  font-size: 9px;
+  margin-top: 5px;
+}
+
+.nav-buttons li label:hover{
+  cursor: pointer;
+}
+
+.nav-side-bar-content{
+  background: rgba(62,99,184,0.9);
+  height: 100%;
+  width: 100%;
+}
+
+.nav-expand-bar{
+    background: rgba(29,55,115,0.9);
+    height: 100%;
+    width: 15%;
+    min-width: 40px;
+}
+
+.nav-expand-button{
+  height: 50%;
+  width: 100%;
+}
+
 
 /** 03.00 Content Pane **/
 .content-pane{
   background: #fafafa;
 	box-sizing: border-box;
-  float: left;
-	height: 92%;
+  float: right;
+	height: 100%;
   padding: 20px;
-	width: 90%;
+	width: 91.666666663%;
 }
 
 /** 03.01 Case Builder Block **/
@@ -288,12 +407,12 @@ small{
 }
 
 .prelink-time{
-  background: #44bb44;
-  border-radius: 5px;
-  color: #fff;
-  display: inline-block;
-  font-size: 12px;
-  padding: 10px;
+  font-size: 17px;
+  margin-bottom: 5px;
+}
+
+.time-start-button, .time-end-button{
+  font-size: 10px;
 }
 
 .media-add-icon {
@@ -533,12 +652,11 @@ small{
   background: #385477;
   color: #fff;
   cursor: pointer;
-  transition: all 0.2s ease;
+  text-align: center;
 }
 
 .prelink-toggle:hover {
   background: #648bba;
-  text-shadow: 0px 1px 0px #333;
 }
 
 .prelink-toggle:active {
@@ -1337,14 +1455,18 @@ h3.new-case:active{
 
 /** 09.01 Logo **/
 
-.logo{
-  background: rgba(000,000,000,0.3);
-  //box-shadow: 0px 3px 20px #111;
-  width: 100%;
+.logo-box{
+  background: #1d3773;
+  height: 30%;
   margin: 0px auto;
-  margin-bottom: 40px;
+  //padding: 30px;
+  width: 100%;
+}
+
+.logo{
   display: block;
-  padding: 30px;
+  height: 100%;
+  margin: 0px auto;
 }
 
   /**09.02 Nav**/
@@ -1362,39 +1484,14 @@ h3.new-case:active{
 }
 
 
-nav li{
-  width: 100%;
-}
-nav li{
-  background: rgba(255,255,255,0.1);
-  color: #fff;
-  display: block;
-  margin-bottom: 1px;
-  padding: 20px 10px;
-  text-align: center;
-  text-decoration: none;
-  transition: all .1s;
-}
-
-nav li:nth-child(even){
-    background: rgba(255,255,255,0.05);
-
-}
-
-nav li:hover{
-  background: rgba(255,255,255,0.3);
-  cursor: pointer;
-//  text-shadow: 0px 2px 0px #333;
-}
-
-
 
 /** 10.00 Footer **/
 
 footer{
   background: #3f3f3f;
 /*border-top: 5px solid #333;*/
-	height: 8%;
+  display: none;
+	height: 5%;
 	width: 100%;
 }
 
@@ -1428,6 +1525,7 @@ footer{
   bottom: 0;
 //  border-left: 5px solid #333;
   color: #fff;
+
   float: right;
   height: 100%;
   text-align: center;
@@ -1498,6 +1596,7 @@ footer .headshot{
 .notification-button-container{
   bottom: 0;
   background: rgba(000,000,000,.8);
+    display: none;
   height: 80%;
   position:fixed;
   right: 0;

@@ -96,7 +96,7 @@ function newCaseFile(uploadedfile)
 	log(JSON.stringify(data));
 
 	var loadingPlace;
-	
+
 	//Check if the file already exists server side, if so, give it a UID and upload a new file. If not, return the uid of the object on the server.
 	$.ajax({
 		xhr: function() {
@@ -212,7 +212,7 @@ function deleteCase(c)
 	pushStack('deleteCase');
 	var len = cases.length;
 	for(var i=0; i<len; i++) {
-		if(cases[i].uid == c.uid) 
+		if(cases[i].uid == c.uid)
 		{
 			c.deleteCase();
 			cases.splice(i,1);
@@ -289,7 +289,7 @@ function updateTags()
 	{
 		for(var x=0; x<tlistlen; x++)
 		{
-			if(workingcase.tags[i] == reporttags[x].name) 
+			if(workingcase.tags[i] == reporttags[x].name)
 			{
 				reporttags[x].element.css('display','block');
 				disableTag(reporttags[x].value);
@@ -362,7 +362,7 @@ function setTag()
 	workingcase.tags.push($('#report-tag').val())
 	$('#report-tag').val('SELECT TAG');
 	updateTags();
-	popStack(); 
+	popStack();
 }
 
 function removeTag(t)
@@ -993,13 +993,13 @@ Prelink.prototype.setTime = function() {
 	{
 		workingcase.prelinkstart = getUnixTime(time.valueOf());
 		var h = time.getHours();
-		$('.prelink-start').html('<p>Start Time<br>'+time.toLocaleDateString()+', '+(h<10?'0'+h:h)+':'+(time.getMinutes()>10?time.getMinutes():'0'+time.getMinutes())+'</p>');
+		$('.prelink-start').html('<p><p class="prelink-time">Start Time</p>'+time.toLocaleDateString()+', '+(h<10?'0'+h:h)+':'+(time.getMinutes()>10?time.getMinutes():'0'+time.getMinutes())+'</p>');
 	}
 	else if(this.editing=='end')
 	{
 		workingcase.prelinkend = getUnixTime(time.valueOf());
 		var h = time.getHours();
-		$('.prelink-end').html('<p>End Time<br>'+time.toLocaleDateString()+', '+(h<10?'0'+h:h)+':'+(time.getMinutes()>10?time.getMinutes():'0'+time.getMinutes())+'</p>');
+		$('.prelink-end').html('<p><p class="prelink-time">End Time</p>'+time.toLocaleDateString()+', '+(h<10?'0'+h:h)+':'+(time.getMinutes()>10?time.getMinutes():'0'+time.getMinutes())+'</p>');
 	}
 }
 

@@ -141,10 +141,10 @@
 
               <div class="prelink-block" style="z-index: 51;">
                 <div class="three-wide timeset-button time-start-button">
-                  <div class="vertical-middle no-select prelink-start"><p>Start Time<br><small>[Click to Set]</small></p></div>
+                  <div class="vertical-middle no-select prelink-start"><p><span class="prelink-time">Start Time</span><br><small>[Click to Set]</small></p></div>
                 </div>
                 <div class="three-wide timeset-button time-end-button">
-                  <div class="vertical-middle no-select prelink-end"><p>End Time<br><small>[Click to Set]</small></p></div>
+                  <div class="vertical-middle no-select prelink-end"><p><span class="prelink-time">End Time</span><br><small>[Click to Set]</small></p></div>
                 </div>
                 <div class="three-wide prelink-toggle">
                   <div class="vertical-middle no-select prelink-toggle-text">Enable Pre-Link</div>

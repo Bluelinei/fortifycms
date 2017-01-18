@@ -38,21 +38,80 @@
 <?php include 'notification-bar.php'; ?>
 
 <!--START Main Content Area wrapper (side-bar + content pane)-->
-<!--  <div class="content-wrapper"> -->
+<div class="content-wrapper">
 <!--START Nav/Logo side-bar-->
     <div class="nav-side-bar">
 
-      <img src="img/logo.png" class="logo"/>
+<!--LOGO BOX is 30% 0f the nav-side-bar -->
+          <div class="logo-box">
+            <div class="expand-container">
+              <div class="expand-button">
+                <i class="fa fa-bars" aria-hidden="true"></i>
+              </div>
+              <div class="clear"></div>
+            </div>
+              <div style="padding: 25px;padding-bottom: 35px; width: 100%;height: 90%;">
+                <img src="img/logo.png" class="logo"/>
+              </div>
+          </div>
 
-      <nav>
-        <ul class="no-select">
-          <li id="search-button"><div>Search<i class="fa fa-search fa-lg right ten-margin-right"></i></div></li>
-          <li><div>Recent<i class="fa fa-reply fa-lg right ten-margin-right"></i></div></li>
-          <li id="nav-casebuilder"><div>Builder<i class="fa fa-pencil fa-lg right ten-margin-right"></i></div></li>
-          <li id="nav-evidence"><div>Evidence<i class="fa fa-folder-open fa-lg right ten-margin-right"></i></div></li>
-        </ul>
-      </nav>
+<!-- CURRENT USER data box -->
+          <div class="current-user-data-wrapper">
+            <div class="current-user-data nav-side-bar-content">
+                <ul>
+                  <li><div class="inner">Focused Case<br>17-000001234</div></li>
+                  <li><div class="inner">Start Time</div></li>
+                  <li><div class="inner">PreLink ON/Off</div></li>
+                <ul>
+            </div>
+            <div class="clear"></div>
+          </div>
 
+
+<!-- LINK BOX-->
+
+          <div class="nav-button-box">
+            <div class="nav-buttons left">
+                <ul>
+                  <li id="nav-evidence">
+                    <div class="vertical-middle text-center">
+                      <i class="fa fa-folder-open" aria-hidden="true"></i>
+                      <label>Evidence</label>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="vertical-middle text-center">
+                      <i class="fa fa-reply-all" aria-hidden="true"></i>
+                      <label>Recent</label>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="vertical-middle text-center">
+                      <i class="fa fa-pencil" aria-hidden="true"></i>
+                      <label>Builder</label>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="vertical-middle text-center">
+                      <i class="fa fa-power-off" aria-hidden="true"></i>
+                      <label>Log-off</label>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="vertical-middle text-center">
+                      <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                      <label>Notification</label>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="vertical-middle text-center">
+                      <i class="fa fa-search" aria-hidden="true"></i>
+                      <label>Search</label>
+                    </div>
+                  </li>
+                </ul>
+            </div>
+          </div><!--END LINK BOX-->
     </div><!--END Nav/Logo side-bar-->
 
 <script>
