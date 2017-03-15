@@ -56,13 +56,11 @@ function fileOutput(files) //Outputs the information for the uploaded file onto 
 
 function postFiles(files) //Sends file and file data to PHP for processing and uploading.
 {
-	pushStack('postFiles');
 	var len = files.length;
 	for(var i=0; i<len; i++)
 	{
 		newCaseFile(files[i]);
 	}
-	popStack();
 }
 
 function closeAllBrowsers()
@@ -273,7 +271,8 @@ function getDatabase()
 	var f = new FormData();
 	f.append('function','get');
 	loading(1);
-	ajax(SERVER_ADDRESS+'framework/functions.php',f,function(response){
+	Tool.ajax(SERVER_ADDRESS+'framework/functions.php',f,function(response){
+		log('Got Database');
 		log(response);
 		var obj = JSON.parse(response);
 		//Will return assoc array of 'cases' and 'evidence' with all of their data
@@ -292,8 +291,8 @@ function getDatabase()
 			c.officer = dbcases[i].users;
 			c.type = dbcases[i].type;
 			c.filelist = tokenizeUID(dbcases[i].evidence);
-			c.prelinkstart = (data.prelinkstart?Number(data.prelinkstart):getUnixTime());
-			c.prelinkend = (data.prelinkend?Number(data.prelinkend):getUnixTime());
+			c.prelinkstart = (data.prelinkstart?Number(data.prelinkstart):Tool.getUnixTime());
+			c.prelinkend = (data.prelinkend?Number(data.prelinkend):Tool.getUnixTime());
 			c.prelinkenable = (data.prelinkenable?true:false);
 		}
 		//Generate evidence objects
@@ -338,7 +337,7 @@ function getDatabase()
 function loadINI()
 {
 	loading(1);
-	ajax('framework/getsession.php', null, function(response) {
+	Tool.ajax('framework/getsession.php', null, function(response) {
 		var session = JSON.parse(response);
 		if(!session.agency)
 		{

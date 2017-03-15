@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<?php //require 'framework/requireSSL.php'; ?>
+<?php require 'framework/requireSSL.php'; ?>
 <html>
   <head>
     <meta charset="utf-8">
@@ -40,7 +40,7 @@
             loginNotify('Please enter login credentials.');
             return;
           }
-          login($('#user').val(), $('#pass').val(), $('#agencyid').val());
+          Tool.login($('#user').val(), $('#pass').val(), $('#agencyid').val());
         }
         $(document).on('click', '#login', doLogin);
         $(document).on('keypress', function(event){

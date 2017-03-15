@@ -188,7 +188,7 @@
 <?php require 'footer.php'; ?>
 
 <div id="pageload-overlay">
-  <img class="loading-gif" style="width:300px; height:auto;" src="../img/fortifyloading.gif"/>
+  <img class="loading-gif" style="width:300px; height:auto;" src="img/fortifyloading.gif"/>
 </div>
 
 <div class="media-preview-overlay hidden no-event"></div>

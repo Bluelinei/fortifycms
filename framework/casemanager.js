@@ -43,27 +43,23 @@ function getCasefileById(id)
 
 function updateCases()
 {
-	pushStack('updateCases');
 	var len = cases.length;
 	for(var i=0; i<len; i++) {
 		cases[i].updateElement();
 		$(caselistElementID).append(cases[i].element);
 	}
-	popStack();
 }
 
 function display(node, element) {node.append(element);}
 
 function newCase()
 {
-	pushStack('newCase');
 	var f = new FormData();
 	f.append('function', 'caseuid');
-	ajax('framework/functions.php', f, function(uid) {
+	Tool.ajax('framework/functions.php', f, function(uid) {
 		var c = new Case(uid);
 		setAsActiveCase(c);
 	});
-	popStack();
 }
 
 var placeholderQueue = 0;
@@ -85,12 +81,11 @@ Placeholder.prototype.update = function(percent) {
 
 function newCaseFile(uploadedfile)
 {
-	pushStack('newCaseFile');
 	var f = new FormData();
 	f.append('file', uploadedfile);
 	var data = {};
-	data['file_type'] = getFileType(uploadedfile.type);
-	data['lastmodified'] = getUnixTime(uploadedfile.lastModified);
+	data['file_type'] = Tool.getFileType(uploadedfile.type);
+	data['lastmodified'] = Tool.getUnixTime(uploadedfile.lastModified);
 	f.append('data', JSON.stringify(data));
 
 	log(JSON.stringify(data));
@@ -139,7 +134,7 @@ function newCaseFile(uploadedfile)
 			switch(cf.filetype)
 			{
 				case 'VIDEO':
-					getVideoThumbnail(cf, function(response){
+					Tool.getVideoThumbnail(cf, function(response){
 						cf.thumbnail = 'framework/'+response;
 						cf.updateMediaElement();
 						updateMedia();
@@ -168,20 +163,16 @@ function newCaseFile(uploadedfile)
 			updateMedia();
 		}
 	});
-
-	popStack();
 }
 
 function setAsActiveCase(activecase)
 {
-	pushStack('setAsActiveCase');
 	if(!activecase||activecase==undefined)
 	{
 		newCase();
-		popStack();
 		return;
 	}
-	if(workingcase == activecase || activecase.DELETED) {popStack(); return;}
+	if(workingcase == activecase || activecase.DELETED) {return;}
 	if(workingcase)
 	{
 		var oldcase = workingcase;
@@ -193,23 +184,19 @@ function setAsActiveCase(activecase)
 	updateCases();
 	updateMedia();
 	updateReport();
-	popStack();
 }
 
 function addFileToCase(file)
 {
-	pushStack('addFile');
 	if(file.state == INUSE) workingcase.removeFile(file)
 	else workingcase.addFile(file);
 	updateCases();
 	updateMedia();
 	updateReport();
-	popStack();
 }
 
 function deleteCase(c)
 {
-	pushStack('deleteCase');
 	var len = cases.length;
 	for(var i=0; i<len; i++) {
 		if(cases[i].uid == c.uid)
@@ -223,20 +210,16 @@ function deleteCase(c)
 	updateCases();
 	updateMedia();
 	updateReport();
-	popStack();
 }
 
 function fortifyActiveCase()
 {
-	pushStack('fortifyActiveCase');
 	postCases();
 	updateInfo();
-	popStack();
 }
 
 function updateReport()
 {
-	pushStack('updateReport');
 	if(workingcase.casenum) $('#report-number').val(workingcase.casenum);
 	else $('#report-number').val('');
 	if(workingcase.location) $('#report-location').val(workingcase.location);
@@ -253,35 +236,29 @@ function updateReport()
 	updateFileList();
 	updateTags();
 	updateMedia();
-	popStack();
 }
 
 function updateFileList()
 {
-	pushStack('updateFileList');
 	var len;
 	if(!workingcase) len=0;
 	else len = workingcase.files.length;
-	clearElement($(filelistElementID));
+	Tool.clearElement($(filelistElementID));
 	for(var i=0; i<len; i++) {$(filelistElementID).append(workingcase.files[i].element);}
-	popStack();
 }
 
 function updateInfo()
 {
-	pushStack('Case.updateInfo');
 	if($('#report-number').val()) workingcase.casenum = $('#report-number').val();
 	else workingcase.casenum = '';
 	if($('#report-location').val()) workingcase.location = $('#report-location').val();
 	else workingcase.location = '';
 	workingcase.updateElement();
 	updateCases();
-	popStack();
 }
 
 function updateTags()
 {
-	pushStack('updateTags');
 	hideTags();
 	var len = workingcase.tags.length;
 	var tlistlen = reporttags.length;
@@ -296,12 +273,10 @@ function updateTags()
 			}
 		}
 	}
-	popStack();
 }
 
 function resetTags()
 {
-	pushStack('resetTags');
 	var rt = document.getElementById('report-tag');
 	var len = rt.options.length;
 	for(var i=0; i<len; i++)
@@ -309,12 +284,10 @@ function resetTags()
 		if(rt.options[i].value=='SELECT TAG') continue;
 		rt.options[i].disabled = false;
 	}
-	popStack();
 }
 
 function disableTag(tag)
 {
-	pushStack('disableTag');
 	var rt = document.getElementById('report-tag');
 	var len = rt.options.length;
 	for(var i=0; i<len; i++)
@@ -324,12 +297,10 @@ function disableTag(tag)
 			rt.options[i].disabled = true;
 		}
 	}
-	popStack();
 }
 
 function generateTags()
 {
-	pushStack('generateTags');
 	var rt = document.getElementById('report-tag');
 	var len = rt.options.length;
 	for(var i=0; i<len; i++)
@@ -338,15 +309,12 @@ function generateTags()
 		tag.value = rt.options[i].value;
 		$('#tag-list').append(tag.element);
 	}
-	popStack();
 }
 
 function setTag()
 {
-	pushStack('setTag');
 	if($('#report-tag').val() == 'SELECT TAG')
 	{
-		popStack();
 		return;
 	}
 	var len = workingcase.tags.length;
@@ -355,68 +323,55 @@ function setTag()
 		if(workingcase.tags[i] == $('#report-tag').val())
 		{
 			$('#report-tag').val('SELECT TAG');
-			popStack();
 			return;
 		}
 	}
 	workingcase.tags.push($('#report-tag').val())
 	$('#report-tag').val('SELECT TAG');
 	updateTags();
-	popStack();
 }
 
 function removeTag(t)
 {
-	pushStack('removeTag');
 	workingcase.changed = true;
 	var len = workingcase.tags.length;
 	for(var i=0; i<len; i++) {if(workingcase.tags[i] == t.name) {workingcase.tags.splice(i,1);}}
 	updateTags();
-	popStack();
 }
 
 function hideTags()
 {
-	pushStack('hideTags');
 	var len = reporttags.length;
 	resetTags();
 	for(var i=0; i<len; i++)
 	{
 		reporttags[i].element.css('display','none');
 	}
-	popStack();
 }
 
 function setCaseType()
 {
-	pushStack('setCaseType');
 	workingcase.type = $('#report-type').val();
-	popStack();
 }
 
 function removeFileFromCase(file)
 {
-	pushStack('removeFileFromCase');
 	workingcase.removeFile(file);
 	updateCases();
 	updateMedia();
 	updateReport();
-	popStack();
 }
 
 function addMedia(file)
 {
-	pushStack('addMedia');
 	if(file.state != UNUSED) $('#mediabrowser').append(file.mediaelement);
 	updateMedia();
-	popStack();
 }
 
 function updateMedia()
 {
-	pushStack('updateMedia');
 	var len = casefiles.length;
-	clearElement($('#mediabrowser'));
+	Tool.clearElement($('#mediabrowser'));
 	for(var i=0; i<len; i++)
 	{
 		casefiles[i].checkState();
@@ -424,16 +379,13 @@ function updateMedia()
 		$('#mediabrowser').append(casefiles[i].mediaelement);
 		casefiles[i].updateMediaElement();
 	}
-	popStack();
 }
 
 function toggleAdmin()
 {
-	pushStack('toggleAdmin');
 	if(workingcase.admin) workingcase.admin = false;
 	else workingcase.admin = true;
 	updateReport();
-	popStack();
 }
 
 function clearPreview()
@@ -454,7 +406,6 @@ function clearPreview()
 
 function Case(uid)
 {
-	pushStack('Case');
 	this.uid = uid;
 	this.casenum = '';
 	this.nickname = '';
@@ -468,7 +419,7 @@ function Case(uid)
 	this.changed = false;
 	this.DELETED = false;
 	this.editnick = false;
-	this.prelinkstart = getUnixTime();
+	this.prelinkstart = Tool.getUnixTime();
 	this.prelinkend = this.prelinkstart;
 	this.prelinkenable = false;
 	this.creationdate;
@@ -476,7 +427,6 @@ function Case(uid)
 	cases.push(this);
 	this.newElement();
 	updateCases();
-	popStack();
 }
 
 Case.prototype.changeCase = function(x) {
@@ -486,8 +436,7 @@ Case.prototype.changeCase = function(x) {
 }
 
 Case.prototype.postCase = function() {
-	pushStack('Case.postCase');
-	if(this.casenum==''||!this.type) {popStack(); return false;}
+	if(this.casenum==''||!this.type) {return false;}
 	var f = new FormData();
 	f.append('uid',this.uid); //uid
 	f.append('nickname',this.nickname); //nickname
@@ -510,7 +459,7 @@ Case.prototype.postCase = function() {
 	data['audcount'] = 0;
 	data['doccount'] = 0;
 	data['phycount'] = 0;
-	data['casedate'] = (this.creationdate?this.creationdate:getUnixTime());
+	data['casedate'] = (this.creationdate?this.creationdate:Tool.getUnixTime());
 	for(var i=0; i<this.files.length; i++)
 	{
 		switch(this.files[i].filetype)
@@ -533,16 +482,14 @@ Case.prototype.postCase = function() {
 		}
 	}
 	f.append('data', JSON.stringify(data));
-	ajax('framework/casepost.php', f, function(response) {
+	Tool.ajax('framework/casepost.php', f, function(response) {
 			//log(response);
 	});
 	this.changeCase(false);
-	popStack();
 	return true;
 }
 
 Case.prototype.newElement = function() {
-	pushStack('Case.newElement');
 	var src = this;
 	this.element = $('<li>');
 	this.element.append('<div class="case-ref-id-wrapper seventy-per-wide ten-padding left point-cursor '+this.uid+'_case_text"><div class="case-ref-id">[No Case ID]</div></div>');
@@ -574,11 +521,9 @@ Case.prototype.newElement = function() {
 			});
 		}
 	});
-	popStack();
 };
 
 Case.prototype.updateElement = function() {
-	pushStack('Case.updateElement');
 	var casetext = this.element.find('.'+this.uid+'_case_text');
 	if(workingcase == this)
 	{
@@ -591,11 +536,9 @@ Case.prototype.updateElement = function() {
 		casetext.css({'cursor':'inherit'});
 	}
 	this.updateHTML();
-	popStack();
 };
 
 Case.prototype.updateHTML = function() {
-	pushStack('Case.updateHTML');
 	if(!this.editnick)
 	{
 		if(this.nickname) this.element.find('.'+this.uid+'_case_text').html('<div class="case-ref-id">'+this.nickname+'</div>');
@@ -603,24 +546,20 @@ Case.prototype.updateHTML = function() {
 		else this.element.find('.'+this.uid+'_case_text').html('<div class="case-ref-id">[No Case ID]</div>');
 	}
 	this.element.find('._case_filelen').html(this.files.length);
-	popStack();
 };
 
 Case.prototype.addFile = function(file) {
-	pushStack('Case.addFile');
 	var len = this.files.length;
-	for(var i=0; i<len; i++) {if(this.files[i].uid==file.uid) {popStack(); return 0;}}
+	for(var i=0; i<len; i++) {if(this.files[i].uid==file.uid) {return 0;}}
 	this.files.push(file);
 	file.caseindex.push(this.uid)
 	file.updateMediaElement();
 	this.updateElement();
 	updateFileList();
-	popStack();
 	return 1;
 };
 
 Case.prototype.removeFile = function(file) {
-	pushStack('Case.removeFile');
 	var len = this.files.length;
 	for(var i=0; i<len; i++) {if(this.files[i]==file) {this.files.splice(i,1); i--;}}
 	len = file.caseindex.length;
@@ -628,29 +567,24 @@ Case.prototype.removeFile = function(file) {
 	file.updateMediaElement();
 	this.updateElement();
 	updateFileList();
-	popStack();
 };
 
 Case.prototype.getFileList = function() {
-	pushStack('getFileList');
 	var l = [];
 	var len = this.files.length;
 	for(var i=0; i<len; i++)
 	{
 		l.push(this.files[i].file.name);
 	}
-	popStack();
 	return l.join('<br>');
 };
 
 Case.prototype.deleteCase = function() {
-	pushStack('Case.deleteCase');
 	this.element.off('click');
 	$(document).off('click','.'+this.uid),
 	this.element.find('.'+this.uid+'_case_text').off('click');
 	this.element.remove();
 	this.DELETED = true;
-	popStack();
 };
 
 
@@ -664,13 +598,12 @@ Case.prototype.deleteCase = function() {
 
 function Casefile(file, uid)
 {
-	pushStack('CaseFile');
 	this.uid = uid;
 	this.name = (file?file.name:'');
 	this.type;
-	this.filetype = (file?getFileType(file.type):'');
+	this.filetype = (file?Tool.getFileType(file.type):'');
 	this.filepath = '';
-	this.filedate = getUnixTime((file?file.lastModified:0));
+	this.filedate = Tool.getUnixTime((file?file.lastModified:0));
 	this.uploaddate = 0;
 	this.lastmodified = 0;
 	this.element;
@@ -679,7 +612,6 @@ function Casefile(file, uid)
 	this.state;
 	this.officer;
 	this.caseindex = [];
-	popStack();
 	/*
 	DATA VARIABLES
 		file_path
@@ -699,7 +631,6 @@ Casefile.prototype.init = function()
 }
 
 Casefile.prototype.postFile = function() {
-	pushStack('Casefile.postFile');
 	var fdata = new FormData();
 	fdata.append('uid', this.uid);
 	fdata.append('nickname', (this.name?this.name:''));
@@ -713,18 +644,16 @@ Casefile.prototype.postFile = function() {
 	data['thumbnail'] = this.thumbnail;
 	fdata.append('data', JSON.stringify(data));
 
-	ajax('framework/filepost.php', fdata, function(response) {
+	Tool.ajax('framework/filepost.php', fdata, function(response) {
 		//log('filepost.php: '+response);
 	});
-	popStack()
 }
 
 Casefile.prototype.truncName = function(y, n){
-	return (this.name?truncateText(this.name, y, '...'):truncateText(this.filepath, n, '...', getExtension(this.filepath).length));
+	return (this.name?truncateText(this.name, y, '...'):truncateText(this.filepath, n, '...', Tool.getExtension(this.filepath).length));
 }
 
 Casefile.prototype.newElement = function() {
-	pushStack('CaseFile.newElement');
 	this.element = $('<li>');
 	this.element.addClass('casefile-element');
 	this.element.append('<p class="left ten-padding bold">'+this.filetype+'</p>');
@@ -733,11 +662,9 @@ Casefile.prototype.newElement = function() {
 	this.element.append('<p class="right ten-padding">'+ new Date(this.filedate*1000).toLocaleDateString() + '</p>');
 	this.element.append('<div class="clear"></div>');
 	this.element.id = this.uid+"_case";
-	popStack();
 };
 
 Casefile.prototype.newMediaElement = function() {
-	pushStack('Casefile.newMediaElement');
 	var d = new Date(this.filedate*1000);
 	this.mediaelement = $('<li>');
 	var inner = $('<div id="'+this.uid+'_blockelement" class="block">');
@@ -756,18 +683,15 @@ Casefile.prototype.newMediaElement = function() {
 		'background-position': 'center'
 	});
 	this.mediaelement.append(inner);
-	popStack();
 }
 
 Casefile.prototype.updateMediaElement = function(thumb) {
-	pushStack('Casefile.updateMediaElement');
 	this.checkState();
 	$('#'+this.uid+"_name").html(this.truncName(15,12));
 	$('#'+this.uid+"_addremove").html('<i class="fa '+this.isInclude()+' point-cursor '+this.uid+'_addfilebutton" aria-hidden="true"></i>');
 	$('#'+this.uid+"_blockelement").removeClass('green-border');
 	if(this.state==INUSE) $('#'+this.uid+"_blockelement").addClass('green-border');
 	this.updateThumb();
-	popStack();
 }
 
 Casefile.prototype.display = function(node) {
@@ -784,7 +708,6 @@ Casefile.prototype.isInclude = function() {
 }
 
 Casefile.prototype.checkState = function() {
-	pushStack('CaseFile.checkState');
 	var len = this.caseindex.length;
 	this.state = UNUSED;
 	if(!len) this.state = UNFORT;
@@ -803,7 +726,6 @@ Casefile.prototype.checkState = function() {
 		}
 		if(this.state != INUSE) this.state = UNUSED;
 	};
-	popStack();
 	return;
 };
 
@@ -814,12 +736,12 @@ Casefile.prototype.doHide = function() {
 
 Casefile.prototype.setButtonFunction = function() {
 	var ref = this;
-	$(document).on('click', '.'+this.uid+'_addfilebutton', clickHandler(addFileToCase, this));
-	$(document).on('click', '.'+this.uid+'_removebutton', clickHandler(removeFileFromCase, this));
+	$(document).on('click', '.'+this.uid+'_addfilebutton', Tool.clickHandler(addFileToCase, this));
+	$(document).on('click', '.'+this.uid+'_removebutton', Tool.clickHandler(removeFileFromCase, this));
 	if(this.filetype == 'VIDEO')
 	{
 		$(document).on('click', '.'+this.uid+'_view-button', function(e){
-			href('video.php?view='+encodeURIComponent(ref.filepath));
+			Tool.href('video.php?view='+encodeURIComponent(ref.filepath));
 		});
 		$(document).on('mouseenter', '.'+ref.uid+'_view-button', function(e){
 			clearPreview();
@@ -887,33 +809,27 @@ function getOverlayPosition(e)
 
 function ReportTag(n)
 {
-	pushStack('ReportTag');
 	this.name = n;
 	this.value;
 	this.element;
 	this.newElement();
 	this.element.css('display', 'none');
 	reporttags.push(this);
-	popStack();
 }
 
 ReportTag.prototype.newElement = function() {
-	pushStack('ReportTag.updateElement');
 	this.element = $('<li>');
 	this.element.addClass('point-cursor');
 	this.element.append('<p class="left">'+this.name+'</p>');
 	this.element.append('<div class="fa fa-minus-circle right link-button"></div>');
 	this.element.append('<div class="clear"></div>');
-	this.element.on('click', clickHandler(removeTag, this));
-	popStack();
+	this.element.on('click', Tool.clickHandler(removeTag, this));
 }
 
 ReportTag.prototype.newButton = function() {
-	pushStack('ReportTag.newButton');
 	var button = $('<div>');
 	button.addClass('<div class="fa fa-minus-circle right link-button point-cursor"></div>');
-	button.on('click', clickHandler(removeTag, this));
-	popStack();
+	button.on('click', Tool.clickHandler(removeTag, this));
 	return button;
 }
 
@@ -991,13 +907,13 @@ Prelink.prototype.setTime = function() {
 
 	if(this.editing=='start')
 	{
-		workingcase.prelinkstart = getUnixTime(time.valueOf());
+		workingcase.prelinkstart = Tool.getUnixTime(time.valueOf());
 		var h = time.getHours();
 		$('.prelink-start').html('<p><p class="prelink-time">Start Time</p>'+time.toLocaleDateString()+', '+(h<10?'0'+h:h)+':'+(time.getMinutes()>10?time.getMinutes():'0'+time.getMinutes())+'</p>');
 	}
 	else if(this.editing=='end')
 	{
-		workingcase.prelinkend = getUnixTime(time.valueOf());
+		workingcase.prelinkend = Tool.getUnixTime(time.valueOf());
 		var h = time.getHours();
 		$('.prelink-end').html('<p><p class="prelink-time">End Time</p>'+time.toLocaleDateString()+', '+(h<10?'0'+h:h)+':'+(time.getMinutes()>10?time.getMinutes():'0'+time.getMinutes())+'</p>');
 	}

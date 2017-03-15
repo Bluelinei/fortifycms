@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+  <?php require 'framework/requireSSL.php'; ?>
   <?php
     if(!isset($_SESSION)) session_start();
     if(!isset($_SESSION['user']))

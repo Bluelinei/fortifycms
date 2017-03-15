@@ -4,7 +4,7 @@ require_once 'dbconnect.php';
 
 function forceLogin()
 {
-	header("Location: https://".$_SERVER['SERVER_NAME']."/login.php");
+	header("Location: https://".$_SERVER['SERVER_NAME']."/fortify/login.php");
 	die();
 }
 

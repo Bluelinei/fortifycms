@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<?php //require 'framework/securesession.php'; ?>
-<?php //require 'framework/requireSSL.php'; ?>
+<?php require 'framework/securesession.php'; ?>
+<?php require 'framework/requireSSL.php'; ?>
 <html>
   <head>
     <title>Fortify</title>
@@ -150,7 +150,7 @@
   });
 
   $('#to-casebuilder').on('click', function(e){
-    href('casebuilder.php');
+    Tool.href('casebuilder.php');
   });
 
   $('#logout').on('click', function(e) {
@@ -170,7 +170,9 @@
     $('.search-box').addClass('hidden');
   });
   $('.note-header').on('click', toggleNotifications);
-  $('#nav-casebuilder').on('click', clickHandler(href, 'casebuilder.php'))
+  $('#nav-casebuilder').on('click', function() {
+    Tool.href('casebuilder.php');
+  });
   /*
   $(document).ready(function() {
     idle_timer = setInterval(timerIncrement, 60000);
